@@ -3,6 +3,7 @@
 ===========
 
 `jekyll_plugin_support` is a Ruby gem that facilitates writing and testing Jekyll plugins.
+At present only Jekyll block tags are supported.
 
 ## Installation
 
