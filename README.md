@@ -2,7 +2,7 @@
 [![Gem Version](https://badge.fury.io/rb/jekyll_plugin_support.svg)](https://badge.fury.io/rb/jekyll_plugin_support)
 ===========
 
-`jekyll_plugin_support` is a Ruby gem that facilitates writing Jekyll plugin.
+`jekyll_plugin_support` is a Ruby gem that facilitates writing and testing Jekyll plugins.
 
 ## Installation
 
@@ -32,8 +32,8 @@ You can also run `bin/console` for an interactive prompt that will allow you to 
 To build and install this gem onto your local machine, run:
 ```shell
 $ bundle exec rake install
-jekyll_plugin_support 1.0.0 built to pkg/jekyll_plugin_support-0.1.0.gem.
-jekyll_plugin_support (1.0.0) installed.
+jekyll_plugin_support 0.1.0 built to pkg/jekyll_plugin_support-0.1.0.gem.
+jekyll_plugin_support (0.1.0) installed.
 ```
 
 Examine the newly built gem:
@@ -42,7 +42,7 @@ $ gem info jekyll_plugin_support
 
 *** LOCAL GEMS ***
 
-jekyll_plugin_support (1.0.0)
+jekyll_plugin_support (0.1.0)
     Author: Mike Slinn
     Homepage:
     https://github.com/mslinn/jekyll_plugin_support
