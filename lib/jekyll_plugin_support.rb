@@ -6,7 +6,7 @@ require_relative 'jekyll_plugin_support_helper'
 require_relative 'jekyll_plugin_support/version'
 
 # @author Copyright 2022 Michael Slinn
-# @license SPDX-License-Identifier: Apache-2.0
+# @license SPDX-License-Identifier: Apache-2.0``
 module JekyllSupport
   # Base class for Jekyll block tags
   class JekyllBlock < Liquid::Block

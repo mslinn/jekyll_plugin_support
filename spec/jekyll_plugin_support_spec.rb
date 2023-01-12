@@ -7,7 +7,7 @@ require_relative '../lib/jekyll_plugin_support_spec_support'
 
 # Lets get this party started
 class MyTest
-  RSpec.describe Jekyll::Quote do
+  RSpec.describe JekyllSupport::JekyllBlock do
     let(:logger) do
       PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
     end
