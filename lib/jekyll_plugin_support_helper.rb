@@ -24,15 +24,19 @@ class JekyllPluginHelper
   end
 
   def initialize(tag_name, markup, logger)
-    # @keys_values was a Hash[Symbol, String|Boolean] but now it is Hash[String, String|Boolean]
     @tag_name = tag_name
+    @logger = logger
+    @logger.debug { "@keys_values='#{@keys_values}'" }
+    reinitialize(markup.strip)
+  end
+
+  def reinitialize(markup)
+    # @keys_values was a Hash[Symbol, String|Boolean] but now it is Hash[String, String|Boolean]
     @markup = markup # Useful for debugging
     @argv = Shellwords.split(JekyllPluginHelper.expand_env(markup))
     @keys_values = KeyValueParser \
       .new({}, { array_values: false, normalize_keys: false, separator: /=/ }) \
       .parse(@argv)
-    @logger = logger
-    @logger.debug { "@keys_values='#{@keys_values}'" }
   end
 
   def delete_parameter(key)
