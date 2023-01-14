@@ -1,8 +1,5 @@
-# frozen_string_literal: true
-
 require_relative 'lib/jekyll_plugin_support/version'
 
-# rubocop:disable Metrics/BlockLength
 Gem::Specification.new do |spec|
   github = 'https://github.com/mslinn/jekyll_plugin_support'
 
@@ -47,4 +44,3 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop-rspec'
   spec.add_development_dependency 'ruby-debug-ide'
 end
-# rubocop:enable Metrics/BlockLength

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'jekyll'
 
 Registers = Struct.new(:page, :site)

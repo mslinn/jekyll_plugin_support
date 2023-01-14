@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'jekyll_plugin_logger'
 # require 'rspec/match_ignoring_whitespace'
 require_relative '../lib/jekyll_plugin_support'
@@ -7,7 +5,7 @@ require_relative '../lib/jekyll_plugin_support_spec_support'
 
 # Lets get this party started
 class MyTest
-  RSpec.describe JekyllSupport::JekyllBlock do
+  RSpec.describe JekyllSupport::JekyllTag do
     let(:logger) do
       PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
     end

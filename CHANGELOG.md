@@ -3,3 +3,6 @@
 
 ## 0.2.0 / 2023-01-12
   * Refactored
+
+## 0.3.0 / 2023-01-14
+  * Added support for tags, which should subclass JekyllSupport::JekyllTag
