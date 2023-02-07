@@ -10,13 +10,68 @@ At present, only Jekyll tags and blocks are supported.
 Add this line to your Jekyll plugin's Gemfile:
 
 ```ruby
-gem 'jekyll_plugin_support'
+group :jekyll_plugins do
+  gem 'jekyll_plugin_support'
+end
 ```
 
 And then execute:
 
     $ bundle install
 
+## Usage
+`JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag`
+provide support for Jekyll tag blocks and Jekyll tags, respectively.
+They are very similar in construction and usage.
+
+Instead of subclassing your Jekyll block tag class from `Liquid::Block`,
+subclass from `JekyllSupport::JekyllBlock` instead.
+Similarly, instead of subclassing your Jekyll tag class from `Liquid::Tag`,
+subclass from `JekyllSupport::JekyllTag` instead.
+
+Both `JekyllSupport` classes instantiate new instances of
+[`PluginMetaLogger`](https://github.com/mslinn/jekyll_plugin_logger) (called `@logger`) and
+[`JekyllPluginHelper`](lib/jekyll_plugin_support_helper.rb) (called `@helper`).
+
+`JekyllPluginHelper` defines a generic `initialize` method,
+and your tag or block tag class should not override it.
+Also, your tag or block tag class should not define a method called `render`,
+because `JekyllBlock.initialize` defines one, which creates variables called
+[`@page`](https://jekyllrb.com/docs/variables/#page-variables) and
+[`@site`](https://jekyllrb.com/docs/variables/#site-variables).
+
+Instead, define a method called `render_impl`.
+For tags, `render_impl` does not accept any parameters.
+For block tags, a single parameter is required, which contains any text enclosed within your block.
+
+Your implementation of `render_impl` can access `@page` and `@site`,
+and can parse parameters passed to the tag / block tag, [as described here](https://mslinn.com/jekyll/10100-jekyll-plugin-background.html#params):
+
+```ruby
+# For a tag:
+module Jekyll
+  class Quote < JekyllSupport::JekyllTag
+    def render_impl
+      site_data = @site.data
+      @break  = @helper.parameter_specified? 'break'
+      # ...
+    end
+  end
+end
+```
+
+```ruby
+# For a tag block:
+module Jekyll
+  class Quote < JekyllSupport::JekyllBlock
+    def render_impl(text)
+      site_url = @site.url
+      @break  = @helper.parameter_specified? 'break'
+      # ...
+    end
+  end
+end
+```
 
 ## Additional Information
 More information is available on

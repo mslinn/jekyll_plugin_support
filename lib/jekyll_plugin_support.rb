@@ -29,18 +29,20 @@ module JekyllSupport
 
     # Method prescribed by the Jekyll plugin lifecycle.
     # @return [String]
-    def render(context)
+    def render(liquid_context)
       text = super
+      @page = liquid_context.registers[:page]
+      @site = liquid_context.registers[:site]
       render_impl text
     end
 
     # Jekyll plugins should override this method, not render, so their plugin can be tested more easily
+    # @page and @site are available
     # @return [String]
     def render_impl(text)
       text
     end
   end
-
 
   # Base class for Jekyll tags
   class JekyllTag < Liquid::Tag
@@ -64,11 +66,14 @@ module JekyllSupport
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.
-    def render(context)
+    def render(liquid_context)
+      @page = liquid_context.registers[:page]
+      @site = liquid_context.registers[:site]
       render_impl
     end
 
     # Jekyll plugins must override this method, not render, so their plugin can be tested more easily
+    # @page and @site are available
     def render_impl
       abort "JekyllTag render_impl for tag #{@tag_name} must be overridden, but it was not."
     end
