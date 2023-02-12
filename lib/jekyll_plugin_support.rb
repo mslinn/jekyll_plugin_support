@@ -31,8 +31,15 @@ module JekyllSupport
     # @return [String]
     def render(liquid_context)
       text = super
-      @page = liquid_context.registers[:page]
+      @liquid_context = liquid_context
+
+      # The names of front matter variables are hash keys for @page
+      @page = liquid_context.registers[:page] # Jekyll::Drops::DocumentDrop
       @site = liquid_context.registers[:site]
+      @config = @site.config
+      @envs = liquid_context.environments.first
+      @mode = @config['env']['JEKYLL_ENV'] || 'development'
+
       render_impl text
     end
 

@@ -1,3 +1,10 @@
+## 0.4.0 / 2023-02-12
+ * `render_impl` now predefines more instance variables:
+   - `@liquid_context` &ndash; passed to `render`
+   - `@config` Jekyll configuration
+   - `@envs` Environment variables
+   - `@mode` ('development', 'test' or 'production')
+
 ## 0.3.1 / 2023-02-07
   * `JekyllBlock.render_impl` and `JekyllTag.render_impl` now define `@page` and `@site`.
 
