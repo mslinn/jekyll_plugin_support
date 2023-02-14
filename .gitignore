@@ -30,8 +30,6 @@ jekyll/doc/
 node_modules/
 out/
 pkg/
-project/
-target/
 tmp/
 ~*
 Gemfile.lock

@@ -109,6 +109,20 @@ jekyll_plugin_support (0.1.0)
 ```
 
 
+## Test
+A test website is provided in the `demo` directory.
+ 1. Set breakpoints.
+
+ 2. Initiate a debug session from the command line:
+    ```shell
+    $ bin/attach demo
+    ```
+
+  3. Once the `Fast Debugger` signon appears, launch the Visual Studio Code launch configuration called `Attach rdebug-ide`.
+
+  4. View the generated website at [`http://localhost:4444`](http://localhost:4444)
+
+
 ### Build and Push to RubyGems
 To release a new version,
   1. Update the version number in `version.rb`.

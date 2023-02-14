@@ -31,7 +31,7 @@ module JekyllSupport
     # @return [String]
     def render(liquid_context)
       text = super
-      @liquid_context = liquid_context
+      @helper.liquid_context = liquid_context
 
       # The names of front matter variables are hash keys for @page
       @page = liquid_context.registers[:page] # Jekyll::Drops::DocumentDrop
@@ -74,7 +74,7 @@ module JekyllSupport
 
     # Method prescribed by the Jekyll plugin lifecycle.
     def render(liquid_context)
-      @liquid_context = liquid_context
+      @helper.liquid_context = liquid_context
       @page = liquid_context.registers[:page]
       @site = liquid_context.registers[:site]
       @config = @site.config

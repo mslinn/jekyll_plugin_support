@@ -1,3 +1,7 @@
+## 0.4.1 / 2023-02-14
+  * Fixed several problems
+  * Added demo site
+
 ## 0.4.0 / 2023-02-12
  * `render_impl` for tags and blocks now predefines more instance variables:
    - `@liquid_context` &ndash; passed to `render`
