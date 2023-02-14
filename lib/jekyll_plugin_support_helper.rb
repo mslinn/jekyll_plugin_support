@@ -14,7 +14,7 @@ class JekyllPluginHelper
       raise HrefError, "jekyll_href error: #{envar} is undefined".red, [] \
         if !ENV.key?(envar) && die_if_undefined # Suppress stack trace
 
-      ENV.fetch(envar)
+      ENV.fetch(envar, nil)
     end
   end
 
