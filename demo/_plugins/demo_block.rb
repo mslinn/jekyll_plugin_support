@@ -49,7 +49,7 @@ module Jekyll
         @envs=#{@envs.keys.join(' ')}</pre>
       END_OUTPUT
     end
-  end
 
-  JekyllPluginHelper.register(self, 'demo_block')
+    JekyllPluginHelper.register(self, 'demo_block')
+  end
 end

@@ -50,8 +50,8 @@ and can parse parameters passed to the tag / block tag, [as described here](http
 ```ruby
 # For a tag:
 module Jekyll
-  class Quote < JekyllSupport::JekyllTag
-    VERSION = '0.1.0'
+  class MyTag < JekyllSupport::JekyllTag
+    VERSION = '0.1.0'.freeze
 
     def render_impl
       # Your code here
@@ -63,8 +63,8 @@ end
 ```ruby
 # For a tag block:
 module Jekyll
-  class Quote < JekyllSupport::JekyllBlock
-    VERSION = '0.1.0'
+  class MyBlock < JekyllSupport::JekyllBlock
+    VERSION = '0.1.0'.freeze
 
     def render_impl(text)
       # Your code here
@@ -74,10 +74,26 @@ end
 ```
 
 Note that each tag or tag block must define a constant called `VERSION`.
-If your plugin is packaged as a gem, then you might need to include `version.rb` into the plugin class:
+If your plugin is packaged as a gem, then you might need to include `version.rb` into the plugin class.
+For example, if `lib/my_plugin/version.rb` looks like this:
 
 ```ruby
-include 'my_plugin/version'
+module MyPluginVersion
+  VERSION = '0.5.0'.freeze
+end
+```
+
+Then your plugin can incorporate the `VERSION` constant into your plugin like this:
+```ruby
+module Jekyll
+  class MyBlock < JekyllSupport::JekyllBlock
+    include MyPluginVersion
+
+    def render_impl(text)
+      # Your code here
+    end
+  end
+end
 ```
 
 ## Additional Information

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'shellwords'
 require 'key_value_parser'
 
@@ -18,21 +16,19 @@ class JekyllPluginHelper
     end
   end
 
-  def self.register(module_or_class, name)
-    module_or_class.constants.each do |konstant|
-      x = module_or_class.const_get(konstant)
-      next unless x.instance_of?(Class)
-      next unless x.ancestors.include?(JekyllSupport::JekyllBlock) || \
-                  x.ancestors.include?(JekyllSupport::JekyllTag)
+  def self.register(klass, name)
+    abort("Error: The #{name} plugin does not define VERSION") \
+      unless klass.const_defined?(:VERSION)
 
-      abort("Error: The #{name} plugin does not define VERSION") unless x.const_defined?(:VERSION)
+    version = klass.const_get(:VERSION)
 
-      v = x.const_get(:VERSION)
-      version = " v#{v}"
+    abort("Error: The #{name} plugin is not an instance of JekyllSupport::JekyllBlock or JekyllSupport::JekyllTag") \
+      unless klass.instance_of?(Class) &&
+             (klass.ancestors.include?(JekyllSupport::JekyllBlock) || \
+              klass.ancestors.include?(JekyllSupport::JekyllTag))
 
-      Liquid::Template.register_tag(name, x)
-      PluginMetaLogger.instance.info { "Loaded #{name}#{version} plugin." }
-    end
+    Liquid::Template.register_tag(name, klass)
+    PluginMetaLogger.instance.info { "Loaded #{name} v#{version} plugin." }
   end
 
   # strip leading and trailing quotes if present
