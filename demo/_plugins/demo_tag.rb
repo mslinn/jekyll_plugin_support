@@ -23,12 +23,12 @@ module Jekyll
 
         # Liquid variable name/value pairs
         @helper.params=
-          #{@helper.params.join(", ")}
+          #{@helper.params.join(', ')}
 
         @config['url']='#{@config['url']}'
 
         @helper.keys_values=
-        #{ @helper.keys_values.each { |k, v| "  #{k}=#{v}\n" } }
+        #{(@helper.keys_values.map { |k, v| "  #{k}=#{v}\n" }).join("  \n")}
 
         @site=#{@site}
 

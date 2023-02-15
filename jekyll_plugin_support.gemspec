@@ -22,25 +22,13 @@ Gem::Specification.new do |spec|
     Thanks for installing #{spec.name}!
 
   END_MESSAGE
-  spec.post_install_message = <<~END_MESSAGE
-
-    Thanks for installing #{spec.name}!
-
-  END_MESSAGE
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>= 2.6.0'
   spec.summary = 'Provides support for writing Jekyll plugins.'
   spec.test_files = spec.files.grep %r{^(test|spec|features)/}
-  spec.version = JekyllQuoteVersion::VERSION
+  spec.version = JekyllPluginSupportVersion::VERSION
 
   spec.add_dependency 'jekyll', '>= 3.5.0'
   spec.add_dependency 'jekyll_plugin_logger'
   spec.add_dependency 'key-value-parser'
-
-  spec.add_development_dependency 'debase'
-  spec.add_development_dependency 'rspec-match_ignoring_whitespace'
-  # spec.add_development_dependency 'rubocop-jekyll'
-  spec.add_development_dependency 'rubocop-rake'
-  spec.add_development_dependency 'rubocop-rspec'
-  spec.add_development_dependency 'ruby-debug-ide'
 end
