@@ -1,3 +1,7 @@
+## 0.5.0 / 2023-02-15
+  * Plugins now register themselves
+  * Plugins now report their name and version
+
 ## 0.4.1 / 2023-02-14
   * Fixed several problems
   * Added demo site

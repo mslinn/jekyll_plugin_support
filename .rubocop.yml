@@ -28,6 +28,9 @@ Metrics/BlockLength:
   Exclude:
     - jekyll_plugin_support.gemspec
 
+Metrics/MethodLength:
+  Max: 25
+
 Style/FrozenStringLiteralComment:
   Enabled: false
 

@@ -1,9 +1,9 @@
 require 'jekyll_plugin_support'
 
 module Jekyll
-  PLUGIN_BLOCK_NAME = 'demo_block'.freeze
-
   class DemoBlock < JekyllSupport::JekyllBlock
+    VERSION = '0.1.0'
+
     def render_impl(text)
       @keyword1  = @helper.parameter_specified? 'keyword1'
       @keyword2  = @helper.parameter_specified? 'keyword2'
@@ -50,7 +50,6 @@ module Jekyll
       END_OUTPUT
     end
   end
-end
 
-PluginMetaLogger.instance.info { "Loaded #{Jekyll::PLUGIN_BLOCK_NAME} plugin." }
-Liquid::Template.register_tag(Jekyll::PLUGIN_BLOCK_NAME, Jekyll::DemoBlock)
+  JekyllPluginHelper.register(self, 'demo_block')
+end

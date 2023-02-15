@@ -1,9 +1,9 @@
 require 'jekyll_plugin_support'
 
 module Jekyll
-  PLUGIN_TAG_NAME = 'demo_tag'.freeze
-
   class DemoTag < JekyllSupport::JekyllTag
+    VERSION = '0.1.1'
+
     def render_impl
       @keyword1  = @helper.parameter_specified? 'keyword1'
       @keyword2  = @helper.parameter_specified? 'keyword2'
@@ -48,7 +48,6 @@ module Jekyll
       END_OUTPUT
     end
   end
-end
 
-PluginMetaLogger.instance.info { "Loaded #{Jekyll::PLUGIN_TAG_NAME} plugin." }
-Liquid::Template.register_tag(Jekyll::PLUGIN_TAG_NAME, Jekyll::DemoTag)
+  JekyllPluginHelper.register(self, 'demo_tag')
+end

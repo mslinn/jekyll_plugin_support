@@ -18,6 +18,23 @@ class JekyllPluginHelper
     end
   end
 
+  def self.register(module_or_class, name)
+    module_or_class.constants.each do |konstant|
+      x = module_or_class.const_get(konstant)
+      next unless x.instance_of?(Class)
+      next unless x.ancestors.include?(JekyllSupport::JekyllBlock) || \
+                  x.ancestors.include?(JekyllSupport::JekyllTag)
+
+      abort("Error: The #{name} plugin does not define VERSION") unless x.const_defined?(:VERSION)
+
+      v = x.const_get(:VERSION)
+      version = " v#{v}"
+
+      Liquid::Template.register_tag(name, x)
+      PluginMetaLogger.instance.info { "Loaded #{name}#{version} plugin." }
+    end
+  end
+
   # strip leading and trailing quotes if present
   def self.remove_quotes(string)
     string.strip.gsub(/\A'|\A"|'\Z|"\Z/, '').strip if string
