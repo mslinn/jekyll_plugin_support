@@ -51,10 +51,10 @@ and can parse parameters passed to the tag / block tag, [as described here](http
 # For a tag:
 module Jekyll
   class Quote < JekyllSupport::JekyllTag
+    VERSION = '0.1.0'
+
     def render_impl
-      site_data = @site.data
-      @break  = @helper.parameter_specified? 'break'
-      # ...
+      # Your code here
     end
   end
 end
@@ -64,13 +64,20 @@ end
 # For a tag block:
 module Jekyll
   class Quote < JekyllSupport::JekyllBlock
+    VERSION = '0.1.0'
+
     def render_impl(text)
-      site_url = @site.url
-      @break  = @helper.parameter_specified? 'break'
-      # ...
+      # Your code here
     end
   end
 end
+```
+
+Note that each tag or tag block must define a constant called `VERSION`.
+If your plugin is packaged as a gem, then you might need to include `version.rb` into the plugin class:
+
+```ruby
+include 'my_plugin/version'
 ```
 
 ## Additional Information
