@@ -75,11 +75,18 @@ module JekyllSupport
     # Method prescribed by the Jekyll plugin lifecycle.
     def render(liquid_context)
       @helper.liquid_context = liquid_context
-      @page = liquid_context.registers[:page]
-      @site = liquid_context.registers[:site]
+
+      @envs      = liquid_context.environments.first
+
+      @layout    = @envs.registers[:layout]
+      @page      = liquid_context.registers[:page]
+      @paginator = liquid_context.registers[:paginator]
+      @site      = liquid_context.registers[:site]
+      @theme     = liquid_context.registers[:theme]
+
       @config = @site.config
-      @envs = liquid_context.environments.first
       @mode = @config['env']['JEKYLL_ENV'] || 'development'
+
       render_impl
     end
 

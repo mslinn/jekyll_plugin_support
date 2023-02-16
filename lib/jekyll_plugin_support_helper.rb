@@ -5,7 +5,7 @@ require 'key_value_parser'
 class JekyllPluginHelper
   attr_reader :argv, :keys_values, :liquid_context, :logger, :markup, :params, :tag_name
 
-  # Expand a environment variable reference
+  # Expand an environment variable reference
   def self.expand_env(str, die_if_undefined: false)
     str.gsub(/\$([a-zA-Z_][a-zA-Z0-9_]*)|\${\g<1>}|%\g<1>%/) do
       envar = Regexp.last_match(1)
@@ -48,14 +48,14 @@ class JekyllPluginHelper
   def initialize(tag_name, markup, logger)
     @tag_name = tag_name
     @logger = logger
-    @logger.debug { "@keys_values='#{@keys_values}'" }
     reinitialize(markup.strip)
+    @logger.debug { "@keys_values='#{@keys_values}'" }
   end
 
   def reinitialize(markup)
     # @keys_values was a Hash[Symbol, String|Boolean] but now it is Hash[String, String|Boolean]
-    @markup = markup # Useful for debugging
-    @argv = Shellwords.split(JekyllPluginHelper.expand_env(markup))
+    @markup = markup
+    @argv = Shellwords.split(self.class.expand_env(markup))
     @keys_values = KeyValueParser \
       .new({}, { array_values: false, normalize_keys: false, separator: /=/ }) \
       .parse(@argv)
