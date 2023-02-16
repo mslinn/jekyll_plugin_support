@@ -78,11 +78,12 @@ module JekyllSupport
 
       @envs      = liquid_context.environments.first
 
-      @layout    = @envs.registers[:layout]
+      @layout    = @envs[:layout]
+      @paginator = @envs[:paginator]
+      @theme     = @envs[:theme]
+
       @page      = liquid_context.registers[:page]
-      @paginator = liquid_context.registers[:paginator]
       @site      = liquid_context.registers[:site]
-      @theme     = liquid_context.registers[:theme]
 
       @config = @site.config
       @mode = @config['env']['JEKYLL_ENV'] || 'development'

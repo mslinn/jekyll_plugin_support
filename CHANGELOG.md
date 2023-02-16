@@ -1,6 +1,7 @@
 ## 0.5.0 / 2023-02-15
   * Plugins now register themselves
   * Plugins now report their name and version
+  * `@layout`, `@paginator`, and `@theme` have values if supported by the version of Jekyll, and they are active. (See [Jekyll docs](https://jekyllrb.com/docs/variables/).)
 
 ## 0.4.1 / 2023-02-14
   * Fixed several problems
