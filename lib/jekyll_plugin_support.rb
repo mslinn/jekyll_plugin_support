@@ -30,7 +30,7 @@ module JekyllSupport
       @tag_name = tag_name
       @argument_string = argument_string
       @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
-      p "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}."
+      @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
       @helper = JekyllPluginHelper.new(tag_name, argument_string, @logger, respond_to?(:no_arg_parsing))
     end
 
@@ -64,9 +64,8 @@ module JekyllSupport
       end
 
       super
+      @logger.debug { "#{self.class}: respond_to?(:o_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
     end
-
-    p "#{self.class}: respond_to?(:o_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}."
   end
 
   # Base class for Jekyll tags
@@ -87,7 +86,7 @@ module JekyllSupport
       @tag_name = tag_name
       @argument_string = argument_string
       @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
-      p "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}."
+      @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
       @helper = JekyllPluginHelper.new(tag_name, argument_string, @logger, respond_to?(:no_arg_parsing))
     end
 
@@ -124,8 +123,7 @@ module JekyllSupport
       end
 
       super
+      @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
     end
-
-    p "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}."
   end
 end
