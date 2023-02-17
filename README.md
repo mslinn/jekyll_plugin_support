@@ -94,6 +94,7 @@ end
 Then your plugin can incorporate the `VERSION` constant into your plugin like this:
 ```ruby
 require 'jekyll_plugin_support'
+require_relative 'my_block/version'
 
 module Jekyll
   class MyBlock < JekyllSupport::JekyllBlock
