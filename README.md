@@ -19,7 +19,7 @@ And then execute:
 
     $ bundle install
 
-## Usage
+## General Usage
 `JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag`
 provide support for Jekyll tag blocks and Jekyll tags, respectively.
 They are very similar in construction and usage.
@@ -47,8 +47,10 @@ For block tags, a single parameter is required, which contains any text enclosed
 Your implementation of `render_impl` can access `@page` and `@site`,
 and can parse parameters passed to the tag / block tag, [as described here](https://mslinn.com/jekyll/10100-jekyll-plugin-background.html#params):
 
+### For a tag:
 ```ruby
-# For a tag:
+require 'jekyll_plugin_support'
+
 module Jekyll
   class MyTag < JekyllSupport::JekyllTag
     VERSION = '0.1.0'.freeze
@@ -56,12 +58,16 @@ module Jekyll
     def render_impl
       # Your code here
     end
+
+    JekyllPluginHelper.register(self, 'demo_tag')
   end
 end
 ```
 
+### For a tag block:
 ```ruby
-# For a tag block:
+require 'jekyll_plugin_support'
+
 module Jekyll
   class MyBlock < JekyllSupport::JekyllBlock
     VERSION = '0.1.0'.freeze
@@ -69,6 +75,8 @@ module Jekyll
     def render_impl(text)
       # Your code here
     end
+
+    JekyllPluginHelper.register(self, 'demo_block')
   end
 end
 ```
@@ -79,12 +87,14 @@ For example, if `lib/my_plugin/version.rb` looks like this:
 
 ```ruby
 module MyPluginVersion
-  VERSION = '0.5.0'.freeze
+  VERSION = '0.5.1'.freeze
 end
 ```
 
 Then your plugin can incorporate the `VERSION` constant into your plugin like this:
 ```ruby
+require 'jekyll_plugin_support'
+
 module Jekyll
   class MyBlock < JekyllSupport::JekyllBlock
     include MyPluginVersion
@@ -92,9 +102,17 @@ module Jekyll
     def render_impl(text)
       # Your code here
     end
+
+    JekyllPluginHelper.register(self, 'demo_tag')
   end
 end
 ```
+
+### `no_arg_parsing` Optimization
+If your tag or block plugin only needs access to the raw arguments passed from the web page,
+without tokenization, and you expect that the plugin might be invoked with large amounts of text,
+derive your plugin from `JekyllBlockNoArgParsing` or `JekyllTagNoArgParsing`.
+
 
 ## Additional Information
 More information is available on

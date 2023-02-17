@@ -2,7 +2,7 @@ require 'jekyll_plugin_support'
 
 module Jekyll
   class DemoBlock < JekyllSupport::JekyllBlock
-    VERSION = '0.1.0'
+    VERSION = '0.1.0'.freeze
 
     def render_impl(text)
       @keyword1  = @helper.parameter_specified? 'keyword1'

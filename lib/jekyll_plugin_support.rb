@@ -5,6 +5,12 @@ require_relative 'jekyll_plugin_support/version'
 
 # @author Copyright 2022 Michael Slinn
 # @license SPDX-License-Identifier: Apache-2.0``
+module NoArgParsing
+  attr_accessor :no_arg_parsing
+
+  @no_arg_parsing = true
+end
+
 module JekyllSupport
   # Base class for Jekyll block tags
   class JekyllBlock < Liquid::Block
@@ -22,9 +28,10 @@ module JekyllSupport
     def initialize(tag_name, argument_string, parse_context)
       super
       @tag_name = tag_name
-      @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
-      @helper = JekyllPluginHelper.new(tag_name, argument_string, @logger)
       @argument_string = argument_string
+      @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
+      p "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}."
+      @helper = JekyllPluginHelper.new(tag_name, argument_string, @logger, respond_to?(:no_arg_parsing))
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.
@@ -33,8 +40,7 @@ module JekyllSupport
       text = super
       @helper.liquid_context = liquid_context
 
-      # The names of front matter variables are hash keys for @page
-      @page = liquid_context.registers[:page] # Jekyll::Drops::DocumentDrop
+      @page = liquid_context.registers[:page] # Type Jekyll::Drops::DocumentDrop
       @site = liquid_context.registers[:site]
       @config = @site.config
       @envs = liquid_context.environments.first
@@ -49,6 +55,18 @@ module JekyllSupport
     def render_impl(text)
       text
     end
+  end
+
+  class JekyllBlockNoArgParsing < JekyllBlock
+    def initialize(tag_name, argument_string, parse_context)
+      class << self
+        include NoArgParsing
+      end
+
+      super
+    end
+
+    p "#{self.class}: respond_to?(:o_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}."
   end
 
   # Base class for Jekyll tags
@@ -67,9 +85,10 @@ module JekyllSupport
     def initialize(tag_name, argument_string, parse_context)
       super
       @tag_name = tag_name
-      @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
-      @helper = JekyllPluginHelper.new(tag_name, argument_string, @logger)
       @argument_string = argument_string
+      @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
+      p "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}."
+      @helper = JekyllPluginHelper.new(tag_name, argument_string, @logger, respond_to?(:no_arg_parsing))
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.
@@ -94,7 +113,19 @@ module JekyllSupport
     # Jekyll plugins must override this method, not render, so their plugin can be tested more easily
     # @page and @site are available
     def render_impl
-      abort "JekyllTag render_impl for tag #{@tag_name} must be overridden, but it was not."
+      abort "#{self.class}.render_impl for tag #{@tag_name} must be overridden, but it was not."
     end
+  end
+
+  class JekyllTagNoArgParsing < JekyllTag
+    def initialize(tag_name, argument_string, parse_context)
+      class << self
+        include NoArgParsing
+      end
+
+      super
+    end
+
+    p "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}."
   end
 end

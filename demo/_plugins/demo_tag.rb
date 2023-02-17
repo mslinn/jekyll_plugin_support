@@ -2,7 +2,7 @@ require 'jekyll_plugin_support'
 
 module Jekyll
   class DemoTag < JekyllSupport::JekyllTag
-    VERSION = '0.1.1'
+    VERSION = '0.1.1'.freeze
 
     def render_impl
       @keyword1  = @helper.parameter_specified? 'keyword1'

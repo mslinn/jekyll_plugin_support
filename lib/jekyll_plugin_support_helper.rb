@@ -3,7 +3,7 @@ require 'key_value_parser'
 
 # Base class for all types of Jekyll plugin helpers
 class JekyllPluginHelper
-  attr_reader :argv, :keys_values, :liquid_context, :logger, :markup, :params, :tag_name
+  attr_reader :argv, :keys_values, :liquid_context, :logger, :markup, :no_arg_parsing, :params, :tag_name
 
   # Expand an environment variable reference
   def self.expand_env(str, die_if_undefined: false)
@@ -45,20 +45,37 @@ class JekyllPluginHelper
   #        This argument is used mostly to display localized error messages on Liquid built-in Tags and Filters.
   #        See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
   # @return [void]
-  def initialize(tag_name, markup, logger)
+  def initialize(tag_name, markup, logger, no_arg_parsing)
     @tag_name = tag_name
     @logger = logger
+    @no_arg_parsing = no_arg_parsing
     reinitialize(markup.strip)
     @logger.debug { "@keys_values='#{@keys_values}'" }
+  end
+
+  def warn_fetch(variable)
+    abort "Error: Argument parsing was suppressed, but an attempt to obtain the value of #{variable} was made"
+  end
+
+  def warn_parse(meth)
+    abort "Error: Argument parsing was suppressed, but an attempt to invoke #{meth} was made"
   end
 
   def reinitialize(markup)
     # @keys_values was a Hash[Symbol, String|Boolean] but now it is Hash[String, String|Boolean]
     @markup = markup
-    @argv = Shellwords.split(self.class.expand_env(markup))
-    @keys_values = KeyValueParser \
-      .new({}, { array_values: false, normalize_keys: false, separator: /=/ }) \
-      .parse(@argv)
+    if @no_arg_parsing
+      define_singleton_method(:argv) { warn_fetch :argv }
+      define_singleton_method(:keys_values) { warn_fetch :keys_values }
+      define_singleton_method(:params) { warn_fetch :params }
+      define_singleton_method(:parameter_specified?) { |_name| warn_parse(:parameter_specified?) }
+      define_singleton_method(:delete_parameter) { |_name| warn_parse(:delete_parameter) }
+    else
+      @argv = Shellwords.split(self.class.expand_env(markup))
+      @keys_values = KeyValueParser \
+        .new({}, { array_values: false, normalize_keys: false, separator: /=/ }) \
+        .parse(@argv)
+    end
   end
 
   def delete_parameter(key)
@@ -106,7 +123,7 @@ class JekyllPluginHelper
   # Sets @params by replacing any Liquid variable names with their values
   def liquid_context=(context)
     @liquid_context = context
-    @params = @keys_values.map { |k, _v| lookup_variable(k) }
+    @params = @keys_values.map { |k, _v| lookup_variable(k) } unless respond_to?(:no_arg_parsing) && no_arg_parsing
   end
 
   def lookup_variable(symbol)

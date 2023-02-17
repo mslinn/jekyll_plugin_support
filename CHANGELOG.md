@@ -1,3 +1,6 @@
+## 0.5.1 / 2023-02-17
+  * `no_arg_parsing` optimization added.
+
 ## 0.5.0 / 2023-02-15
   * Plugins now register themselves
   * Plugins now report their name and version
