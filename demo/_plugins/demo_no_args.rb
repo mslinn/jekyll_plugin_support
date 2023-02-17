@@ -5,8 +5,6 @@ module Jekyll
     VERSION = '0.1.0'.freeze
 
     def render_impl
-      # @keyword1  = @helper.parameter_specified? 'keyword1'
-
       <<~END_OUTPUT
         The raw arguments passed to this DemoTagNoArgs instance are:
         '#{@argument_string}'
