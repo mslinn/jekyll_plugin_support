@@ -147,7 +147,7 @@ jekyll_plugin_support (0.1.0)
     License: MIT
     Installed at: /home/mslinn/.gems
 
-    Generates Jekyll logger with colored output.
+    Provides support for writing Jekyll plugins.
 ```
 
 
