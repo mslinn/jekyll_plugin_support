@@ -1,5 +1,10 @@
+require:
+  - rubocop-rspec
+  # - rubocop-jekyll
+
 AllCops:
   Exclude:
+    - demo/_site/**/*
     - exe/**/*
     - vendor/**/*
     - Gemfile*
@@ -13,7 +18,7 @@ Gemspec/RequireMFA:
   Enabled: false
 
 Layout/HashAlignment:
-  Enabled: false
+  EnforcedHashRocketStyle: table
 
 Layout/LineLength:
   Max: 150
@@ -31,10 +36,16 @@ Metrics/BlockLength:
 Metrics/MethodLength:
   Max: 25
 
-Style/FrozenStringLiteralComment:
-  Enabled: false
+RSpec/ExampleLength:
+  Max: 20
+
+RSpec/MultipleExpectations:
+  Max: 15
 
 Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
   Enabled: false
 
 Style/TrailingCommaInHashLiteral:
