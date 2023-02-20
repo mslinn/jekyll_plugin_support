@@ -23,8 +23,16 @@ Layout/HashAlignment:
 Layout/LineLength:
   Max: 150
 
+Layout/CommentIndentation:
+  Exclude:
+    - spec/**/*
+
 Layout/MultilineMethodCallIndentation:
   Enabled: false
+
+Lint/RedundantCopDisableDirective:
+  Exclude:
+    - jekyll_plugin_support.gemspec
 
 Metrics/AbcSize:
   Max: 20
