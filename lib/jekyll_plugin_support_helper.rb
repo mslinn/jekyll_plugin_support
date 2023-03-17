@@ -75,6 +75,7 @@ class JekyllPluginHelper
       @keys_values = KeyValueParser \
         .new({}, { array_values: false, normalize_keys: false, separator: /=/ }) \
         .parse(@argv)
+      @params = @keys_values.map { |k, _v| lookup_variable(k) } unless respond_to?(:no_arg_parsing) && no_arg_parsing
     end
   end
 
@@ -123,7 +124,6 @@ class JekyllPluginHelper
   # Sets @params by replacing any Liquid variable names with their values
   def liquid_context=(context)
     @liquid_context = context
-    @params = @keys_values.map { |k, _v| lookup_variable(k) } unless respond_to?(:no_arg_parsing) && no_arg_parsing
   end
 
   def lookup_variable(symbol)
