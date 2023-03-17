@@ -28,23 +28,33 @@ class MyTest
     end
 
     it 'parses quoted booleans' do
-      helper = described_class.new('my_tag', "bool='true' blah ick", logger, false)
-      expect(helper.keys_values.keys).to eq(%w[bool blah ick])
+      helper = described_class.new('my_tag', "bool1='true' bool2='false' blah ick", logger, false)
+      expect(helper.keys_values.keys).to eq(%w[bool1 bool2 blah ick])
 
-      bool = helper.parameter_specified? 'bool'
-      expect(bool).to be true
+      bool1 = helper.parameter_specified? 'bool1'
+      expect(bool1).to be true
+
+      bool2 = helper.parameter_specified? 'bool2'
+      expect(bool2).to be false
 
       expect(helper.keys_values.keys).to eq(%w[blah ick])
+
+      expect(helper.remaining_markup).to eq('blah ick')
     end
 
     it 'parses unquoted booleans' do
-      helper = described_class.new('my_tag', 'bool=true blah ick', logger, false)
-      expect(helper.keys_values.keys).to eq(%w[bool blah ick])
+      helper = described_class.new('my_tag', 'bool1=true bool2=false blah ick', logger, false)
+      expect(helper.keys_values.keys).to eq(%w[bool1 bool2 blah ick])
 
-      bool = helper.parameter_specified? 'bool'
-      expect(bool).to be true
+      bool1 = helper.parameter_specified? 'bool1'
+      expect(bool1).to be true
+
+      bool2 = helper.parameter_specified? 'bool2'
+      expect(bool2).to be false
 
       expect(helper.keys_values.keys).to eq(%w[blah ick])
+
+      expect(helper.remaining_markup).to eq('blah ick')
     end
   end
 end
