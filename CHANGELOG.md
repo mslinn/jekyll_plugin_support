@@ -1,4 +1,5 @@
 ## 0.5.2 / 2023-03-17
+  * Added `@helper.remaining_markup` public method, which returns remaining markup passed to your tag, after keyword and name/value parsing is complete.
   * Finally wrote proper `rspec` tests.
   * Finally documented argument parsing.
   * Fixed bug introduced in v0.5.1 which did not remove elements from `@params`.

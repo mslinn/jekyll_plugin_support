@@ -157,6 +157,10 @@ The following also have the same result, however note that because the value has
   - `pay_tuesday="maybe not"`
   - `pay_tuesday='maybe not'`
 
+#### Remaining Markup
+After your plugin has parsed all the keyword options and name/value parameters,
+call `@helper.remaining_markup` to obtain the remaining markup that was passed to your plugin.
+
 
 ### `no_arg_parsing` Optimization
 If your tag or block plugin only needs access to the raw arguments passed from the web page,

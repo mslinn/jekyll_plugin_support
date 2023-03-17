@@ -79,6 +79,11 @@ class JekyllPluginHelper
     end
   end
 
+  # Call this method to return the remaining markup after `parameter_specified?` has been invoked.
+  def remaining_markup
+    @argv.join(' ')
+  end
+
   def delete_parameter(key)
     return if @keys_values.empty? || @params.nil?
 

@@ -2,7 +2,7 @@ require 'jekyll_plugin_support'
 
 module Jekyll
   class DemoBlock < JekyllSupport::JekyllBlock
-    VERSION = '0.1.0'.freeze
+    VERSION = '0.1.1'.freeze
 
     def render_impl(text)
       @keyword1  = @helper.parameter_specified? 'keyword1'
@@ -25,10 +25,12 @@ module Jekyll
         @helper.params=
           #{@helper.params.join(', ')}
 
-        @config['url']='#{@config['url']}'
+        @helper.remaining_markup='#{@helper.remaining_markup}'
 
         @helper.keys_values=
         #{(@helper.keys_values.map { |k, v| "  #{k}=#{v}\n" }).join("  \n")}
+
+        @config['url']='#{@config['url']}'
 
         @site.url=# {@site.url}
 
