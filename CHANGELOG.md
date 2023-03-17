@@ -1,3 +1,8 @@
+## 0.5.2 / 2023-03-17
+  * Finally wrote proper `rspec` tests.
+  * Finally documented argument parsing.
+  * Fixed bug introduced in v0.5.1 which did not remove elements from `@params`.
+
 ## 0.5.1 / 2023-02-17
   * `no_arg_parsing` optimization added.
 

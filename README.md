@@ -109,6 +109,55 @@ module Jekyll
 end
 ```
 
+### Argument Parsing
+Tag arguments can be obtained within `render_impl`.
+Both keyword options and name/value parameters are supported.
+
+Both `JekyllTag` and `JekyllBlock` use the standard Ruby mechanism for parsing command-line options:
+[`shellwords`](https://ruby-doc.org/stdlib-2.5.1/libdoc/shellwords/rdoc/Shellwords.html) and
+[`key_value_parser`](https://www.rubydoc.info/gems/key-value-parser).
+
+All your code has to do is to specify the keywords to search for in the string passed from the HTML page that your tag is embedded in.
+The included `demo` website has examples; both [`demo/_plugins/demo_tag.rb`](demo/_plugins/demo_tag.rb) and
+[`demo/_plugins/demo_block.rb`](demo/_plugins/demo_block.rb) contain the following:
+
+```ruby
+@keyword1  = @helper.parameter_specified? 'keyword1'
+@keyword2  = @helper.parameter_specified? 'keyword2'
+@name1  = @helper.parameter_specified? 'name1'
+@name2  = @helper.parameter_specified? 'name2'
+```
+
+In [`demo/index.html`](demo/index.html), the following invoked the tag:
+
+```html
+{% demo_tag keyword1 name1='value1' unreferenced_key unreferenced_name="unreferenced_value" %}
+```
+
+The `demo/_plugins/demo_tag.rb` plugin uses `@helper.parameter_specified?` provided by
+`jekyll_support_plugin` to parse the string passed to the tag, which is
+`keyword1 name1='value1' unreferenced_key unreferenced_name="unreferenced_value"`.
+
+  - Because `keyword1` was referenced by `@helper.parameter_specified?` above,
+    that keyword option is removed from the argument string.
+  - Because the `name1` key/value parameter was referenced by `@helper.parameter_specified?` above,
+    that name/value pair is removed from the argument string.
+  - The remainder of the argument string is now `unreferenced_key unreferenced_name="unreferenced_value"`.
+
+Name/value parameters can be quoted; if the value consists of only one token then it does not need to be quoted.
+The following name/value parameters all have the same result:
+
+  - `pay_tuesday="true"`
+  - `pay_tuesday='true'`
+  - `pay_tuesday=true`
+  - `pay_tuesday`
+
+The following also have the same result, however note that because the value has more than one token, quotes must be used:
+
+  - `pay_tuesday="maybe not"`
+  - `pay_tuesday='maybe not'`
+
+
 ### `no_arg_parsing` Optimization
 If your tag or block plugin only needs access to the raw arguments passed from the web page,
 without tokenization, and you expect that the plugin might be invoked with large amounts of text,
