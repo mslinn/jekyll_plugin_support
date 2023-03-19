@@ -1,3 +1,8 @@
+## 0.5.3 / 2023-03-19
+  * Added properties `argv_original`, `keys_values_original`, `remaining_markup_original`,
+    and `params_original`, which are the original values of `argv`, `keys_values`,
+    `remaining_markup`, and `params`, before environment variable expansion.
+
 ## 0.5.2 / 2023-03-17
   * Added `@helper.remaining_markup` public method, which returns remaining markup passed to your tag, after keyword and name/value parsing is complete.
   * Finally wrote proper `rspec` tests.

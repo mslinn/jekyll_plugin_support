@@ -2,8 +2,10 @@ require 'shellwords'
 require 'key_value_parser'
 
 # Base class for all types of Jekyll plugin helpers
-class JekyllPluginHelper
-  attr_reader :argv, :keys_values, :liquid_context, :logger, :markup, :no_arg_parsing, :params, :tag_name
+class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
+  attr_accessor :liquid_context
+  attr_reader :argv, :keys_values, :logger, :markup, :no_arg_parsing, :params, :tag_name,
+              :argv_original, :keys_values_original, :params_original
 
   # Expand an environment variable reference
   def self.expand_env(str, die_if_undefined: false)
@@ -53,12 +55,15 @@ class JekyllPluginHelper
     @logger.debug { "@keys_values='#{@keys_values}'" }
   end
 
-  def warn_fetch(variable)
-    abort "Error: Argument parsing was suppressed, but an attempt to obtain the value of #{variable} was made"
-  end
+  # @return if parameter was specified, removes it from the available tokens and returns value
+  def parameter_specified?(name)
+    return false if @keys_values.empty?
 
-  def warn_parse(meth)
-    abort "Error: Argument parsing was suppressed, but an attempt to invoke #{meth} was made"
+    key = name
+    key = name.to_sym if @keys_values.first.first.instance_of?(Symbol)
+    value = @keys_values[key]
+    delete_parameter(name)
+    value
   end
 
   def reinitialize(markup)
@@ -71,11 +76,7 @@ class JekyllPluginHelper
       define_singleton_method(:parameter_specified?) { |_name| warn_parse(:parameter_specified?) }
       define_singleton_method(:delete_parameter) { |_name| warn_parse(:delete_parameter) }
     else
-      @argv = Shellwords.split(self.class.expand_env(markup))
-      @keys_values = KeyValueParser \
-        .new({}, { array_values: false, normalize_keys: false, separator: /=/ }) \
-        .parse(@argv)
-      @params = @keys_values.map { |k, _v| lookup_variable(k) } unless respond_to?(:no_arg_parsing) && no_arg_parsing
+      parse markup
     end
   end
 
@@ -84,23 +85,26 @@ class JekyllPluginHelper
     @argv.join(' ')
   end
 
+  def remaining_markup_original
+    @argv_original.join(' ')
+  end
+
+  def warn_fetch(variable)
+    abort "Error: Argument parsing was suppressed, but an attempt to obtain the value of #{variable} was made"
+  end
+
+  def warn_parse(meth)
+    abort "Error: Argument parsing was suppressed, but an attempt to invoke #{meth} was made"
+  end
+
+  private
+
   def delete_parameter(key)
     return if @keys_values.empty? || @params.nil?
 
     @params.delete(key)
     @argv.delete_if { |x| x == key or x.start_with?("#{key}=") }
     @keys_values.delete(key)
-  end
-
-  # @return if parameter was specified, removes it from the available tokens and returns value
-  def parameter_specified?(name)
-    return false if @keys_values.empty?
-
-    key = name
-    key = name.to_sym if @keys_values.first.first.instance_of?(Symbol)
-    value = @keys_values[key]
-    delete_parameter(name)
-    value
   end
 
   PREDEFINED_SCOPE_KEYS = %i[include page].freeze
@@ -126,11 +130,6 @@ class JekyllPluginHelper
     value
   end
 
-  # Sets @params by replacing any Liquid variable names with their values
-  def liquid_context=(context)
-    @liquid_context = context
-  end
-
   def lookup_variable(symbol)
     string = symbol.to_s
     return string unless string.start_with?('{{') && string.end_with?('}}')
@@ -140,5 +139,19 @@ class JekyllPluginHelper
 
   def page
     @liquid_context.registers[:page]
+  end
+
+  def parse(markup)
+    @argv_original = Shellwords.split(markup)
+    @keys_values_original = KeyValueParser \
+      .new({}, { array_values: false, normalize_keys: false, separator: /=/ }) \
+      .parse(@argv_original)
+    @params = @keys_values_original.map { |k, _v| lookup_variable(k) } unless respond_to?(:no_arg_parsing) && no_arg_parsing
+
+    @argv = Shellwords.split(self.class.expand_env(markup))
+    @keys_values = KeyValueParser \
+      .new({}, { array_values: false, normalize_keys: false, separator: /=/ }) \
+      .parse(@argv)
+    @params = @keys_values.map { |k, _v| lookup_variable(k) } unless respond_to?(:no_arg_parsing) && no_arg_parsing
   end
 end
