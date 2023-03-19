@@ -105,6 +105,10 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
     @params.delete(key)
     @argv.delete_if { |x| x == key or x.start_with?("#{key}=") }
     @keys_values.delete(key)
+
+    @params_original.delete(key)
+    @argv_original.delete_if { |x| x == key or x.start_with?("#{key}=") }
+    @keys_values_original.delete(key)
   end
 
   PREDEFINED_SCOPE_KEYS = %i[include page].freeze
@@ -146,7 +150,7 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
     @keys_values_original = KeyValueParser \
       .new({}, { array_values: false, normalize_keys: false, separator: /=/ }) \
       .parse(@argv_original)
-    @params = @keys_values_original.map { |k, _v| lookup_variable(k) } unless respond_to?(:no_arg_parsing) && no_arg_parsing
+    @params_original = @keys_values_original.map { |k, _v| lookup_variable(k) } unless respond_to?(:no_arg_parsing) && no_arg_parsing
 
     @argv = Shellwords.split(self.class.expand_env(markup))
     @keys_values = KeyValueParser \
