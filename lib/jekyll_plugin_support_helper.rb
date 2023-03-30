@@ -1,5 +1,6 @@
 require 'shellwords'
 require 'key_value_parser'
+require_relative 'call_chain'
 
 # Base class for all types of Jekyll plugin helpers
 class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
@@ -56,52 +57,12 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
     reinitialize(markup.strip)
 
     @attribution = parameter_specified?('attribution') unless no_arg_parsing
-    @spec = current_spec
+    _x = CallChain.caller_method
+    _y = CallChain.caller_method 2
+    _z = CallChain.caller_method 3
+    @spec = current_spec __FILE__
 
     @logger.debug { "@keys_values='#{@keys_values}'" }
-  end
-
-  def current_spec
-    searcher = if Gem::Specification.respond_to?(:find)
-                 Gem::Specification
-               elsif Gem.respond_to?(:searcher)
-                 Gem.searcher.init_gemspecs
-               end
-
-    searcher&.find do |spec|
-      File.fnmatch(File.join(spec.full_gem_path, '*'), __FILE__)
-    end
-  end
-
-  def attribute
-    return unless @spec
-
-    current_gem = @spec.name
-    props = Gem.loaded_specs[current_gem]
-    <<~END_OUTPUT
-      <div id="jps_attribute_#{rand(999_999)}" class="jps_attribute">
-        <a href="#{props.homepage}">
-          <b>#{attribution_string}</b>
-        </a>
-      </div>
-    END_OUTPUT
-  end
-
-  def attribution_string
-    string = if @attribution == true
-               DEFAULT_ATTRIBUTION
-             else
-               @attribution
-             end
-    string.gsub('#{', '#{props.')
-  end
-
-  def annotate_globals
-    @specs = Gem.loaded_specs[@spec.name]
-    @authors = @specs.authors
-    @version = @specs.version
-    @homepage = @specs.homepage
-    @published_date = @specs.date
   end
 
   # @return if parameter was specified, removes it from the available tokens and returns value
@@ -147,6 +108,49 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
   end
 
   private
+
+  def attribute
+    return unless @spec
+
+    current_gem = @spec.name
+    props = Gem.loaded_specs[current_gem]
+    <<~END_OUTPUT
+      <div id="jps_attribute_#{rand(999_999)}" class="jps_attribute">
+        <a href="#{props.homepage}">
+          <b>#{attribution_string}</b>
+        </a>
+      </div>
+    END_OUTPUT
+  end
+
+  def attribution_string
+    string = if @attribution == true
+               DEFAULT_ATTRIBUTION
+             else
+               @attribution
+             end
+    string.gsub('#{', '#{props.')
+  end
+
+  def annotate_globals
+    @specs = Gem.loaded_specs[@spec.name]
+    @authors = @specs.authors
+    @version = @specs.version
+    @homepage = @specs.homepage
+    @published_date = @specs.date
+  end
+
+  def current_spec(file)
+    searcher = if Gem::Specification.respond_to?(:find)
+                 Gem::Specification
+               elsif Gem.respond_to?(:searcher)
+                 Gem.searcher.init_gemspecs
+               end
+
+    searcher&.find do |spec|
+      File.fnmatch(File.join(spec.full_gem_path, '*'), file)
+    end
+  end
 
   def delete_parameter(key)
     return if @keys_values.empty? || @params.nil?
