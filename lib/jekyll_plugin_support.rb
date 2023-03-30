@@ -46,7 +46,11 @@ module JekyllSupport
       @envs = liquid_context.environments.first
       @mode = @config['env']['JEKYLL_ENV'] || 'development'
 
-      render_impl text
+      if @helper.attribution
+        @helper.attribute
+      else
+        render_impl text
+      end
     end
 
     # Jekyll plugins should override this method, not render, so their plugin can be tested more easily
