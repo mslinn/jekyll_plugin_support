@@ -8,11 +8,9 @@ title: Welcome
 
 
 <h2 id="tag">Demo_Tag</h2>
-{% demo_tag keyword1 name1='value1' unreferenced_key unreferenced_name="unreferenced_value" %}
-{% demo_tag attribution %}
+{% demo_tag attribution keyword1 name1='value1' unreferenced_key unreferenced_name="unreferenced_value" %}
 
 <h2 id="block">Demo_Block</h2>
-{% demo_block keyword1 name1='value1' unreferenced_key unreferenced_name="unreferenced_value" %}
+{% demo_block attribution keyword1 name1='value1' unreferenced_key unreferenced_name="unreferenced_value" %}
   Contents of <code>demo_block</code>.
 {% enddemo_block %}
-{% demo_block attribution %}{% enddemo_block %}
