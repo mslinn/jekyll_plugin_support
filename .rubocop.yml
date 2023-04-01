@@ -42,6 +42,9 @@ Metrics/BlockLength:
   Exclude:
     - jekyll_plugin_support.gemspec
 
+Metrics/CyclomaticComplexity:
+  Max: 20
+
 Metrics/MethodLength:
   Max: 25
 

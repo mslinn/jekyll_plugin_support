@@ -57,10 +57,10 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
     reinitialize(markup.strip)
 
     @attribution = parameter_specified?('attribution') unless no_arg_parsing
-    _x = CallChain.caller_method
-    _y = CallChain.caller_method 2
-    _z = CallChain.caller_method 3
-    @spec = current_spec __FILE__
+    the_caller = CallChain.callers
+    @spec = current_spec(the_caller.filename)
+
+    puts "@spec=#{@spec}"
 
     @logger.debug { "@keys_values='#{@keys_values}'" }
   end
@@ -140,6 +140,7 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
     @published_date = @specs.date
   end
 
+  # @return nil if not called from a gem
   def current_spec(file)
     searcher = if Gem::Specification.respond_to?(:find)
                  Gem::Specification
