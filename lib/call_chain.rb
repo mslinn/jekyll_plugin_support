@@ -1,19 +1,24 @@
-require 'pathname'
-
 # See https://stackoverflow.com/a/23363883/553865
 module CallChain
   ACaller = Struct.new(:filepath, :line, :method_name)
-
-  def self.caller_file_match(filename)
-    parse_caller(caller(depth + 1).first).file
-  end
 
   def self.caller_method(depth = 1)
     parse_caller(caller(depth + 1).first).method_name
   end
 
+  def self.parse_caller(at)
+    return unless /^(.+?):(\d+)(?::in `(.*)')?/ =~ at
+
+    last_match = Regexp.last_match.to_a
+    ACaller.new(
+      last_match[1],
+      last_match[2].to_i,
+      last_match[3]
+    )
+  end
+
   # Return ACaller prior to jekyll_plugin_support
-  def self.prior_caller
+  def self.jpsh_subclass_caller
     state = :nothing_found
     caller.each_with_index do |caller_, i|
       parsed_caller = parse_caller(caller_)
@@ -28,22 +33,6 @@ module CallChain
         return parsed_caller unless jpsh
       end
     end
-    nil
+    undefined
   end
-
-  def self.parse_caller(at)
-    return unless /^(.+?):(\d+)(?::in `(.*)')?/ =~ at
-
-    last_match = Regexp.last_match.to_a
-    ACaller.new(
-      last_match[1],
-      last_match[2].to_i,
-      last_match[3]
-    )
-  end
-end
-
-if __FILE__ == $PROGRAM_NAME
-  caller = CallChain.prior_caller # should be nil
-  puts caller
 end

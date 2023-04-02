@@ -169,7 +169,7 @@ derive your plugin from `JekyllBlockNoArgParsing` or `JekyllTagNoArgParsing`.
 
 
 ## Subclass Attribution
-`JekyllTag` and `JekyllBlock` subclasses of `jekyll_plugin_support` can utilize the `attribution` option.
+`JekyllTag` and `JekyllBlock` subclasses of `jekyll_plugin_support` can utilize the `attribution` option IFF they are published as a gem.
 `JekyllTagNoArgParsing` and `JekyllBlockNoArgParsing` subclasses cannot.
 
  - When used as a keyword option, a default value is used for the attribution string.
