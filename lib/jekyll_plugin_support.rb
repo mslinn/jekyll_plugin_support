@@ -1,6 +1,6 @@
 require 'jekyll'
 require 'jekyll_plugin_logger'
-require_relative 'jekyll_plugin_support_helper'
+require_relative 'jekyll_plugin_helper'
 require_relative 'jekyll_plugin_support/version'
 
 # @author Copyright 2022 Michael Slinn

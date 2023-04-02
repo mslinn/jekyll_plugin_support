@@ -13,35 +13,37 @@ module CallChain
   end
 
   # Return ACaller prior to jekyll_plugin_support
-  def self.callers
+  def self.prior_caller
     state = :nothing_found
     caller.each_with_index do |caller_, i|
       parsed_caller = parse_caller(caller_)
       filepath = parsed_caller.filepath
       jpsh = File.dirname(filepath).end_with?('jekyll_plugin_support/lib') && \
-             File.basename(filepath) == 'jekyll_plugin_support_helper.rb'
+             File.basename(filepath) == 'jekyll_plugin_helper.rb'
       case state
       when :nothing_found
         state = :jpsh_found if jpsh
       when :jpsh_found
-        puts "#{parsed_caller.filepath} line #{parsed_caller.line} #{parsed_caller.method_name}" unless jpsh
+        puts "Called from #{parsed_caller.filepath}, on line #{parsed_caller.line}, by method '#{parsed_caller.method_name}'" unless jpsh
         return parsed_caller unless jpsh
       end
     end
+    nil
   end
 
   def self.parse_caller(at)
     return unless /^(.+?):(\d+)(?::in `(.*)')?/ =~ at
 
+    last_match = Regexp.last_match.to_a
     ACaller.new(
-      Regexp.last_match[1],
-      Regexp.last_match[2].to_i,
-      Regexp.last_match[3]
+      last_match[1],
+      last_match[2].to_i,
+      last_match[3]
     )
   end
 end
 
 if __FILE__ == $PROGRAM_NAME
-  caller = CallChain.caller_method
+  caller = CallChain.prior_caller # should be nil
   puts caller
 end

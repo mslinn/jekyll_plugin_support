@@ -57,8 +57,8 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
     reinitialize(markup.strip)
 
     @attribution = parameter_specified?('attribution') unless no_arg_parsing
-    the_caller = CallChain.callers
-    @spec = current_spec(the_caller.filename)
+    prior_caller = CallChain.prior_caller
+    @spec = current_spec(prior_caller.filepath) if prior_caller # nil if not called from a gem, for example if called from _plugins directory
 
     puts "@spec=#{@spec}"
 
@@ -110,7 +110,7 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
   private
 
   def attribute
-    return unless @spec
+    return unless @spec # TODO: handle being called from _plugins directory
 
     current_gem = @spec.name
     props = Gem.loaded_specs[current_gem]
@@ -132,7 +132,7 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
     string.gsub('#{', '#{props.')
   end
 
-  def annotate_globals
+  def annotate_globals # TODO: handle called from _plugins directory
     @specs = Gem.loaded_specs[@spec.name]
     @authors = @specs.authors
     @version = @specs.version
