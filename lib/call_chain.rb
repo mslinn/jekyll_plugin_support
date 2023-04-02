@@ -24,7 +24,7 @@ module CallChain
       when :nothing_found
         state = :jpsh_found if jpsh
       when :jpsh_found
-        puts "Called from #{parsed_caller.filepath}, on line #{parsed_caller.line}, by method '#{parsed_caller.method_name}'" unless jpsh
+        # puts "Called from #{parsed_caller.filepath}, on line #{parsed_caller.line}, by method '#{parsed_caller.method_name}'" unless jpsh
         return parsed_caller unless jpsh
       end
     end
