@@ -70,7 +70,7 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
     <<~END_OUTPUT
       <div id="jps_attribute_#{rand(999_999)}" class="jps_attribute">
         <div>
-          <a href="#{@homepage}">
+          <a href="#{@homepage}" target="_blank" rel="nofollow">
             <b>#{attribution_string}</b>
           </a>
         </div>
