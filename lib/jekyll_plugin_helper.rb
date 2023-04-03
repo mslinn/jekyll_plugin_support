@@ -131,8 +131,9 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
   end
 
   def annotate_globals
-    jpsh_subclass_caller = CallChain.jpsh_subclass_caller
-    return unless jpsh_subclass_caller.to_s.empty?
+    @jpsh_subclass_caller = CallChain.jpsh_subclass_caller
+    @logger.info { "@jpsh_subclass_caller=#{@jpsh_subclass_caller}" }
+    return if @jpsh_subclass_caller.nil?
 
     @gem_name = File.basename(@jpsh_subclass_caller.filepath).delete_suffix('.rb')
     specs = Gem.loaded_specs[@gem_name]
