@@ -46,11 +46,12 @@ module JekyllSupport
       @envs = liquid_context.environments.first
       @mode = @config['env']['JEKYLL_ENV'] || 'development'
 
-      if @helper.attribution
-        @helper.attribute
-      else
-        render_impl text
-      end
+      render_impl text
+    rescue StandardError => e
+      @logger.error { "#{self.class} died with a #{e.message}" }
+      # raise SystemExit, 3, []
+      e.set_backtrace []
+      raise e
     end
 
     # Jekyll plugins should override this method, not render, so their plugin can be tested more easily
@@ -69,6 +70,9 @@ module JekyllSupport
 
       super
       @logger.debug { "#{self.class}: respond_to?(:o_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
+    rescue StandardError => e
+      @logger.error { "#{self.class} died with a #{e.message}" }
+      exit 2
     end
   end
 
@@ -111,6 +115,9 @@ module JekyllSupport
       @mode = @config['env']['JEKYLL_ENV'] || 'development'
 
       render_impl
+    rescue StandardError => e
+      @logger.error { "#{self.class} died with a #{e.message}" }
+      exit 3
     end
 
     # Jekyll plugins must override this method, not render, so their plugin can be tested more easily

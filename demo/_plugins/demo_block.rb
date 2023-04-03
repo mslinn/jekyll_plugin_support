@@ -11,7 +11,11 @@ module Jekyll
       @name2  = @helper.parameter_specified? 'name2'
 
       <<~END_OUTPUT
+        #{@helper.attribute if @helper.attribution}
         <pre>@helper.tag_name=#{@helper.tag_name}
+
+        @helper.attribution=#{@helper.attribution}
+        @helper.attribute=#{@helper.attribute}
 
         @mode=#{@mode}
 

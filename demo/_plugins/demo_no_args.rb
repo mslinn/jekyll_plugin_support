@@ -6,8 +6,8 @@ module Jekyll
 
     def render_impl
       <<~END_OUTPUT
-        The raw arguments passed to this DemoTagNoArgs instance are:
-        '#{@argument_string}'
+        The raw arguments passed to this <code>DemoTagNoArgs</code> instance are:<br>
+        <code>#{@argument_string}</code>
       END_OUTPUT
     end
 

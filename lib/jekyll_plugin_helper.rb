@@ -1,4 +1,4 @@
-require 'facets/interpolate'
+require 'facets/string/interpolate'
 require 'key_value_parser'
 require 'shellwords'
 require_relative 'call_chain'
@@ -60,6 +60,20 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
     @attribution = parameter_specified?('attribution') unless no_arg_parsing
     annotate_globals if @attribution
     @logger.debug { "@keys_values='#{@keys_values}'" }
+  rescue StandardError => e
+    @logger.error { "#{self.class} died with a #{e.message}" }
+  end
+
+  def attribute
+    return unless @gem_name
+
+    <<~END_OUTPUT
+      <div id="jps_attribute_#{rand(999_999)}" class="jps_attribute">
+        <a href="#{props.homepage}">
+          <b>#{attribution_string}</b>
+        </a>
+      </div>
+    END_OUTPUT
   end
 
   # @return if parameter was specified, removes it from the available tokens and returns value
@@ -105,18 +119,6 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
   end
 
   private
-
-  def attribute
-    return unless @gem_name
-
-    <<~END_OUTPUT
-      <div id="jps_attribute_#{rand(999_999)}" class="jps_attribute">
-        <a href="#{props.homepage}">
-          <b>#{attribution_string}</b>
-        </a>
-      </div>
-    END_OUTPUT
-  end
 
   def attribution_string
     string = if @attribution == true
