@@ -25,8 +25,8 @@ module CallChain
       filepath = parsed_caller.filepath
       jpsh = File.dirname(filepath).match?(%r{jekyll_plugin_support[.0-9-]*/lib\z}) &&
              File.basename(filepath) == 'jekyll_plugin_helper.rb'
-      puts "jsc: filepath=#{filepath}"
-      puts "jsc: jpsh=#{jpsh}"
+      # puts "jsc: filepath=#{filepath}"
+      # puts "jsc: jpsh=#{jpsh}"
       case state
       when :nothing_found
         state = :jpsh_found if jpsh
