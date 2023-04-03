@@ -20,10 +20,10 @@ module CallChain
   # Return ACaller prior to jekyll_plugin_support
   def self.jpsh_subclass_caller
     state = :nothing_found
-    caller.each_with_index do |caller_, i|
+    caller.each do |caller_|
       parsed_caller = parse_caller(caller_)
       filepath = parsed_caller.filepath
-      jpsh = File.dirname(filepath).match?(%r{jekyll_plugin_support[.0-9-]*/lib\z}) && \
+      jpsh = File.dirname(filepath).match?(%r{jekyll_plugin_support[.0-9-]*/lib\z}) &&
              File.basename(filepath) == 'jekyll_plugin_helper.rb'
       puts "jsc: filepath=#{filepath}"
       puts "jsc: jpsh=#{jpsh}"

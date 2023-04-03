@@ -30,7 +30,7 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
 
     abort("Error: The #{name} plugin is not an instance of JekyllSupport::JekyllBlock or JekyllSupport::JekyllTag") \
       unless klass.instance_of?(Class) &&
-             (klass.ancestors.include?(JekyllSupport::JekyllBlock) || \
+             (klass.ancestors.include?(JekyllSupport::JekyllBlock) ||
               klass.ancestors.include?(JekyllSupport::JekyllTag))
 
     Liquid::Template.register_tag(name, klass)
@@ -195,21 +195,21 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
   # rubocop:disable Style/IfUnlessModifier
   def parse(markup)
     @argv_original = Shellwords.split(markup)
-    @keys_values_original = KeyValueParser \
-      .new({}, { array_values: false, normalize_keys: false, separator: /=/ }) \
+    @keys_values_original = KeyValueParser
+      .new({}, { array_values: false, normalize_keys: false, separator: /=/ })
       .parse(@argv_original)
     unless respond_to?(:no_arg_parsing) && no_arg_parsing
       @params_original = @keys_values_original.map { |k, _v| lookup_variable(k) }
     end
 
     @argv = Shellwords.split(self.class.expand_env(markup))
-    @keys_values = KeyValueParser \
-      .new({}, { array_values: false, normalize_keys: false, separator: /=/ }) \
+    @keys_values = KeyValueParser
+      .new({}, { array_values: false, normalize_keys: false, separator: /=/ })
       .parse(@argv)
 
     return if respond_to?(:no_arg_parsing) && no_arg_parsing
 
     @params = @keys_values.map { |k, _v| lookup_variable(k) }
   end
-  # rubocop:ensable Style/IfUnlessModifier
+  # rubocop:enable Style/IfUnlessModifier
 end
