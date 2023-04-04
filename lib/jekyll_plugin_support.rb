@@ -48,7 +48,7 @@ module JekyllSupport
 
       render_impl text
     rescue StandardError => e
-      @logger.error { "#{self.class} died with a #{e.message}" }
+      @logger.error { "#{self.class} died with a #{e.full_message}" }
       # raise SystemExit, 3, []
       e.set_backtrace []
       raise e
@@ -58,7 +58,7 @@ module JekyllSupport
     # @page and @site are available
     # @return [String]
     def render_impl(text)
-      text
+      abort "#{self.class}.render_impl for tag #{@tag_name} must be overridden, but it was not."
     end
   end
 
@@ -71,7 +71,7 @@ module JekyllSupport
       super
       @logger.debug { "#{self.class}: respond_to?(:o_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
     rescue StandardError => e
-      @logger.error { "#{self.class} died with a #{e.message}" }
+      @logger.error { "#{self.class} died with a #{e.full_message}" }
       exit 2
     end
   end
@@ -116,7 +116,7 @@ module JekyllSupport
 
       render_impl
     rescue StandardError => e
-      @logger.error { "#{self.class} died with a #{e.message}" }
+      @logger.error { "#{self.class} died with a #{e.full_message}" }
       exit 3
     end
 

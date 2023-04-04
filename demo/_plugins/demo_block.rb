@@ -27,12 +27,12 @@ module Jekyll
 
         # Liquid variable name/value pairs
         @helper.params=
-          #{@helper.params.join(', ')}
+          #{@helper.params&.join(', ')}
 
         @helper.remaining_markup='#{@helper.remaining_markup}'
 
         @helper.keys_values=
-        #{(@helper.keys_values.map { |k, v| "  #{k}=#{v}\n" }).join("  \n")}
+        #{(@helper.keys_values.map { |k, v| "  #{k}=#{v}\n" })&.join("  \n")}
 
         @config['url']='#{@config['url']}'
 

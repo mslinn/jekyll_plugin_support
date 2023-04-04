@@ -1,4 +1,5 @@
 module GemSupport
+  # @param file must be a fully qualified file name, for example: __FILE__.
   # @return Gem::Specification of gem @ file, or nil if not called from a gem
   def self.current_spec(file)
     searcher = if Gem::Specification.respond_to?(:find)
@@ -8,7 +9,8 @@ module GemSupport
                end
 
     searcher&.find do |spec|
-      spec.name == file
+      File.fnmatch(File.join(spec.full_gem_path, '**'), file)
+      # spec.name == file.delete_suffix('.rb')
     end
   end
 end
