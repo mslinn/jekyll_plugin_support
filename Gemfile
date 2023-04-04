@@ -1,10 +1,10 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-# Specify the gem's production dependencies in jekyll_plugin_support.gemspec
+# Specify the gem's dependencies in jekyll_outline.gemspec
 gemspec
 
-gem 'debase', "0.2.5.beta2", require: false
-gem "rake", require: false
+gem 'debase', '0.2.5.beta2', require: false
+gem 'rake', require: false
 gem 'rspec', require: false
 gem 'rubocop', require: false
 gem 'rubocop-md', require: false
