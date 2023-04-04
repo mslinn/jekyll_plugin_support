@@ -62,7 +62,7 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
   end
 
   def attribute
-    return unless @gem_name
+    return unless @current_gem
 
     <<~END_OUTPUT
       <div id="jps_attribute_#{rand(999_999)}" class="jps_attribute">

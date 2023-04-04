@@ -58,7 +58,7 @@ module JekyllSupport
     # @page and @site are available
     # @return [String]
     def render_impl(text)
-      abort "#{self.class}.render_impl for tag #{@tag_name} must be overridden, but it was not."
+      text
     end
   end
 
