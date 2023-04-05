@@ -72,6 +72,8 @@ module Jekyll
     VERSION = '0.1.0'.freeze
 
     def render_impl
+      @helper.gem_file __FILE__ # This enables attribution
+
       # Your code here
     end
 
@@ -88,7 +90,9 @@ module Jekyll
   class MyBlock < JekyllSupport::JekyllBlock
     VERSION = '0.1.0'.freeze
 
-    def render_impl(text)
+    def render_impl(content)
+      @helper.gem_file __FILE__ # This enables attribution
+
       # Your code here
     end
 
@@ -117,6 +121,7 @@ module Jekyll
     include MyPluginVersion
 
     def render_impl(text)
+      @helper.gem_file __FILE__ # Enables attribution
       # Your code here
     end
 
