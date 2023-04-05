@@ -72,9 +72,10 @@ module Jekyll
     VERSION = '0.1.0'.freeze
 
     def render_impl
-      @helper.gem_file __FILE__ # This enables attribution
-
-      # Your code here
+      my_output = "<p>blah blah</p>"
+      <<~END_OUTPUT
+        #{my_output}
+      END_OUTPUT
     end
 
     JekyllPluginHelper.register(self, 'demo_tag')
@@ -91,9 +92,12 @@ module Jekyll
     VERSION = '0.1.0'.freeze
 
     def render_impl(content)
-      @helper.gem_file __FILE__ # This enables attribution
-
-      # Your code here
+      @helper.gem_file __FILE__ # Enables attribution
+      my_output = "<p>blah blah</p>"
+      <<~END_OUTPUT
+        #{my_output}
+        #{@helper.attribute if @helper.attribution}
+      END_OUTPUT
     end
 
     JekyllPluginHelper.register(self, 'demo_block')
@@ -122,7 +126,11 @@ module Jekyll
 
     def render_impl(text)
       @helper.gem_file __FILE__ # Enables attribution
-      # Your code here
+      my_output = "<p>blah blah</p>"
+      <<~END_OUTPUT
+        #{my_output}
+        #{@helper.attribute if @helper.attribution}
+      END_OUTPUT
     end
 
     JekyllPluginHelper.register(self, 'demo_tag')
