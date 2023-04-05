@@ -1,67 +1,67 @@
-require:
-  - rubocop-md
-  - rubocop-performance
-  - rubocop-rake
-  - rubocop-rspec
-  # - rubocop-jekyll
+  require:
+    - rubocop-md
+    - rubocop-performance
+    - rubocop-rake
+    - rubocop-rspec
+    # - rubocop-jekyll
 
-AllCops:
-  Exclude:
-    - demo/_site/**/*
-    - exe/**/*
-    - vendor/**/*
-    - Gemfile*
-  NewCops: enable
-  TargetRubyVersion: 2.6
+  AllCops:
+    Exclude:
+      - demo/_site/**/*
+      - exe/**/*
+      - vendor/**/*
+      - Gemfile*
+    NewCops: enable
+    TargetRubyVersion: 2.6
 
-Gemspec/DeprecatedAttributeAssignment:
-  Enabled: false
+  Gemspec/DeprecatedAttributeAssignment:
+    Enabled: false
 
-Gemspec/RequireMFA:
-  Enabled: false
+  Gemspec/RequireMFA:
+    Enabled: false
 
-Layout/HashAlignment:
-  EnforcedColonStyle: table
-  EnforcedHashRocketStyle: table
+  Layout/HashAlignment:
+    EnforcedColonStyle: table
+    EnforcedHashRocketStyle: table
 
-Layout/LineLength:
-  Max: 150
+  Layout/LineLength:
+    Max: 150
 
-Layout/CommentIndentation:
-  Exclude:
-    - spec/**/*
+  Layout/CommentIndentation:
+    Exclude:
+      - spec/**/*
 
-Layout/MultilineMethodCallIndentation:
-  Enabled: false
+  Layout/MultilineMethodCallIndentation:
+    Enabled: false
 
-Lint/RedundantCopDisableDirective:
-  Exclude:
-    - jekyll_plugin_support.gemspec
+  Lint/RedundantCopDisableDirective:
+    Exclude:
+      - jekyll_plugin_support.gemspec
 
-Metrics/AbcSize:
-  Max: 30
+  Metrics/AbcSize:
+    Max: 30
 
-Metrics/BlockLength:
-  Exclude:
-    - jekyll_plugin_support.gemspec
+  Metrics/BlockLength:
+    Exclude:
+      - jekyll_plugin_support.gemspec
 
-Metrics/CyclomaticComplexity:
-  Max: 20
+  Metrics/CyclomaticComplexity:
+    Max: 20
 
-Metrics/MethodLength:
-  Max: 40
+  Metrics/MethodLength:
+    Max: 40
 
-RSpec/ExampleLength:
-  Max: 20
+  RSpec/ExampleLength:
+    Max: 20
 
-RSpec/MultipleExpectations:
-  Max: 15
+  RSpec/MultipleExpectations:
+    Max: 15
 
-Style/Documentation:
-  Enabled: false
+  Style/Documentation:
+    Enabled: false
 
-Style/FrozenStringLiteralComment:
-  Enabled: false
+  Style/FrozenStringLiteralComment:
+    Enabled: false
 
-Style/TrailingCommaInHashLiteral:
-  EnforcedStyleForMultiline: comma
+  Style/TrailingCommaInHashLiteral:
+    EnforcedStyleForMultiline: comma

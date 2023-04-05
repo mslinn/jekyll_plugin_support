@@ -5,8 +5,11 @@
 `Jekyll_plugin_support` is a Ruby gem that facilitates writing and testing Jekyll plugins.
 At present, only Jekyll tags and blocks are supported.
 
-## Installation
 
+## Installation
+`Jekyll_plugin_support` can be used to create simple Jekyll plugins in the `_plugins/` directory, or gem-based Jekyll plugins.
+
+### Simple `_plugins`
 Add this line to your Jekyll plugin's Gemfile:
 
 ```ruby
@@ -18,6 +21,19 @@ end
 And then execute:
 
     $ bundle install
+
+
+### Gem-Based Plugins
+Add this line to your Jekyll plugin's `.gemspec`:
+
+```ruby
+spec.add_dependency 'jekyll_plugin_support'
+```
+
+And then execute:
+
+    $ bundle install
+
 
 ## General Usage
 `JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag`
@@ -195,7 +211,7 @@ Typical usage for the `attribution` tag is:
 {% my_tag attribution %}
 ```
 
-Normal processing of `my_tag` is replaced by interpolating the attribution format string,
+Normal processing of `my_tag` is augmented by interpolating the attribution format string,
 which is a Ruby-compatible interpolated string.
 
 The default attribution format string is:
@@ -208,9 +224,6 @@ Because `jekyll_plugin_suppprt` subclasses are `gem`s, their `gemfile`s define v
 `name`, `version`, `homepage`, and `authors`, as well as many other properties.
 The `date` property is obtained from the plugin/gem publishing date.
 
-The following public methods are available for the attribution string:
-`full_name`, `conflicts`, `dependencies`, `platform`, `specification_version`, `date`, `summary`, `authors`, `autorequire`, `cert_chain`, `description`, `email`, `extensions`, `extra_rdoc_files`, `homepage`, `licenses`, `metadata`, `post_install_message`, `rg_full_gem_path`, `location`, `git_version`, `rg_extension_dir`, `nondevelopment_dependencies`, `activated`, `default_executable`, `original_platform`, `gems_dir`, `groups`, `name`, `version`, `requirements`, `bin_file`, `executables`, `bindir`, `loaded_from`, `hash`, `files`, `spec_file`, `abbreviate`, `author`, `bin_dir`, `default_value`, `doc_dir`, `mark_version`, `executable`, `file_name`, `rubygems_version`, `lib_files`, `license`, `name_tuple`,  `original_name`, `require_path`, `ri_dir`, `spec_dir`, `spec_name`, `source`,`validate_permissions`, `extension_dir`, `full_gem_path`, `remote`, `base_dir`, `gem_dir`, `normalize`, `match_platform`, `plugins`, `source_paths`, `datadir`, `lib_dirs_glob`, `require_paths`, `this`
-
 An alternative attribution string can be specified properties can be output using any of the above properties:
 
 ```
@@ -220,7 +233,7 @@ An alternative attribution string can be specified properties can be output usin
 
 ## Additional Information
 More information is available on
-[Mike Slinn&rsquo;s website](https://www.mslinn.com/blog/2020/10/03/jekyll-plugins.html).
+[Mike Slinn&rsquo;s website](https://www.mslinn.com/jekyll/10200-jekyll-plugin-support.html).
 
 
 ## Development
@@ -254,16 +267,28 @@ jekyll_plugin_support (0.1.0)
 ```
 
 
-## Test
-A test website is provided in the `demo` directory.
- 1. Set breakpoints.
+## Demo
+A demo / test website is provided in the `demo` directory.
+It can be used to debug the plugin or to run freely.
+
+### Run Freely
+ 1. Run from the command line:
+    ```shell
+    $ demo/_bin/debug -r
+    ```
+
+  2. View the generated website at [`http://localhost:4444`](http://localhost:4444)
+
+### Plugin Debugging
+ 1. Set breakpoints in Visual Studio Code.
 
  2. Initiate a debug session from the command line:
     ```shell
-    $ bin/attach demo
+    $ demo/_bin/debug
     ```
 
-  3. Once the `Fast Debugger` signon appears, launch the Visual Studio Code launch configuration called `Attach rdebug-ide`.
+  3. Once the `Fast Debugger` signon appears, launch the Visual Studio Code launch
+     configuration called `Attach rdebug-ide`.
 
   4. View the generated website at [`http://localhost:4444`](http://localhost:4444)
 

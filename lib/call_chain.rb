@@ -1,3 +1,5 @@
+# TODO: File not used, delete
+
 # See https://stackoverflow.com/a/23363883/553865
 module CallChain
   ACaller = Struct.new(:filepath, :line, :method_name)

@@ -22,8 +22,6 @@ exclude:  # Wildcards are not supported yet https://github.com/jekyll/jekyll-wat
   - Gemfile
   - Gemfile.lock
   - README.md
-href:
-  nomatch: fatal
 ignore_theme_config: true
 liquid:
   error_mode: strict

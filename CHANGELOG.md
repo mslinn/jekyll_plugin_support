@@ -1,3 +1,7 @@
+## 0.6.0 / 2023-04-05
+  * Added attribution support
+  * Renamed `jekyll_plugin_support_helper.rb` to `jekyll_plugin_helper.rb`.
+
 ## 0.5.3 / 2023-03-19
   * Added properties `argv_original`, `keys_values_original`, `remaining_markup_original`,
     and `params_original`, which are the original values of `argv`, `keys_values`,

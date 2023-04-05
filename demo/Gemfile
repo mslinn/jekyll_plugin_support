@@ -1,12 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'confidential_info_redactor'
-gem 'ffi'
 gem 'jekyll', '~> 4.3.2'
-gem 'nokogumbo', '=2.0.3'
-gem 'ptools'
-gem 'sprockets'
-gem 'webrick'
 
 group :jekyll_plugins do
   gem 'html-proofer'
@@ -16,7 +10,6 @@ group :jekyll_plugins do
   gem 'jekyll_plugin_support', path: '../'
   gem 'jekyll-sort'
   gem 'jekyll-tagging'
-  gem 'kramdown'
 end
 
 gem 'debase', '0.2.5.beta2', require: false

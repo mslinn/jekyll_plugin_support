@@ -1,11 +1,9 @@
 #!/usr/bin/env ruby
 
-# frozen_string_literal: true
-
 require 'bundler/setup'
 require 'fileutils'
 require 'irb'
 require 'jekyll_plugin_support'
 require 'liquid'
 
-IRB.start(__FILE__)
+IRB.start __FILE__
