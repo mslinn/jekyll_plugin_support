@@ -55,7 +55,7 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
     @no_arg_parsing = no_arg_parsing
     reinitialize(markup.strip)
 
-    @attribution = parameter_specified?('attribution') unless no_arg_parsing
+    @attribution = parameter_specified?('attribution') || false unless no_arg_parsing
     @logger.debug { "@keys_values='#{@keys_values}'" }
   rescue StandardError => e
     @logger.error { "#{self.class} died with a #{e.full_message}" }
@@ -92,9 +92,9 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
     annotate_globals if @attribution && @current_gem
   end
 
-  # @return if parameter was specified, removes it from the available tokens and returns value
+  # @return undefined if parameter was specified, removes it from the available tokens and returns value
   def parameter_specified?(name, delete_param: true)
-    return false if @keys_values.empty?
+    return if @keys_values.empty?
 
     key = name
     key = name.to_sym if @keys_values.first.first.instance_of?(Symbol)
