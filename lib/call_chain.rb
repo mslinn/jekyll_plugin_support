@@ -19,6 +19,18 @@ module CallChain
     )
   end
 
+  def self.excerpt_caller
+    call_sequence = caller
+    call_sequence.each do |caller_|
+      parsed_caller = parse_caller caller_
+      filepath = parsed_caller.filepath
+      excerpt = filepath.match? %r{jekyll[.0-9-]*/lib/jekyll/excerpt.rb\z}
+      puts "excerpt matched #{filepath}" if excerpt
+      return true if excerpt
+    end
+    false
+  end
+
   # Return ACaller prior to jekyll_plugin_support
   def self.jpsh_subclass_caller
     state = :nothing_found

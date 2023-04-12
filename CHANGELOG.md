@@ -1,3 +1,6 @@
+## 0.6.1 / 2023-04-12
+  * Added `CallChain.excerpt_caller` to detect if an excerpt is being generated.
+
 ## 0.6.0 / 2023-04-05
   * Added attribution support
   * Renamed `jekyll_plugin_support_helper.rb` to `jekyll_plugin_helper.rb`.

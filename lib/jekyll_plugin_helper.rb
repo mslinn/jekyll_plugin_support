@@ -7,7 +7,7 @@ require_relative 'gem_support'
 class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
   attr_accessor :liquid_context
   attr_reader :argv, :attribution, :keys_values, :logger, :markup, :no_arg_parsing, :params, :tag_name,
-              :argv_original, :keys_values_original, :params_original, :jpsh_subclass_caller
+              :argv_original, :excerpt_caller, :keys_values_original, :params_original, :jpsh_subclass_caller
 
   # Expand an environment variable reference
   def self.expand_env(str, die_if_undefined: false)

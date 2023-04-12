@@ -100,6 +100,8 @@ module JekyllSupport
 
     # Method prescribed by the Jekyll plugin lifecycle.
     def render(liquid_context)
+      return if @helper.excerpt_caller
+
       @helper.liquid_context = liquid_context
 
       @envs      = liquid_context.environments.first
