@@ -142,7 +142,6 @@ class JekyllPluginHelper # rubocop:disable Metrics/ClassLength
              else
                @attribution
              end
-    puts { "Interpolationg #{string}" }
     String.interpolate { string }
   end
 
