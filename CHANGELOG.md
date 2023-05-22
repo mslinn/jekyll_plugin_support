@@ -1,5 +1,5 @@
 ## 0.7.0 / 2023-05-22
-  * Added `warn_short_trace` methods.
+  * Added `error_short_trace` and `warn_short_trace` methods for displaying non-fatal errors on the console.
 
 ## 0.6.2 / 2023-05-15
   * Removed annoying blank line output when attribute was invoked.
