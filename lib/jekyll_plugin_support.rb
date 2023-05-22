@@ -12,6 +12,17 @@ module NoArgParsing
 end
 
 module JekyllSupport
+  DISPLAYED_CALLS = 8
+
+  def self.warn_short_trace(logger, error)
+    remaining = e.backtrace.length - DISPLAYED_CALLS
+    logger.warn do
+      error.message + "\n" + # rubocop:disable Style/StringConcatenation
+        error.backtrace.take(DISPLAYED_CALLS).join("\n") +
+        "\n...Remaining #{remaining} call sites elided.\n"
+    end
+  end
+
   # Base class for Jekyll block tags
   class JekyllBlock < Liquid::Block
     attr_reader :argument_string, :helper, :line_number, :logger, :page, :site, :text
@@ -32,6 +43,10 @@ module JekyllSupport
       @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
       @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
       @helper = JekyllPluginHelper.new tag_name, argument_string, @logger, respond_to?(:no_arg_parsing)
+    end
+
+    def warn_short_trace(error)
+      JekyllSupport.warn_short_trace(@logger, error)
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.
@@ -74,6 +89,10 @@ module JekyllSupport
       @logger.error { "#{self.class} died with a #{e.full_message}" }
       exit 2
     end
+
+    def warn_short_trace(error)
+      JekyllSupport.warn_short_trace(@logger, error)
+    end
   end
 
   # Base class for Jekyll tags
@@ -96,6 +115,10 @@ module JekyllSupport
       @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
       @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
       @helper = JekyllPluginHelper.new(tag_name, argument_string, @logger, respond_to?(:no_arg_parsing))
+    end
+
+    def warn_short_trace(error)
+      JekyllSupport.warn_short_trace(@logger, error)
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.

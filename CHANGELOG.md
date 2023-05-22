@@ -1,3 +1,6 @@
+## 0.7.0 / 2023-05-22
+  * Added `warn_short_trace` methods.
+
 ## 0.6.2 / 2023-05-15
   * Removed annoying blank line output when attribute was invoked.
 
