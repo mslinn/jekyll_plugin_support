@@ -59,6 +59,7 @@ module JekyllSupport
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.
+    # Defines @config, @envs, @mode, @page and @site
     # @return [String]
     def render(liquid_context)
       text = super
@@ -68,6 +69,11 @@ module JekyllSupport
       @site = liquid_context.registers[:site]
       @config = @site.config
       @envs = liquid_context.environments.first
+
+      @layout    = @envs[:layout]
+      @paginator = @envs[:paginator]
+      @theme     = @envs[:theme]
+
       @mode = @config['env']['JEKYLL_ENV'] || 'development'
 
       render_impl text
@@ -78,9 +84,11 @@ module JekyllSupport
       raise e
     end
 
-    # Jekyll plugins should override this method, not render, so their plugin can be tested more easily
-    # @page and @site are available
-    # @return [String]
+    # Jekyll plugins should override this method, not render,
+    # so they can be tested more easily.
+    # The following variables are predefined:
+    #   @argument_string, @config, @envs, @helper, @layout, @logger, @mode, @page, @paginator, @site, @tag_name and @theme
+    # @return [String] The result to be rendered to the invoking page
     def render_impl(text)
       text
     end
@@ -155,7 +163,8 @@ module JekyllSupport
     end
 
     # Jekyll plugins must override this method, not render, so their plugin can be tested more easily
-    # @page and @site are available
+    # The following variables are predefined:
+    #   @argument_string, @config, @envs, @helper, @layout, @logger, @mode, @page, @paginator, @site, @tag_name and @theme
     def render_impl
       abort "#{self.class}.render_impl for tag #{@tag_name} must be overridden, but it was not."
     end
