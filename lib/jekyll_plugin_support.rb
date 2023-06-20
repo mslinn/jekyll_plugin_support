@@ -54,8 +54,9 @@ module JekyllSupport
       @helper = JekyllPluginHelper.new tag_name, argument_string, @logger, respond_to?(:no_arg_parsing)
     end
 
-    def warn_short_trace(error)
-      JekyllSupport.warn_short_trace(@logger, error)
+    # @return line number where tag or block was found, relative to the start of the page
+    def jekyll_line_number
+      @page['front_matter'].count("\n") + @line_number
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.
@@ -65,7 +66,7 @@ module JekyllSupport
       text = super
       @helper.liquid_context = liquid_context
 
-      @page = liquid_context.registers[:page] # Type Jekyll::Drops::DocumentDrop
+      @page = liquid_context.registers[:page] # hash
       @site = liquid_context.registers[:site]
       @config = @site.config
       @envs = liquid_context.environments.first
@@ -91,6 +92,10 @@ module JekyllSupport
     # @return [String] The result to be rendered to the invoking page
     def render_impl(text)
       text
+    end
+
+    def warn_short_trace(error)
+      JekyllSupport.warn_short_trace(@logger, error)
     end
   end
 
@@ -134,8 +139,9 @@ module JekyllSupport
       @helper = JekyllPluginHelper.new(tag_name, argument_string, @logger, respond_to?(:no_arg_parsing))
     end
 
-    def warn_short_trace(error)
-      JekyllSupport.warn_short_trace(@logger, error)
+    # @return line number where tag or block was found, relative to the start of the page
+    def jekyll_line_number
+      @page['front_matter'].count("\n") + @line_number
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.
@@ -167,6 +173,10 @@ module JekyllSupport
     #   @argument_string, @config, @envs, @helper, @layout, @logger, @mode, @page, @paginator, @site, @tag_name and @theme
     def render_impl
       abort "#{self.class}.render_impl for tag #{@tag_name} must be overridden, but it was not."
+    end
+
+    def warn_short_trace(error)
+      JekyllSupport.warn_short_trace(@logger, error)
     end
   end
 
