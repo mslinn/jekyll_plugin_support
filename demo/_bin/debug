@@ -26,9 +26,6 @@ bundle exec jekyll clean # Ensure all hooks get called
 if [ "$1" == -r ]; then
   bundle exec ../exe/jekyll $run
 else
-  bundle exec rdebug-ide \
-    --host 0.0.0.0 \
-    --port 1234 \
-    --dispatcher-port 26162 \
-    -- ../exe/jekyll $run
+  # See https://marketplace.visualstudio.com/items?itemName=KoichiSasada.vscode-rdbg#attach-to-the-running-ruby-process
+  rdbg -O -c -- bundle exec ../exe/jekyll $run
 fi

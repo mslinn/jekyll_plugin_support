@@ -1,3 +1,4 @@
+require 'colorator'
 require 'jekyll'
 require 'jekyll_plugin_logger'
 require_relative 'jekyll_plugin_helper'
@@ -139,6 +140,15 @@ module JekyllSupport
       @helper = JekyllPluginHelper.new(tag_name, argument_string, @logger, respond_to?(:no_arg_parsing))
     end
 
+    def exit_without_stack_trace(error)
+      raise error
+    rescue StandardError => e
+      file, line_number, caller = e.backtrace[1].split(':')
+      caller = caller.tr('`', "'")
+      warn "#{self.class} died with a '#{error.message}' #{caller} on line #{line_number} of #{file}".red
+      exec "echo ''"
+    end
+
     # @return line number where tag or block was found, relative to the start of the page
     def jekyll_line_number
       @page['front_matter'].count("\n") + @line_number
@@ -160,12 +170,11 @@ module JekyllSupport
       @site      = liquid_context.registers[:site]
 
       @config = @site.config
-      @mode = @config['env']['JEKYLL_ENV'] || 'development'
+      @mode = @config['env'].key?('JEKYLL_ENV') ? @config['env']['JEKYLL_ENV'] : 'development'
 
       render_impl
     rescue StandardError => e
-      @logger.error { "#{self.class} died with a #{e.full_message}" }
-      exit 3
+      exit_without_stack_trace(e)
     end
 
     # Jekyll plugins must override this method, not render, so their plugin can be tested more easily

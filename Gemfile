@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :test, :development do
-  gem 'debase', '0.2.5.beta2', require: false
+  gem 'debug', require: false
   gem 'rake', require: false
   gem 'rspec', require: false
   gem 'rubocop', require: false
@@ -12,7 +12,6 @@ group :test, :development do
   gem 'rubocop-performance', require: false
   gem 'rubocop-rake', require: false
   gem 'rubocop-rspec', require: false
-  gem 'ruby-debug-ide', require: false
 end
 
 group :test do

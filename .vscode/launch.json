@@ -6,19 +6,14 @@
   "configurations": [
     {
       "name": "Debug CallChain",
-      "type": "Ruby",
+      "type": "rdbg",
       "request": "launch",
-      "program": "${workspaceRoot}/lib/call_chain.rb"
+      "command": "${workspaceRoot}/lib/call_chain.rb"
     },
     {
-      "cwd": "${workspaceRoot}",
-      "name": "Attach rdebug-ide",
+      "name": "Attach with rdbg",
       "request": "attach",
-      "remoteHost": "localhost",
-      "remotePort": "1234",
-      "remoteWorkspaceRoot": "/",
-      "showDebuggerOutput": true,
-      "type": "Ruby",
+      "type": "rdbg",
     },
     {
       "args": [
@@ -27,10 +22,9 @@
       ],
       "cwd": "${workspaceRoot}",
       "name": "RSpec - all",
-      "program": "${workspaceRoot}/exe/rspec",
+      "command": "${workspaceRoot}/exe/rspec",
       "request": "launch",
-      "showDebuggerOutput": false,
-      "type": "Ruby",
+      "type": "rdbg",
       "useBundler": true,
     },
     {
@@ -41,10 +35,9 @@
       ],
       "cwd": "${workspaceRoot}",
       "name": "RSpec - active spec file only",
-      "program": "${workspaceRoot}/exe/rspec",
+      "command": "${workspaceRoot}/exe/rspec",
       "request": "launch",
-      "showDebuggerOutput": false,
-      "type": "Ruby",
+      "type": "rdbg",
       "useBundler": true,
     }
   ]
