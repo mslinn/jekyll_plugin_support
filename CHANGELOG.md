@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.7.2 / 2023-08-14
+
+* Added `plugin_suppport/enable_stack_dump` config to enable stack dumps when problems occur
+* Hopefully takes care of issue [#4](../../issues/4).
+
 ## 0.7.1 / 2023-08-11
 
 * Suppressed stack trace from issue [#4](../../issues/4).

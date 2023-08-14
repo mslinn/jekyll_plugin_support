@@ -8,6 +8,7 @@ At present, only Jekyll tags and blocks are supported.
 
 `Jekyll_plugin_support` can be used to create simple Jekyll plugins in the `_plugins/` directory, or gem-based Jekyll plugins.
 
+
 ### Simple Plugins
 
 For jekyll plugins defined in the `_plugins/` directory,
@@ -71,7 +72,7 @@ For block tags, a single parameter is required, which contains any text enclosed
 Your implementation of `render_impl` can access `@page` and `@site`,
 and can parse parameters passed to the tag / block tag, [as described here](https://mslinn.com/jekyll/10100-jekyll-plugin-background.html#params):
 
-### For a tag:
+### For a tag
 
 ```ruby
 require 'jekyll_plugin_support'
@@ -92,7 +93,7 @@ module Jekyll
 end
 ```
 
-### For a tag block:
+### For a tag block
 
 ```ruby
 require 'jekyll_plugin_support'
@@ -213,7 +214,8 @@ derive your plugin from `JekyllBlockNoArgParsing` or `JekyllTagNoArgParsing`.
 
 ## Subclass Attribution
 
-`JekyllTag` and `JekyllBlock` subclasses of `jekyll_plugin_support` can utilize the `attribution` option IFF they are published as a gem.
+`JekyllTag` and `JekyllBlock` subclasses of `jekyll_plugin_support` can utilize the `attribution` option
+IFF they are published as a gem.
 `JekyllTagNoArgParsing` and `JekyllBlockNoArgParsing` subclasses cannot.
 
 * When used as a keyword option, a default value is used for the attribution string.
@@ -274,6 +276,15 @@ For example, this is how the
 HEREDOC
 ```
 
+## Enabling Stack Dumps
+
+By default, stack dumps are suppresed.
+To enable them, add the following to `_config.yml`:
+
+```yaml
+plugin_suppport:
+  enable_stack_dump: true
+```
 
 ## Additional Information
 
