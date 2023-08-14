@@ -16,7 +16,7 @@ module JekyllSupport
   DISPLAYED_CALLS = 8
 
   def self.error_short_trace(logger, error)
-    remaining = e.backtrace.length - DISPLAYED_CALLS
+    remaining = error.backtrace.length - DISPLAYED_CALLS
     logger.error do
       error.message + "\n" + # rubocop:disable Style/StringConcatenation
         error.backtrace.take(DISPLAYED_CALLS).join("\n") +
@@ -25,7 +25,7 @@ module JekyllSupport
   end
 
   def self.warn_short_trace(logger, error)
-    remaining = e.backtrace.length - DISPLAYED_CALLS
+    remaining = error.backtrace.length - DISPLAYED_CALLS
     logger.warn do
       error.message + "\n" + # rubocop:disable Style/StringConcatenation
         error.backtrace.take(DISPLAYED_CALLS).join("\n") +
@@ -76,14 +76,12 @@ module JekyllSupport
       @paginator = @envs[:paginator]
       @theme     = @envs[:theme]
 
-      @mode = @config['env']['JEKYLL_ENV'] || 'development'
+      @mode = @config['env']&.key?('JEKYLL_ENV') ? @config['env']['JEKYLL_ENV'] : 'development'
 
       render_impl text
     rescue StandardError => e
       @logger.error { "#{self.class} died with a #{e.full_message}" }
-      # raise SystemExit, 3, []
-      e.set_backtrace []
-      raise e
+      JekyllSupport.error_short_trace(@logger, e)
     end
 
     # Jekyll plugins should override this method, not render,
@@ -110,7 +108,7 @@ module JekyllSupport
       @logger.debug { "#{self.class}: respond_to?(:o_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
     rescue StandardError => e
       @logger.error { "#{self.class} died with a #{e.full_message}" }
-      exit 2
+      JekyllSupport.error_short_trace(@logger, e)
     end
 
     def warn_short_trace(error)
@@ -140,12 +138,26 @@ module JekyllSupport
       @helper = JekyllPluginHelper.new(tag_name, argument_string, @logger, respond_to?(:no_arg_parsing))
     end
 
-    def exit_without_stack_trace(error)
+    # If a Jekyll plugin needs to crash exit, and stop Jekyll, call this method.
+    # It does not generate a stack trace.
+    # This method does not return because the process is abruptly terminated.
+    #
+    # @param error StandardError or a subclass of StandardError is required
+    #
+    # Do not raise the error before calling this method, just create it via 'new', like this:
+    # exit_without_stack_trace StandardError.new('This is my error message')
+    #
+    # If you want to call this method from a handler method, the default index for the backtrace array must be specified.
+    # The default backtrace index is 1, which means the calling method.
+    # To specify the calling method's caller, pass in 2, like this:
+    # exit_without_stack_trace StandardError.new('This is my error message'), 2
+    def exit_without_stack_trace(error, caller_index = 1)
       raise error
     rescue StandardError => e
-      file, line_number, caller = e.backtrace[1].split(':')
+      file, line_number, caller = e.backtrace[caller_index].split(':')
       caller = caller.tr('`', "'")
       warn "#{self.class} died with a '#{error.message}' #{caller} on line #{line_number} of #{file}".red
+      # Process.kill('HUP', Process.pid) # generates huge stack trace
       exec "echo ''"
     end
 
@@ -170,11 +182,11 @@ module JekyllSupport
       @site      = liquid_context.registers[:site]
 
       @config = @site.config
-      @mode = @config['env'].key?('JEKYLL_ENV') ? @config['env']['JEKYLL_ENV'] : 'development'
+      @mode = @config['env']&.key?('JEKYLL_ENV') ? @config['env']['JEKYLL_ENV'] : 'development'
 
       render_impl
     rescue StandardError => e
-      exit_without_stack_trace(e)
+      JekyllSupport.error_short_trace(@logger, e)
     end
 
     # Jekyll plugins must override this method, not render, so their plugin can be tested more easily
