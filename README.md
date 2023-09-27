@@ -55,7 +55,7 @@ subclass from `JekyllSupport::JekyllTag` instead.
 
 Both `JekyllSupport` classes instantiate new instances of
 [`PluginMetaLogger`](https://github.com/mslinn/jekyll_plugin_logger) (called `@logger`) and
-[`JekyllPluginHelper`](lib/jekyll_plugin_support_helper.rb) (called `@helper`).
+[`JekyllPluginHelper`](lib/jekyll_plugin_helper.rb) (called `@helper`).
 
 `JekyllPluginHelper` defines a generic `initialize` method,
 and your tag or block tag class should not override it.

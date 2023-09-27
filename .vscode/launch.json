@@ -5,12 +5,14 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "debugPort": "0",
       "name": "Debug CallChain",
       "type": "rdbg",
       "request": "launch",
-      "command": "${workspaceRoot}/lib/call_chain.rb"
+      "script": "${workspaceRoot}/lib/call_chain.rb"
     },
     {
+      "debugPort": "0",
       "name": "Attach with rdbg",
       "request": "attach",
       "type": "rdbg",
@@ -20,9 +22,9 @@
         "-I",
         "${workspaceRoot}"
       ],
-      "cwd": "${workspaceRoot}",
+      "debugPort": "0",
       "name": "RSpec - all",
-      "command": "${workspaceRoot}/exe/rspec",
+      "script": "${workspaceRoot}/exe/rspec",
       "request": "launch",
       "type": "rdbg",
       "useBundler": true,
@@ -33,9 +35,9 @@
         "${workspaceRoot}",
         "${file}"
       ],
-      "cwd": "${workspaceRoot}",
+      "debugPort": "0",
       "name": "RSpec - active spec file only",
-      "command": "${workspaceRoot}/exe/rspec",
+      "script": "${workspaceRoot}/exe/rspec",
       "request": "launch",
       "type": "rdbg",
       "useBundler": true,
