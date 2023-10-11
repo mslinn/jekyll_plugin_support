@@ -5,6 +5,26 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "args": [
+        "serve",
+        "--livereload_port", "35732",
+        "--force_polling",
+        "--host", "0.0.0.0",
+        "--port", "4011",
+        "--future",
+        "--incremental",
+        "--livereload",
+        "--drafts",
+        "--unpublished"
+      ],
+      "cwd": "${workspaceRoot}/demo",
+      "debugPort": "0",
+      "name": "Debug Demo",
+      "request": "launch",
+      "script": "${workspaceRoot}/exe/jekyll",
+      "type": "rdbg",
+    },
+    {
       "debugPort": "0",
       "name": "Debug CallChain",
       "type": "rdbg",
