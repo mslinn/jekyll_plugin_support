@@ -1,67 +1,74 @@
-  require:
-    - rubocop-md
-    - rubocop-performance
-    - rubocop-rake
-    - rubocop-rspec
-    # - rubocop-jekyll
+require:
+  # - rubocop-jekyll
+  - rubocop-md
+  - rubocop-performance
+  - rubocop-rake
+  - rubocop-rspec
 
-  AllCops:
-    Exclude:
-      - demo/_site/**/*
-      - exe/**/*
-      - vendor/**/*
-      - Gemfile*
-    NewCops: enable
-    TargetRubyVersion: 2.6
+AllCops:
+  Exclude:
+    - binstub/**/*
+    - demo/_site/*
+    - vendor/**/*
+    - Gemfile*
+  NewCops: enable
 
-  Gemspec/DeprecatedAttributeAssignment:
-    Enabled: false
+Gemspec/DeprecatedAttributeAssignment:
+  Enabled: false
 
-  Gemspec/RequireMFA:
-    Enabled: false
+Gemspec/RequireMFA:
+  Enabled: false
 
-  Layout/HashAlignment:
-    EnforcedColonStyle: table
-    EnforcedHashRocketStyle: table
+Gemspec/RequiredRubyVersion:
+  Enabled: false
 
-  Layout/LineLength:
-    Max: 150
+Layout/HashAlignment:
+  EnforcedColonStyle: table
+  EnforcedHashRocketStyle: table
 
-  Layout/CommentIndentation:
-    Exclude:
-      - spec/**/*
+Layout/LineLength:
+  Max: 150
 
-  Layout/MultilineMethodCallIndentation:
-    Enabled: false
+Metrics/AbcSize:
+  Max: 45
 
-  Lint/RedundantCopDisableDirective:
-    Exclude:
-      - jekyll_plugin_support.gemspec
+Metrics/BlockLength:
+  Exclude:
+    - jekyll_all_collections.gemspec
+  Max: 30
 
-  Metrics/AbcSize:
-    Max: 30
+Metrics/CyclomaticComplexity:
+  Max: 25
 
-  Metrics/BlockLength:
-    Exclude:
-      - jekyll_plugin_support.gemspec
+Metrics/MethodLength:
+  Max: 30
 
-  Metrics/CyclomaticComplexity:
-    Max: 20
+Metrics/PerceivedComplexity:
+  Max: 25
 
-  Metrics/MethodLength:
-    Max: 40
+Naming/FileName:
+  Exclude:
+    - Rakefile
 
-  RSpec/ExampleLength:
-    Max: 20
+RSpec/ExampleLength:
+  Max: 30
 
-  RSpec/MultipleExpectations:
-    Max: 15
+RSpec/FilePath:
+  Enabled: false
+  IgnoreMethods: true
+  SpecSuffixOnly: true
 
-  Style/Documentation:
-    Enabled: false
+RSpec/IndexedLet:
+  Enabled: false
 
-  Style/FrozenStringLiteralComment:
-    Enabled: false
+RSpec/MultipleExpectations:
+  Max: 15
 
-  Style/TrailingCommaInHashLiteral:
-    EnforcedStyleForMultiline: comma
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma

@@ -21,7 +21,7 @@
       "debugPort": "0",
       "name": "Debug Demo",
       "request": "launch",
-      "script": "${workspaceRoot}/exe/jekyll",
+      "script": "${workspaceRoot}/binstub/jekyll",
       "type": "rdbg",
     },
     {
@@ -44,8 +44,8 @@
       ],
       "debugPort": "0",
       "name": "RSpec - all",
-      "script": "${workspaceRoot}/exe/rspec",
       "request": "launch",
+      "script": "${workspaceRoot}/binstub/rspec",
       "type": "rdbg",
       "useBundler": true,
     },
@@ -57,8 +57,8 @@
       ],
       "debugPort": "0",
       "name": "RSpec - active spec file only",
-      "script": "${workspaceRoot}/exe/rspec",
       "request": "launch",
+      "script": "${workspaceRoot}/binstub/rspec",
       "type": "rdbg",
       "useBundler": true,
     }
