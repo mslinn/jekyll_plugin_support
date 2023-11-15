@@ -18,10 +18,10 @@ body {
   margin: 0;
 }
 
-code, pre, tt, .codeLabel {
+code, pre, tt, .code, .codeLabel, h2 .code, h3 .code, h4 .code, h5 .code, h6.code {
   font-family: Monaco,"Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
   font-stretch: semi-condensed;
-  font-size: smaller;
+  font-size: 9pt;
 }
 
 h1, .h1 {
@@ -35,10 +35,25 @@ h1, .h1 {
   font-weight: bold;
 }
 
+h2 .code {
+  font-size: 16pt;
+}
+
+h3 .code {
+  font-size: 14pt;
+}
+
+h4 .code {
+  font-size: 12pt;
+}
+
+header, h1, h2, h3, h4, h5, h6, nav#sidebar {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
 header {
   background: #095e2e;
   display: flow-root;
-  font-family: "Helvetica Neue", Helvetica, Arial, serif;
   height: 160px;
   position: relative;
 }
@@ -66,7 +81,6 @@ header > .inner {
 
 nav#sidebar {
   float: right;
-  font-family: "Helvetica Neue", Helvetica, Arial, serif;
   line-height: 1.3;
   min-height: 504px;
   padding-left: 20px;
@@ -86,16 +100,19 @@ pre {
   margin-right: 0;
 }
 
+.inner {
+  padding-left: 2em;
+}
+
 #main-content, .inner {
   padding-bottom: 2em;
-  padding-left: 2em;
   padding-right: 2em;
   padding-top: 0;
 }
 
 #main-content {
   float: left;
-  width: 690px;
+  width: 80%;
 }
 
 .bg_yellow, .bg_light_yellow {
@@ -112,7 +129,7 @@ pre {
 
 .jps_attribute div {
   flex-grow: 1;
-  font-family: "Helvetica Neue", Helvetica, Arial, serif;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
   font-size: 8pt;
   line-height: 1.3;
   text-align: center;

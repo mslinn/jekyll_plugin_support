@@ -1,3 +1,4 @@
+require 'cgi'
 require 'jekyll_plugin_support'
 
 module Jekyll
@@ -11,11 +12,7 @@ module Jekyll
       @name2  = @helper.parameter_specified? 'name2'
 
       <<~END_OUTPUT
-        #{@helper.attribute if @helper.attribution}
         <pre>@helper.tag_name=#{@helper.tag_name}
-
-        @helper.attribution=#{@helper.attribution}
-        @helper.attribute=#{@helper.attribute}
 
         @mode=#{@mode}
 
@@ -23,20 +20,22 @@ module Jekyll
         @argument_string="#{@argument_string}"
 
         @helper.argv=
-          #{@helper.argv.join("\n  ")}
+          #{@helper.argv&.join("\n  ")}
 
         # Liquid variable name/value pairs
         @helper.params=
-          #{@helper.params&.join(', ')}
+          #{@helper.params&.map { |k, v| "#{k}=#{v}" }&.join("\n  ")}
+
+        @helper.keys_values=
+          #{(@helper.keys_values&.map { |k, v| "#{k}=#{v}" })&.join("\n  ")}
 
         @helper.remaining_markup='#{@helper.remaining_markup}'
 
-        @helper.keys_values=
-        #{(@helper.keys_values.map { |k, v| "  #{k}=#{v}\n" })&.join("  \n")}
+        @envs=#{@envs.keys.sort.join(', ')}
 
         @config['url']='#{@config['url']}'
 
-        @site.url=# {@site.url}
+        @site.collection_names=#{@site.collection_names&.sort&.join(', ')}
 
         @page['description']=#{@page['description']}
 
@@ -50,9 +49,7 @@ module Jekyll
 
         @name2=#{@name2}
 
-        text='#{text}'
-
-        @envs=#{@envs.keys.join(' ')}</pre>
+        text=#{text}</pre>
       END_OUTPUT
     end
 

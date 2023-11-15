@@ -71,7 +71,8 @@ For block tags, a single parameter is required, which contains any text enclosed
 Your implementation of `render_impl` can access `@page` and `@site`,
 and can parse parameters passed to the tag / block tag, [as described here](https://mslinn.com/jekyll/10100-jekyll-plugin-background.html#params):
 
-### For a tag:
+
+### For a tag
 
 ```ruby
 require 'jekyll_plugin_support'
@@ -92,7 +93,8 @@ module Jekyll
 end
 ```
 
-### For a tag block:
+
+### For a tag block
 
 ```ruby
 require 'jekyll_plugin_support'
@@ -149,6 +151,7 @@ module Jekyll
 end
 ```
 
+
 ### Argument Parsing
 
 Tag arguments can be obtained within `render_impl`.
@@ -158,8 +161,10 @@ Both `JekyllTag` and `JekyllBlock` use the standard Ruby mechanism for parsing c
 [`shellwords`](https://ruby-doc.org/stdlib-2.5.1/libdoc/shellwords/rdoc/Shellwords.html) and
 [`key_value_parser`](https://www.rubydoc.info/gems/key-value-parser).
 
-All your code has to do is to specify the keywords to search for in the string passed from the HTML page that your tag is embedded in.
-The included `demo` website has examples; both [`demo/_plugins/demo_tag.rb`](demo/_plugins/demo_tag.rb) and
+All your code has to do is to specify the keywords to search for in the string
+passed from the HTML page that your tag is embedded in.
+The included `demo` website has examples;
+both [`demo/_plugins/demo_tag.rb`](demo/_plugins/demo_tag.rb) and
 [`demo/_plugins/demo_block.rb`](demo/_plugins/demo_block.rb) contain the following:
 
 ```ruby
@@ -198,10 +203,30 @@ The following also have the same result, however note that because the value has
 * `pay_tuesday="maybe not"`
 * `pay_tuesday='maybe not'`
 
-#### Remaining Markup
+### Remaining Markup
 
 After your plugin has parsed all the keyword options and name/value parameters,
 call `@helper.remaining_markup` to obtain the remaining markup that was passed to your plugin.
+
+
+### Configuration Variables
+
+Liquid variables may be defined in `_config.yml`, in a section called `plugin-vars`.
+The following `_config.yml` fragment defines 3 variables called `var1`, `var2` and `var3`:
+
+```yaml
+plugin-vars:
+  var1: value1
+  var2: 'value 2'
+  var3: value3
+```
+
+Variables are expanded transparently.
+They can be referenced like any other Liquid variable:
+
+```html
+This is the value of <code>var1</code>: {{var1}}
+```
 
 
 ### `no_arg_parsing` Optimization
@@ -213,7 +238,8 @@ derive your plugin from `JekyllBlockNoArgParsing` or `JekyllTagNoArgParsing`.
 
 ## Subclass Attribution
 
-`JekyllTag` and `JekyllBlock` subclasses of `jekyll_plugin_support` can utilize the `attribution` option IFF they are published as a gem.
+`JekyllTag` and `JekyllBlock` subclasses of `jekyll_plugin_support` can utilize the `attribution`
+option if they are published as a gem.
 `JekyllTagNoArgParsing` and `JekyllBlockNoArgParsing` subclasses cannot.
 
 * When used as a keyword option, a default value is used for the attribution string.

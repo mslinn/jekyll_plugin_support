@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.7.3 / 2023-11-14
+
+* Restructured for better support of Liquid variables.
+
+
 ## 0.7.2 / 2023-08-14
 
 * Hopefully takes care of issue [#4](../../issues/4).
