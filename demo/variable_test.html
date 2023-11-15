@@ -21,7 +21,8 @@ title: Variable Test
   <li>By adding name/value pairs to the <code>liquid_context.scopes</code> hash.</li>
 </ol>
 <p>
-  Variable references can be explicit in scope, for example <code>include.my_var</code> and <code>page.my_var</code>.
+  Variable references can be explicit in scope,
+  for example <code>include.my_var</code> and <code>page.my_var</code>.
 </p>
 <p>
   Unqualified variable references are resolved according to the first of the following possible definitions:
@@ -32,6 +33,12 @@ title: Variable Test
     Assigned value provided by <code>assign</code> and <code>capture</code> statements in a page or an include.
   </li>
 </ol>
+<p>
+  Variable definitions are store in <code>liquid_context.scopes</code>,
+  which is a list of hashes.
+  It operates as a push-down stack,
+  with innermost includes at the front of the list.
+</p>
 <p>
   The following demonstrates all of the above.
 </p>
@@ -49,7 +56,8 @@ page.param_1={{page.param_1}}</pre>
 
 <h2>Include that passes param_1 as a parameter</h2>
 <p>
-  Passing <code>param_1</code> as a parameter adds a definition for <code>param_1</code> to an <code>include</code> scope.
+  Passing <code>param_1</code> as a parameter adds a definition for
+  <code>param_1</code> to an <code>include</code> scope.
   Each nested <code>include</code> has its own scope, as we are about to discover.
 </p>
 <pre>{% include a.html param_1="param_1_overridden_as_parameter_to_include" %}</pre>
