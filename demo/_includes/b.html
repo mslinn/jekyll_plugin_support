@@ -1,0 +1,5 @@
+This is include b.html; page.param_1={{page.param_1}}; include.param_1={{include.param_1}}; param_1={{param_1}}.
+{% include_test_plugin %}
+
+Notice that scopes above contains two keys, both called 'include', with differing values.
+The first one, corresponding to the most recent include, wins (include.param_1={{include.param_1}})

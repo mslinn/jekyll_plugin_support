@@ -32,7 +32,7 @@ layout: compress
         <div class="bg_yellow draftPost">&mdash; Draft &mdash;</div>
       {% endif %}
       <a href="/index.html">
-        <div class="h1">{{ site.title }}</div>
+        <div class="h1">Jekyll Plugin Support Demo</div>
       </a>
       {% capture Title %}{{ page.title | default: layout.title }}{% endcapture %}
       {% capture Subtitle %}{{ page.subtitle | default: layout.subtitle }}{% endcapture %}
@@ -42,6 +42,11 @@ layout: compress
   <div id="content-wrapper">
     <div class="inner clearfix">
       <nav id="sidebar">
+        <ul>
+          <li><a href="/">First page</a></li>
+          <li><a href="/variable_test.html">Variable test</a></li>
+          <li><a href="/recurse.html">Recursion test</a></li>
+        </ul>
       </nav>
       <section id="main-content">
         {% if isDraft %}

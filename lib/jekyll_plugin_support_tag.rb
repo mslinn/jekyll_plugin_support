@@ -56,22 +56,26 @@ module JekyllSupport
       @helper.liquid_context = JekyllSupport.inject_vars @logger, liquid_context
 
       @envs      = liquid_context.environments.first
+      @page      = liquid_context.registers[:page]
+      @scopes    = liquid_context.scopes
+      @site      = liquid_context.registers[:site]
+
+      @config = @site.config
 
       @layout    = @envs[:layout]
       @paginator = @envs[:paginator]
       @theme     = @envs[:theme]
 
-      @page      = liquid_context.registers[:page]
-      @site      = liquid_context.registers[:site]
-
-      @config = @site.config
       @mode = @config['env']&.key?('JEKYLL_ENV') ? @config['env']['JEKYLL_ENV'] : 'development'
+
+      @helper.reinitialize(@markup.strip)
 
       markup = JekyllSupport.lookup_liquid_variables liquid_context, @argument_string
       @helper.reinitialize markup
 
       render_impl
     rescue StandardError => e
+      @logger.error { "#{self.class} died with a #{e.full_message}" }
       JekyllSupport.error_short_trace(@logger, e)
     end
 

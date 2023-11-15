@@ -1,0 +1,42 @@
+---
+layout: default
+title: Liquid Variable Recursion Test
+---
+<p>
+  The Jekyll docs do not discuss how recursive variable definitions are handled.
+  The following shows that recursive definitions are not supported.
+  Includes can be recursive, however, so devious methods might be possible - not investigated.
+</p>
+{% assign a = '42' %}
+{% assign x = '{{a}}' %}
+<pre>{{x}} # No lookup occured</pre>
+{% capture x -%}{{x}}{%- endcapture %}
+<pre>{{x}} # No lookup occured</pre>
+{% capture x %}{{x}}{% endcapture %}
+<pre>{{x}} # No lookup occured</pre>
+{% capture w -%}{{x}}{%- endcapture %}
+<pre>{{w}}</pre>
+
+<p>
+  This tests the implementation.
+  Note that <code>&lcub;&lcub;&lcub;&lcub;x&rcub;&rcub;&rcub;</code> yields <code>Error: Liquid syntax error (line 40): Unexpected character &lcub; in "&lcub;&lcub;&lcub;&lcub;x&rcub;&rcub;"</code>
+</p>
+
+<p>
+  If the result below is 42, then recursion is supported.
+</p>
+{% assign x = '{{' %}
+{% assign y = 'a' %}
+{% assign z = '}}' %}
+{% capture b %}{{x}}{{y}}{{z}}{% endcapture %}
+<pre>{{b}}</pre>
+{% assign c = b %}
+<pre>{{c}}</pre>
+
+{% assign a = '42' %}
+{% assign x = '{{a}}' %}
+<p>
+  If the result below is 42, then recursion is supported.
+</p>
+<pre>{{x}}</pre>
+<pre></pre>

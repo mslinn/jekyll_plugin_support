@@ -32,7 +32,7 @@ class JekyllPluginHelper
     return false if @keys_values.to_s.empty?
 
     key = name
-    key = name.to_sym if @keys_values.first.first.instance_of?(Symbol)
+    key = name.to_sym if @keys_values&.first&.first.instance_of?(Symbol)
     value = @keys_values[key]
     delete_parameter(name) if delete_param
     value

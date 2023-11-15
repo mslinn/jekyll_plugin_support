@@ -31,7 +31,7 @@ module JekyllSupport
     # @return [String]
     def render(liquid_context)
       @helper.liquid_context = JekyllSupport.inject_vars @logger, liquid_context
-      text = super # Liquid variable values are looked up and substituted
+      text = super # Liquid variable values in content are looked up and substituted
 
       @envs      = liquid_context.environments.first
       @page      = liquid_context.registers[:page] # hash
