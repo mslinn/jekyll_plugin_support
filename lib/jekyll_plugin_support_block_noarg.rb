@@ -8,7 +8,7 @@ module JekyllSupport
       super
       @logger.debug { "#{self.class}: respond_to?(:o_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
     rescue StandardError => e
-      @logger.error { "#{self.class} died with a #{e.full_message}" }
+      @logger.error { e.full_message }
       JekyllSupport.error_short_trace(@logger, e)
     end
 

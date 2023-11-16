@@ -51,7 +51,7 @@ module JekyllSupport
 
       render_impl text
     rescue StandardError => e
-      @logger.error { "#{self.class} died with a #{e.full_message}" }
+      @logger.error { e.full_message }
       JekyllSupport.error_short_trace(@logger, e)
     end
 

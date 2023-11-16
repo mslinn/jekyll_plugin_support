@@ -39,7 +39,7 @@ module JekyllSupport
     rescue StandardError => e
       file, line_number, caller = e.backtrace[caller_index].split(':')
       caller = caller.tr('`', "'")
-      warn "#{self.class} died with a '#{error.message}' #{caller} on line #{line_number} (after front matter) of #{file}".red
+      warn "#{error.message} #{caller} on line #{line_number} (after front matter) of #{file}".red
       # Process.kill('HUP', Process.pid) # generates huge stack trace
       exec "echo ''"
     end
@@ -71,7 +71,7 @@ module JekyllSupport
 
       render_impl
     rescue StandardError => e
-      @logger.error { "#{self.class} died with a #{e.full_message}" }
+      @logger.error { e.full_message }
       JekyllSupport.error_short_trace(@logger, e)
     end
 

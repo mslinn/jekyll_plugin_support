@@ -3,6 +3,7 @@
 ## 0.7.3 / 2023-11-14
 
 * Restructured for better support of Liquid variables.
+* Removed redundant class name in error message.
 
 
 ## 0.7.2 / 2023-08-14

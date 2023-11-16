@@ -2,11 +2,9 @@ module JekyllSupport
   DISPLAYED_CALLS = 8
 
   def self.error_short_trace(logger, error)
-    remaining = error.backtrace.length - DISPLAYED_CALLS
     logger.error do
-      error.message + "\n" + # rubocop:disable Style/StringConcatenation
-        error.backtrace.take(DISPLAYED_CALLS).join("\n") +
-        "\n...Remaining #{remaining} call sites elided.\n"
+      error.set_backtrace error.backtrace[0..DISPLAYED_CALLS]
+      error
     end
   end
 

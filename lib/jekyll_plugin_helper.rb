@@ -24,7 +24,7 @@ class JekyllPluginHelper
     @no_arg_parsing = no_arg_parsing
     @markup = markup
   rescue StandardError => e
-    @logger.error { "#{self.class} died with a #{e.message}" }
+    @logger.error { e.message }
   end
 
   # @return undefined if parameter was specified, removes it from the available tokens and returns value
@@ -72,8 +72,6 @@ class JekyllPluginHelper
     abort "Error: Argument parsing was suppressed, but an attempt to invoke #{meth} was made"
   end
 
-  private
-
   def delete_parameter(key)
     return if @keys_values.empty? || @params.nil?
 
@@ -85,6 +83,8 @@ class JekyllPluginHelper
     @argv_original.delete_if { |x| x == key or x.start_with?("#{key}=") }
     @keys_values_original.delete(key)
   end
+
+  private
 
   def page
     @liquid_context.registers[:page]
