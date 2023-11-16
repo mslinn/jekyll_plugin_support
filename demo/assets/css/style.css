@@ -100,8 +100,23 @@ pre {
   margin-right: 0;
 }
 
+.copyright {
+  margin-top: 2em;
+  border-top: thin solid black;
+  padding-top: 1em;
+}
+
 .inner {
   padding-left: 2em;
+}
+
+.demo_tag_error, .jekyll_plugin_support_error {
+  background-color: red;
+  color: white;
+  font-family: Monaco,"Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  font-stretch: semi-condensed;
+  font-size: 9pt;
+  padding: 3px;
 }
 
 #main-content, .inner {

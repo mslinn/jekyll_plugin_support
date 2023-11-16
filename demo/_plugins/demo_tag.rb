@@ -1,16 +1,46 @@
 require 'cgi'
 require 'jekyll_plugin_support'
 
+CustomError = Class.new(Liquid::Error)
+
 module Jekyll
   class DemoTag < JekyllSupport::JekyllTag
     VERSION = '0.1.2'.freeze
 
     def render_impl
-      @keyword1  = @helper.parameter_specified? 'keyword1'
-      @keyword2  = @helper.parameter_specified? 'keyword2'
-      @name1  = @helper.parameter_specified? 'name1'
-      @name2  = @helper.parameter_specified? 'name2'
+      @boom     = @helper.parameter_specified? 'boom'
+      @keyword1 = @helper.parameter_specified? 'keyword1'
+      @keyword2 = @helper.parameter_specified? 'keyword2'
+      @name1    = @helper.parameter_specified? 'name1'
+      @name2    = @helper.parameter_specified? 'name2'
 
+      config = @config['demo_tag']
+      if config
+        @die_on_custom_error = config['die_on_custom_error'] == true
+        @die_on_run_error = config['die_on_run_error'] == true
+      end
+
+      raise CustomError, "#{@page['path']} #{@boom}".red, [] if @boom
+
+      output
+    rescue CustomError => e
+      e.set_backtrace e.backtrace[0..9]
+      @logger.error e.message
+      raise e if @die_on_custom_error
+
+      "<span class='demo_tag_error'>StandardError: #{e.full_message}</span>"
+    rescue StandardError => e
+      e.set_backtrace e.backtrace[0..9]
+      msg = format_error_message e.full_message
+      @logger.error msg
+      raise e if @die_on_custom_error
+
+      "<span class='demo_tag_error'>StandardError: #{msg}</span>"
+    end
+
+    private
+
+    def output
       <<~END_OUTPUT
         <pre>@helper.tag_name=#{@helper.tag_name}
 

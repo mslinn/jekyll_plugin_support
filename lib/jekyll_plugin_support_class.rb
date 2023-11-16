@@ -44,7 +44,7 @@ module JekyllSupport
   def self.maybe_reraise_error(error, throw: true)
     fmsg = format_error_message "#{error.class}: #{error.msg.strip}"
     @logger.error { fmsg }
-    return "<span class='flexible_error'>#{fmsg}</span>" unless throw
+    return "<span class='jekyll_plugin_support_error'>#{fmsg}</span>" unless throw
 
     error.set_backtrace error.backtrace[0..9]
     raise error

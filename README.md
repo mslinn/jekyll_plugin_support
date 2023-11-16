@@ -82,7 +82,7 @@ module Jekyll
     VERSION = '0.1.0'.freeze
 
     def render_impl
-      my_output = "<p>blah blah</p>"
+      my_output = '<p>blah blah</p>'
       <<~END_OUTPUT
         #{my_output}
       END_OUTPUT
@@ -105,7 +105,7 @@ module Jekyll
 
     def render_impl(content)
       @helper.gem_file __FILE__ # Enables attribution
-      my_output = "<p>blah blah</p>"
+      my_output = '<p>blah blah</p>'
       <<~END_OUTPUT
         #{my_output}
         #{@helper.attribute if @helper.attribution}
@@ -139,7 +139,7 @@ module Jekyll
 
     def render_impl(text)
       @helper.gem_file __FILE__ # Enables attribution
-      my_output = "<p>blah blah</p>"
+      my_output = '<p>blah blah</p>'
       <<~END_OUTPUT
         #{my_output}
         #{@helper.attribute if @helper.attribution}

@@ -1,0 +1,14 @@
+---
+layout: default
+title: Tag Plugins
+---
+<h2 id="tag"><span class="code">Demo_Tag</span></h2>
+{% demo_tag keyword1 name1='git_url_base={{git_url_base}}' unreferenced_key unreferenced_name="unreferenced_value" %}
+
+
+<h2 id="tag_boom"><span class="code">Demo_Tag</span> Exception Handling</h2>
+{% demo_tag boom='Help, I am trapped in this computer' %}
+
+
+<h2 id="tag_no_arg"><span class="code">Demo_tag_no_arg</span></h2>
+  {% demo_tag_no_arg This is an argument string; django-github = {{django-github}} %}

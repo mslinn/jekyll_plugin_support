@@ -1,0 +1,10 @@
+---
+layout: default
+title: Block Tag Plugins
+---
+<h2 id="block"><span class="code">Demo_Block</span></h2>
+{% demo_block keyword1 name1='value1' unreferenced_key unreferenced_name="unreferenced_value" %}
+  Contents of <code>demo_block</code>.
+  var_defined_in_page={{var_defined_in_page}}
+  git_url_base={{git_url_base}} # Variable defined in _config.yml
+{% enddemo_block %}

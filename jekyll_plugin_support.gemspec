@@ -1,6 +1,6 @@
 require_relative 'lib/jekyll_plugin_support/version'
 
-Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
+Gem::Specification.new do |spec|
   github = 'https://github.com/mslinn/jekyll_plugin_support'
 
   spec.bindir = 'exe'
