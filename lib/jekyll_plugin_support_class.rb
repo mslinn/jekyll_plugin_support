@@ -38,7 +38,7 @@ module JekyllSupport
   def self.lookup_liquid_variables(liquid_context, markup)
     liquid_context.scopes.each do |scope|
       scope.each do |name, value|
-        markup.gsub!("{{#{name}}}", value)
+        markup&.gsub!("{{#{name}}}", value)
       end
     end
     markup
