@@ -1,7 +1,7 @@
 require 'cgi'
 require 'jekyll_plugin_support'
 
-CustomError = Class.new(Liquid::Error)
+CustomError = Class.new StandardError
 
 module Jekyll
   class DemoTag < JekyllSupport::JekyllTag
@@ -20,22 +20,23 @@ module Jekyll
         @die_on_run_error = config['die_on_run_error'] == true
       end
 
-      raise CustomError, "#{@page['path']} #{@boom}".red, [] if @boom
+      raise CustomError, 'Fall down, go boom.' if @boom
 
       output
     rescue CustomError => e
       e.set_backtrace e.backtrace[0..9]
-      @logger.error e.message
+      msg = format_error_message e.message
+      @logger.error "#{e.class} raised #{msg}"
       raise e if @die_on_custom_error
 
-      "<span class='demo_tag_error'>StandardError: #{e.full_message}</span>"
+      "<span class='demo_error'>CustomError raised in #{self.class};\n#{msg}</span>"
     rescue StandardError => e
       e.set_backtrace e.backtrace[0..9]
       msg = format_error_message e.full_message
       @logger.error msg
       raise e if @die_on_custom_error
 
-      "<span class='demo_tag_error'>StandardError: #{msg}</span>"
+      "<span class='demo_error'>StandardError: #{msg}</span>"
     end
 
     private

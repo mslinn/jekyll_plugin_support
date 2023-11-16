@@ -45,7 +45,7 @@ module JekyllSupport
     end
 
     def format_error_message(message)
-      "#{message}  on line #{line_number} (after front matter) of #{@page['path']}"
+      "on line #{line_number} (after front matter) of #{@page['path']}.\n#{message}"
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.

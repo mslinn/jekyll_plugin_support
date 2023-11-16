@@ -21,6 +21,10 @@ module JekyllSupport
       @helper = JekyllPluginHelper.new tag_name, markup, @logger, respond_to?(:no_arg_parsing)
     end
 
+    def format_error_message(message)
+      "on line #{line_number} (after front matter) of #{@page['path']}.\n#{message}"
+    end
+
     # Method prescribed by the Jekyll plugin lifecycle.
     # Defines @config, @envs, @mode, @page and @site
     # @return [String]

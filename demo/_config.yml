@@ -23,7 +23,7 @@ exclude:  # Wildcards are not supported yet https://github.com/jekyll/jekyll-wat
   - Gemfile.lock
   - README.md
 demo_tag:
-  die_on_custom_error: true
+  die_on_custom_error: false
   die_on_other_error: false
 ignore_theme_config: true
 liquid:
