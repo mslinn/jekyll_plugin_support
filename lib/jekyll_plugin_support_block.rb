@@ -21,11 +21,6 @@ module JekyllSupport
       @helper = JekyllPluginHelper.new tag_name, markup, @logger, respond_to?(:no_arg_parsing)
     end
 
-    # @return line number where tag or block was found, relative to the start of the page
-    def jekyll_line_number
-      @page['front_matter'].count("\n") + @line_number
-    end
-
     # Method prescribed by the Jekyll plugin lifecycle.
     # Defines @config, @envs, @mode, @page and @site
     # @return [String]

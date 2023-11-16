@@ -39,14 +39,9 @@ module JekyllSupport
     rescue StandardError => e
       file, line_number, caller = e.backtrace[caller_index].split(':')
       caller = caller.tr('`', "'")
-      warn "#{self.class} died with a '#{error.message}' #{caller} on line #{line_number} of #{file}".red
+      warn "#{self.class} died with a '#{error.message}' #{caller} on line #{line_number} (after front matter) of #{file}".red
       # Process.kill('HUP', Process.pid) # generates huge stack trace
       exec "echo ''"
-    end
-
-    # @return line number where tag or block was found, relative to the start of the page
-    def jekyll_line_number
-      @page['front_matter'].count("\n") + @line_number
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.
@@ -62,6 +57,7 @@ module JekyllSupport
 
       @config = @site.config
 
+      # @envs.keys are :content, :highlighter_prefix, :highlighter_suffix, :jekyll, :layout, :page, :paginator, :site, :theme
       @layout    = @envs[:layout]
       @paginator = @envs[:paginator]
       @theme     = @envs[:theme]

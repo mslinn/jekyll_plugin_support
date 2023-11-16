@@ -28,7 +28,7 @@ module JekyllSupport
     site = liquid_context.registers[:site]
     plugin_variables = site.config['plugin-vars']
 
-    plugin_variables.each do |name, value|
+    plugin_variables&.each do |name, value|
       liquid_context.scopes.last[name] = value
     end
     # dump_vars(@logger, liquid_context)

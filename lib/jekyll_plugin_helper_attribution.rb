@@ -4,7 +4,7 @@ class JekyllPluginHelper
   # @return Gem::Specification of gem that file points into, or nil if not called from a gem
   # See https://stackoverflow.com/a/75890279/553865
   def self.current_spec(file)
-    abort 'GemSupport::current_spec: file is nil' if file.nil?
+    abort 'JekyllPluginHelper::current_spec: file is nil' if file.nil?
     return nil unless File.exist?(file)
 
     searcher = if Gem::Specification.respond_to?(:find)
@@ -41,6 +41,14 @@ class JekyllPluginHelper
     result
   end
 
+  # Sets @current_gem if file points at a uniquely named file within a gem.
+  # @param file must be a fully qualified file name in a gem, for example: __FILE__
+  def gem_file(file)
+    @current_gem = JekyllPluginHelper.current_spec file
+    @logger.debug "No gem found for '#{file} was found." unless @current_gem
+    annotate_globals if @attribution && @current_gem
+  end
+
   private
 
   def annotate_globals
@@ -60,13 +68,5 @@ class JekyllPluginHelper
                @attribution
              end
     String.interpolate { string }
-  end
-
-  # Sets @current_gem if file points at a uniquely named file within a gem.
-  # @param file must be a fully qualified file name in a gem, for example: __FILE__
-  def gem_file(file)
-    @current_gem = GemSupport.current_spec file
-    @logger.debug "No gem found for '#{file} was found." unless @current_gem
-    annotate_globals if @attribution && @current_gem
   end
 end

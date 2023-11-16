@@ -24,7 +24,7 @@ class JekyllPluginHelper
     @no_arg_parsing = no_arg_parsing
     @markup = markup
   rescue StandardError => e
-    @logger.error { "#{self.class} died with a #{e.full_message}" }
+    @logger.error { "#{self.class} died with a #{e.message}" }
   end
 
   # @return undefined if parameter was specified, removes it from the available tokens and returns value
