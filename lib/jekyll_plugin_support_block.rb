@@ -15,7 +15,7 @@ module JekyllSupport
     def initialize(tag_name, markup, parse_context)
       super
       @tag_name = tag_name
-      @argument_string = markup # Vars in plugin parameters cannot be replaced yet
+      @argument_string = markup.to_s # Vars in plugin parameters cannot be replaced yet
       @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
       @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
       @helper = JekyllPluginHelper.new tag_name, markup, @logger, respond_to?(:no_arg_parsing)

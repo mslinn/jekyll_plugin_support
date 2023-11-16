@@ -24,7 +24,7 @@ class JekyllPluginHelper
     @no_arg_parsing = no_arg_parsing
     @markup = markup
   rescue StandardError => e
-    @logger.error { e.message }
+    @logger.error { e.msg }
   end
 
   # @return undefined if parameter was specified, removes it from the available tokens and returns value

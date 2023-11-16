@@ -39,9 +39,13 @@ module JekyllSupport
     rescue StandardError => e
       file, line_number, caller = e.backtrace[caller_index].split(':')
       caller = caller.tr('`', "'")
-      warn "#{error.message} #{caller} on line #{line_number} (after front matter) of #{file}".red
+      warn "#{error.msg} #{caller} on line #{line_number} (after front matter) of #{file}".red
       # Process.kill('HUP', Process.pid) # generates huge stack trace
       exec "echo ''"
+    end
+
+    def format_error_message(message)
+      "#{message}  on line #{line_number} (after front matter) of #{@page['path']}"
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.

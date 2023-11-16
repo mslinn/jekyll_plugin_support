@@ -4,7 +4,7 @@ class JekyllPluginHelper
   def self.expand_env(str, die_if_undefined: false)
     str&.gsub(/\$([a-zA-Z_][a-zA-Z0-9_]*)|\${\g<1>}|%\g<1>%/) do
       envar = Regexp.last_match(1)
-      raise HrefError, "jekyll_href error: #{envar} is undefined".red, [] \
+      raise JekyllPluginSupportError, "jekyll_plugin_support error: #{envar} is undefined".red, [] \
         if !ENV.key?(envar) && die_if_undefined # Suppress stack trace
 
       ENV.fetch(envar, nil)

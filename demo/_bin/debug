@@ -55,6 +55,8 @@ rm -f Gemfile.lock
 bundle
 bundle exec jekyll clean # Ensure all hooks get called
 
+_bin/release_port 4444
+
 if [ "$RUN_FREE" ]; then
   bundle exec jekyll $run
 else

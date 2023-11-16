@@ -4,6 +4,7 @@
 
 * Restructured for better support of Liquid variables.
 * Removed redundant class name in error message.
+* Added `format_error_message`, `maybe_reraise_error`, and `raise_error` to `JekyllBlock` and `JekyllTag`
 
 
 ## 0.7.2 / 2023-08-14

@@ -12,6 +12,10 @@ module JekyllSupport
       JekyllSupport.error_short_trace(@logger, e)
     end
 
+    def format_error_message(message)
+      "#{message}  on line #{line_number} (after front matter) of #{@page['path']}"
+    end
+
     def warn_short_trace(error)
       JekyllSupport.warn_short_trace(@logger, error)
     end
