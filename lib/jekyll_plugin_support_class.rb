@@ -40,10 +40,21 @@ module JekyllSupport
   def self.inject_vars(_logger, liquid_context)
     site = liquid_context.registers[:site]
     plugin_variables = site.config['plugin-vars']
+    scope = liquid_context.scopes.last
 
+    env = site.config['env']
+    mode = env&.key?('JEKYLL_ENV') ? env['JEKYLL_ENV'] : 'development'
+
+    # Set default values
     plugin_variables&.each do |name, value|
-      liquid_context.scopes.last[name] = value
+      scope[name] = value if value.instance_of? String
     end
+
+    # Set environment-specific values
+    plugin_variables[mode]&.each do |name, value|
+      scope[name] = value if value.instance_of? String
+    end
+
     # dump_vars(@logger, liquid_context)
     liquid_context
   end
