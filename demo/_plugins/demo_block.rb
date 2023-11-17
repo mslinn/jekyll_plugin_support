@@ -1,29 +1,29 @@
 require 'cgi'
 require 'jekyll_plugin_support'
 
-CustomError = Class.new StandardError unless CustomError
-
 module Jekyll
+  CustomError = Class.new StandardError
+
   class DemoBlock < JekyllSupport::JekyllBlock
     VERSION = '0.1.2'.freeze
 
     def render_impl(text)
-      @standard_error = @helper.parameter_specified? 'standard_error'
-      @custom_error = @helper.parameter_specified? 'custom_error'
-      @keyword1  = @helper.parameter_specified? 'keyword1'
-      @keyword2  = @helper.parameter_specified? 'keyword2'
-      @name1  = @helper.parameter_specified? 'name1'
-      @name2  = @helper.parameter_specified? 'name2'
+      @custom_error   = @helper.parameter_specified? 'raise_custom_error'
+      @keyword1       = @helper.parameter_specified? 'keyword1'
+      @keyword2       = @helper.parameter_specified? 'keyword2'
+      @name1          = @helper.parameter_specified? 'name1'
+      @name2          = @helper.parameter_specified? 'name2'
+      @standard_error = @helper.parameter_specified? 'raise_standard_error'
 
       config = @config['demo_tag']
       if config
         @die_on_custom_error = config['die_on_custom_error'] == true
-        @die_on_run_error = config['die_on_run_error'] == true
+        @die_on_run_error    = config['die_on_run_error']    == true
       end
 
       raise CustomError, 'Fall down, go boom.' if @custom_error
 
-      1 / 0 if @standard_error
+      _infinity = 1 / 0 if @standard_error
 
       output text
     rescue CustomError => e # jekyll_plugin_support handles StandardError
