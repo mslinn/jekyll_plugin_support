@@ -1,4 +1,5 @@
 ---
+description: This page exercises the block tag support in the jekyll_plugin_support gem.
 layout: default
 order: 100
 title: Block Tag Plugins
@@ -11,7 +12,13 @@ title: Block Tag Plugins
 {% enddemo_block %}
 
 
-<h2 id="block_boom"><span class="code">Demo_Block</span> Exception Handling</h2>
-{% demo_block boom %}
+<h2 id="block_custom_error"><span class="code">Demo_Block Custom_error</span> Exception Handling</h2>
+{% demo_block custom_error %}
+Contents of <code>demo_block</code>.
+{% enddemo_block %}
+
+
+<h2 id="block_standard_error"><span class="code">Demo_Block Standard_error</span> Exception Handling</h2>
+{% demo_block standard_error %}
 Contents of <code>demo_block</code>.
 {% enddemo_block %}

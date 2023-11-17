@@ -24,7 +24,7 @@ exclude:  # Wildcards are not supported yet https://github.com/jekyll/jekyll-wat
   - README.md
 demo_tag:
   die_on_custom_error: false
-  die_on_other_error: false
+  die_on_standard_error: false
 ignore_theme_config: true
 liquid:
   error_mode: strict

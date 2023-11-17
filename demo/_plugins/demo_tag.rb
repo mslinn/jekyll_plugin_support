@@ -1,4 +1,3 @@
-require 'cgi'
 require 'jekyll_plugin_support'
 
 CustomError = Class.new StandardError
@@ -8,35 +7,38 @@ module Jekyll
     VERSION = '0.1.2'.freeze
 
     def render_impl
-      @boom     = @helper.parameter_specified? 'boom'
-      @keyword1 = @helper.parameter_specified? 'keyword1'
-      @keyword2 = @helper.parameter_specified? 'keyword2'
-      @name1    = @helper.parameter_specified? 'name1'
-      @name2    = @helper.parameter_specified? 'name2'
+      @custom_error   = @helper.parameter_specified? 'custom_error'
+      @standard_error = @helper.parameter_specified? 'standard_error'
+      @keyword1       = @helper.parameter_specified? 'keyword1'
+      @keyword2       = @helper.parameter_specified? 'keyword2'
+      @name1          = @helper.parameter_specified? 'name1'
+      @name2          = @helper.parameter_specified? 'name2'
 
       config = @config['demo_tag']
       if config
         @die_on_custom_error = config['die_on_custom_error'] == true
-        @die_on_run_error = config['die_on_run_error'] == true
+        @die_on_standard_error = config['die_on_standard_error'] == true
       end
 
-      raise CustomError, 'Fall down, go boom.' if @boom
+      raise CustomError, 'Fall down, go boom.' if @custom_error
+
+      _infinity = 1 / 0 if @standard_error
 
       output
     rescue CustomError => e
-      e.set_backtrace e.backtrace[0..9]
+      e.set_backtrace(e.backtrace[0..3].map { |x| x.gsub(Dir.pwd + '/', '') })
       msg = format_error_message e.message
       @logger.error "#{e.class} raised #{msg}"
       raise e if @die_on_custom_error
 
-      "<span class='demo_error'>CustomError raised in #{self.class};\n#{msg}</span>"
+      "<div class='demo_error'>#{e.class} raised in #{self.class};\n#{msg}</div>"
     rescue StandardError => e
-      e.set_backtrace e.backtrace[0..9]
+      e.set_backtrace(e.backtrace[0..3].map { |x| x.gsub(Dir.pwd + '/', './') })
       msg = format_error_message e.full_message
       @logger.error msg
-      raise e if @die_on_custom_error
+      raise e if @die_on_standard_error
 
-      "<span class='demo_error'>StandardError: #{msg}</span>"
+      "<div class='demo_error'>#{e.class}: #{msg}</div>"
     end
 
     private
@@ -47,7 +49,8 @@ module Jekyll
 
         @mode=#{@mode}
 
-        # Passed into Liquid::Tag.initialize
+        # jekyll_plugin_support becomes able to perform variable substitution after this variable is defined.
+        # The value could be updated at a later stage, but no need to add that complexity unless there is a use case.
         @argument_string="#{@argument_string}"
 
         @helper.argv=
@@ -57,6 +60,7 @@ module Jekyll
         @helper.params=
           #{@helper.params&.map { |k, v| "#{k}=#{v}" }&.join("\n  ")}
 
+        # The keys_values property serves no purpose any more, consider it deprecated
         @helper.keys_values=
           #{(@helper.keys_values&.map { |k, v| "#{k}=#{v}" })&.join("\n  ")}
 
