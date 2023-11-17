@@ -211,6 +211,40 @@ of the [variables described above](#predefined-variables) are set.
 The exception is `@argument_string`, which is not expanded.
 
 
+### Variable Values Specific To Production And Development Modes
+
+Liquid variables defined in `_config.yml` can have different values
+when Jekyll is running in `development` and `production` modes.
+When injecting variables into your Jekyll website, `Jekyll_plugin_support`
+refers to definitions specific to the current environment,
+and then refers to other definitions that are not overridden.
+
+Here is an example:
+
+```yaml
+plugin-vars:
+  development:
+    var1: 'http://localhost:4444/demo_block_tag.html'
+    var2: 'http://localhost:4444/demo_inline_tag.html'
+  production:
+    var1: 'https://github.com/django/django/blob/3.1.7'
+    var2: 'https://github.com/django-oscar/django-oscar/blob/3.0.2'
+  var3: 'https://github.com/mslinn'
+```
+
+For the above, the following variable values are set in `development` mode:
+
+* `var1`: `http://localhost:4444/demo_block_tag.html`
+* `var2`: `http://localhost:4444/demo_inline_tag.html`
+* `var3`: `https://github.com/mslinn`
+
+... and the following variable values are set in `production` mode:
+
+* `var1`: `https://github.com/django/django/blob/3.1.7`
+* `var2`: `https://github.com/django-oscar/django-oscar/blob/3.0.2`
+* `var3`: `https://github.com/mslinn`
+
+
 ## `no_arg_parsing` Optimization
 
 If your tag or block plugin only needs access to the raw arguments passed from the web page,
