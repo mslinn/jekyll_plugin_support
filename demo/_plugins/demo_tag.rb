@@ -1,6 +1,6 @@
 require 'jekyll_plugin_support'
 
-CustomError = Class.new StandardError
+CustomError = Class.new StandardError unless CustomError
 
 module Jekyll
   class DemoTag < JekyllSupport::JekyllTag
@@ -25,20 +25,13 @@ module Jekyll
       _infinity = 1 / 0 if @standard_error
 
       output
-    rescue CustomError => e
+    rescue CustomError => e # jekyll_plugin_support handles StandardError
       e.set_backtrace(e.backtrace[0..3].map { |x| x.gsub(Dir.pwd + '/', '') })
       msg = format_error_message e.message
       @logger.error "#{e.class} raised #{msg}"
       raise e if @die_on_custom_error
 
-      "<div class='demo_error'>#{e.class} raised in #{self.class};\n#{msg}</div>"
-    rescue StandardError => e
-      e.set_backtrace(e.backtrace[0..3].map { |x| x.gsub(Dir.pwd + '/', './') })
-      msg = format_error_message e.full_message
-      @logger.error msg
-      raise e if @die_on_standard_error
-
-      "<div class='demo_error'>#{e.class}: #{msg}</div>"
+      "<div class='custom_error'>#{e.class} raised in #{self.class};\n#{msg}</div>"
     end
 
     private

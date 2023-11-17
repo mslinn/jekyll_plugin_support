@@ -119,7 +119,7 @@ pre {
   padding-left: 2em;
 }
 
-.demo_error, .jekyll_plugin_support_error {
+.custom_error, .standard_error, .jekyll_plugin_support_error {
   background-color: red;
   color: white;
   font-family: Monaco,"Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;

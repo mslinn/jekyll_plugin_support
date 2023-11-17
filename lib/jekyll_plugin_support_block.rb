@@ -55,8 +55,12 @@ module JekyllSupport
 
       render_impl text
     rescue StandardError => e
-      @logger.error { e.full_message }
-      JekyllSupport.error_short_trace(@logger, e)
+      e.set_backtrace(e.backtrace[0..3].map { |x| x.gsub(Dir.pwd + '/', './') })
+      msg = format_error_message e.full_message
+      @logger.error msg
+      raise e if @die_on_standard_error
+
+      "<div class='standard_error'>#{e.class}: #{msg}</div>"
     end
 
     # Jekyll plugins should override this method, not render,
