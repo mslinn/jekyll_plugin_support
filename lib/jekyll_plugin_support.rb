@@ -4,8 +4,6 @@ require 'jekyll_plugin_logger'
 require_relative 'jekyll_plugin_helper'
 require_relative 'jekyll_plugin_support/version'
 
-JekyllPluginSupportError = Class.new(Liquid::Error)
-
 module NoArgParsing
   attr_accessor :no_arg_parsing
 

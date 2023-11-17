@@ -1,3 +1,9 @@
+class StandardError
+  def shorten_backtrace(backtrace_element_count = 3)
+    set_backtrace(backtrace[0..backtrace_element_count].map { |x| x.gsub(Dir.pwd + '/', './') })
+  end
+end
+
 module JekyllSupport
   DISPLAYED_CALLS = 8
 
@@ -6,6 +12,12 @@ module JekyllSupport
     logger.error { error }
     error
   end
+
+  def self.define_error
+    Class.new StandardError
+  end
+
+  JekyllPluginSupportError = define_error
 
   def self.dump_vars(_logger, liquid_context)
     page = liquid_context.registers[:page]
@@ -53,7 +65,7 @@ module JekyllSupport
   def self.warn_short_trace(logger, error)
     remaining = error.backtrace.length - DISPLAYED_CALLS
     logger.warn do
-      error.msg + "\n" + # rubocop:disable Style/StringConcatenation
+      error.msg + "\n" +
         error.backtrace.take(DISPLAYED_CALLS).join("\n") +
         "\n...Remaining #{remaining} call sites elided.\n"
     end

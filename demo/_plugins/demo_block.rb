@@ -2,7 +2,7 @@ require 'cgi'
 require 'jekyll_plugin_support'
 
 module Jekyll
-  CustomError = Class.new StandardError
+  CustomError = JekyllSupport.define_error
 
   class DemoBlock < JekyllSupport::JekyllBlock
     VERSION = '0.1.2'.freeze
@@ -27,7 +27,7 @@ module Jekyll
 
       output text
     rescue CustomError => e # jekyll_plugin_support handles StandardError
-      e.set_backtrace(e.backtrace[0..3].map { |x| x.gsub(Dir.pwd + '/', './') })
+      e.shorten_backtrace
       msg = format_error_message e.message
       @logger.error "#{e.class} raised #{msg}"
       raise e if @die_on_custom_error

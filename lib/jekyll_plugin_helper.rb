@@ -24,6 +24,7 @@ class JekyllPluginHelper
     @no_arg_parsing = no_arg_parsing
     @markup = markup
   rescue StandardError => e
+    e.shorten_backtrace
     @logger.error { e.msg }
   end
 

@@ -55,7 +55,7 @@ module JekyllSupport
 
       render_impl text
     rescue StandardError => e
-      e.backtrace = e.backtrace[0..3].map { |x| x.gsub(Dir.pwd + '/', './') }
+      e.shorten_backtrace
       msg = format_error_message e.full_message
       @logger.error msg
       raise e if @die_on_standard_error

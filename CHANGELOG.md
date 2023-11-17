@@ -7,6 +7,9 @@
 * Improved handling of StandardError.
 * Demo site now shows how to define and handle custom errors.
 * Added `format_error_message`, `maybe_reraise_error`, and `raise_error` to `JekyllBlock` and `JekyllTag`
+* Adds a method called `shorten_backtrace` to `StandardError` and all custom error
+  classes defined by `JekyllSupport.define_error`.
+  See the `demo/` directory for examples of how to use this optional feature.
 
 
 ## 0.7.2 / 2023-08-14
