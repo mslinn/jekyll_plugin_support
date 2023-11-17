@@ -143,7 +143,9 @@ both [`demo/_plugins/demo_inline_tag.rb`](demo/_plugins/demo_inline_tag.rb) and
 @name2     = @helper.parameter_specified? 'name2'
 ```
 
+
 ### Example
+
 [`demo/index.html`](demo/index.html), contains the following inline tag invocation:
 
 ```html
@@ -318,6 +320,7 @@ jekyll_plugin_support (0.1.0)
 A demo / test website is provided in the `demo` directory.
 It can be used to debug the plugin or to run freely.
 
+
 ### Run Freely
 
  1. Run from the command line:
@@ -329,6 +332,7 @@ It can be used to debug the plugin or to run freely.
  2. View the generated website,
     which might be at [`http://localhost:4444`](http://localhost:4444),
     depending on how you configured it.
+
 
 ### Plugin Debugging
 
