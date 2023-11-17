@@ -60,6 +60,7 @@ module JekyllSupport
       @site      = liquid_context.registers[:site]
 
       @config = @site.config
+      @tag_death = @config[@tag_name]
 
       # @envs.keys are :content, :highlighter_prefix, :highlighter_suffix, :jekyll, :layout, :page, :paginator, :site, :theme
       @layout    = @envs[:layout]

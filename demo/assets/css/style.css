@@ -119,18 +119,6 @@ pre {
   padding-left: 2em;
 }
 
-.custom_error, .standard_error, .jekyll_plugin_support_error {
-  background-color: rgb(248, 149, 149);
-  color: black;
-  font-family: Monaco,"Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
-  font-stretch: semi-condensed;
-  font-size: 9pt;
-  line-height: 160%;
-  padding: 5px;
-  border-radius: 4pt;
-  border: rgb(155, 141, 141) 2px solid;
-}
-
 #main-content, .inner {
   padding-bottom: 2em;
   padding-top: 0;
@@ -148,6 +136,18 @@ pre {
 
 
 /* Start of jekyll_plugin_support css */
+
+.custom_error, .standard_error, .jekyll_plugin_support_error {
+  background-color: rgb(248, 149, 149);
+  color: black;
+  font-family: Monaco,"Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  font-stretch: semi-condensed;
+  font-size: 9pt;
+  line-height: 160%;
+  padding: 5px;
+  border-radius: 4pt;
+  border: rgb(155, 141, 141) 2px solid;
+}
 
 .jps_attribute {
   display: flex;

@@ -1,155 +1,119 @@
 # `jekyll_plugin_support` [![Gem Version](https://badge.fury.io/rb/jekyll_plugin_support.svg)](https://badge.fury.io/rb/jekyll_plugin_support)
 
 `Jekyll_plugin_support` is a Ruby gem that facilitates writing and testing Jekyll plugins.
+
+`Jekyll_plugin_support` can be used to create simple Jekyll plugins in the `_plugins/` directory, or gem-based Jekyll plugins.
+
 At present, only Jekyll tags and blocks are supported.
 
 
 ## Installation
 
-`Jekyll_plugin_support` can be used to create simple Jekyll plugins in the `_plugins/` directory, or gem-based Jekyll plugins.
+1. If your Jekyll plugin is packaged as a Ruby gem, add the following to your project&rsquo;s `.gemspec`:
 
-### Simple Plugins
+   ```ruby
+   spec.add_dependency 'jekyll_plugin_support', '>= 0.7.3'
+   ```
 
-For jekyll plugins defined in the `_plugins/` directory,
-add this line to your Jekyll plugin's `Gemfile`:
+   Otherwise, add the following to `Gemfile`, inside the `jekyll_plugins` group:
 
-```ruby
-group :jekyll_plugins do
-  gem 'jekyll_plugin_support'
-end
-```
+   ```ruby
+   group :jekyll_plugins do
+     gem 'jekyll_plugin_support'
+   end
+   ```
 
-And then execute:
+2. Install the `jekyll_plugin_support` Ruby gem and mark it as a dependency of your project:
 
-```shell
-$ bundle
-```
+   ```shell
+   $ bundle
+   ```
 
+3. Copy the CSS from `demo/assets/css/styles.css` between the comments to your Jekyll project's CSS file:
 
-### Gem-Based Plugins
+   ```css
+   blah blah blah
 
-Add this line to your Jekyll plugin's `.gemspec`:
+   /* Start of jekyll_plugin_support css */
+   Copy this stuff
+   /* End of jekyll_plugin_support css */
 
-```ruby
-spec.add_dependency 'jekyll_plugin_support'
-```
-
-And then execute:
-
-```shell
-$ bundle
-```
+   blah blah blah
+   ```
 
 
 ## General Usage
 
+Please see the [`demo/`](demo/) project for a well-documented set of demonstration Jekyll plugins that use `jekyll_plugin_support`.
+
 `JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag`
-provide support for Jekyll tag blocks and Jekyll tags, respectively.
+provide support for Jekyll tag blocks and Jekyll inline tags, respectively.
 They are very similar in construction and usage.
 
 Instead of subclassing your Jekyll block tag class from `Liquid::Block`,
 subclass from `JekyllSupport::JekyllBlock` instead.
 
-Similarly, instead of subclassing your Jekyll tag class from `Liquid::Tag`,
+Similarly, instead of subclassing your Jekyll inline tag class from `Liquid::Tag`,
 subclass from `JekyllSupport::JekyllTag` instead.
 
 Both `JekyllSupport` classes instantiate new instances of
 [`PluginMetaLogger`](https://github.com/mslinn/jekyll_plugin_logger) (called `@logger`) and
 [`JekyllPluginHelper`](lib/jekyll_plugin_helper.rb) (called `@helper`).
 
-`JekyllPluginHelper` defines a generic `initialize` method,
-and your tag or block tag class should not override it.
-Also, your tag or block tag class should not define a method called `render`,
-because `JekyllBlock.initialize` defines one, which creates variables called
-[`@page`](https://jekyllrb.com/docs/variables/#page-variables) and
-[`@site`](https://jekyllrb.com/docs/variables/#site-variables).
+Both `JekyllSupport` classes define a generic `initialize` method,
+and your inline tag or block tag class should not override it.
+
+Also, your inline tag or block tag class should not define a method called `render`,
+because `JekyllBlock.initialize` defines one.
 
 Instead, define a method called `render_impl`.
-For tags, `render_impl` does not accept any parameters.
+For inline tags, `render_impl` does not accept any parameters.
 For block tags, a single parameter is required, which contains any text enclosed within your block.
 
-Your implementation of `render_impl` can access `@page` and `@site`,
-and can parse parameters passed to the tag / block tag, [as described here](https://mslinn.com/jekyll/10100-jekyll-plugin-background.html#params):
+Additional information is available [here](https://mslinn.com/jekyll/10200-jekyll-plugin-background.html) and the
+[`jekyll_plugin_support`](https://www.mslinn.com/jekyll_plugins/jekyll_plugin_support.html) documentation.
 
 
-### For a tag
+## Predefined Variables
 
-```ruby
-require 'jekyll_plugin_support'
+`Jekyll_plugin_support` defines the following variables that you can use in your plugin&rsquo;s `render_impl` method:
 
-module Jekyll
-  class MyTag < JekyllSupport::JekyllTag
-    VERSION = '0.1.0'.freeze
+* `@argument_string` Unparsed markup passed as a parameter to your block tag and inline tag.
 
-    def render_impl
-      my_output = '<p>blah blah</p>'
-      <<~END_OUTPUT
-        #{my_output}
-      END_OUTPUT
-    end
+* [`@attribution`](#subclass-attribution) Attribution markup
 
-    JekyllPluginHelper.register(self, 'demo_tag')
-  end
-end
-```
+* [`@config`](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll#configuring-jekyll-in-your-github-pages-site)
+  [YAML](https://yaml.org/) Jekyll site configuration file
 
+* `@envs` Undocumented Jekyll variable, can be insightful when exploring.
 
-### For a tag block
+* [`@helper`](https://github.com/mslinn/jekyll_plugin_support/blob/master/lib/jekyll_plugin_helper.rb)
+  `JekyllPluginHelper` instance for your plugin.
 
-```ruby
-require 'jekyll_plugin_support'
+* [`@layout`](https://jekyllrb.com/docs/variables/#global-variables) Layout information
 
-module Jekyll
-  class MyBlock < JekyllSupport::JekyllBlock
-    VERSION = '0.1.0'.freeze
+* [`@logger`](jekyll_plugin_logger) `jekyll_plugin_logger` instance for your Jekyll plugin.
 
-    def render_impl(content)
-      @helper.gem_file __FILE__ # Enables attribution
-      my_output = '<p>blah blah</p>'
-      <<~END_OUTPUT
-        #{my_output}
-        #{@helper.attribute if @helper.attribution}
-      END_OUTPUT
-    end
+* [`@mode`](https://jekyllrb.com/docs/configuration/environments/)
+  Indicates `production` or `development` mode.
 
-    JekyllPluginHelper.register(self, 'demo_block')
-  end
-end
-```
+* [`@page`](https://jekyllrb.com/docs/variables/#page-variables) Page variables
 
-Note that each tag or tag block must define a constant called `VERSION`.
-If your plugin is packaged as a gem, then you might need to include `version.rb` into the plugin class.
-For example, if `lib/my_plugin/version.rb` looks like this:
+* [`@paginator`](https://jekyllrb.com/docs/variables/#page-variables) Pagination variables
 
-```ruby
-module MyPluginVersion
-  VERSION = '0.5.1'.freeze
-end
-```
+* [`@scopes`](https://jekyllrb.com/docs/variables/)
+  See the [`jekyll_plugin_support` demo project](demo/variables.html)
 
-Then your plugin can incorporate the `VERSION` constant into your plugin like this:
+* [`@site`](https://jekyllrb.com/docs/variables/#site-variables) Site variables
 
-```ruby
-require 'jekyll_plugin_support'
-require_relative 'my_block/version'
+* [`@tag_death`](lib/jekyll_plugin_support_tag.rb)
+  Contents of the section of `_config.yml` named after your plugin.
 
-module Jekyll
-  class MyBlock < JekyllSupport::JekyllBlock
-    include MyPluginVersion
+* `@tag_name` Name of your Jekyll block tag or inline tag plugin.
 
-    def render_impl(text)
-      @helper.gem_file __FILE__ # Enables attribution
-      my_output = '<p>blah blah</p>'
-      <<~END_OUTPUT
-        #{my_output}
-        #{@helper.attribute if @helper.attribution}
-      END_OUTPUT
-    end
+* [`@theme`](https://jekyllrb.com/docs/variables/#global-variables) Theme variables
 
-    JekyllPluginHelper.register(self, 'demo_tag')
-  end
-end
-```
+* `text` Content provided to your block tag.
 
 
 ### Argument Parsing
@@ -164,23 +128,23 @@ Both `JekyllTag` and `JekyllBlock` use the standard Ruby mechanism for parsing c
 All your code has to do is to specify the keywords to search for in the string
 passed from the HTML page that your tag is embedded in.
 The included `demo` website has examples;
-both [`demo/_plugins/demo_tag.rb`](demo/_plugins/demo_tag.rb) and
-[`demo/_plugins/demo_block.rb`](demo/_plugins/demo_block.rb) contain the following:
+both [`demo/_plugins/demo_inline_tag.rb`](demo/_plugins/demo_inline_tag.rb) and
+[`demo/_plugins/demo_block_tag.rb`](demo/_plugins/demo_block_tag.rb) contain the following:
 
 ```ruby
 @keyword1  = @helper.parameter_specified? 'keyword1'
 @keyword2  = @helper.parameter_specified? 'keyword2'
-@name1  = @helper.parameter_specified? 'name1'
-@name2  = @helper.parameter_specified? 'name2'
+@name1     = @helper.parameter_specified? 'name1'
+@name2     = @helper.parameter_specified? 'name2'
 ```
 
 In [`demo/index.html`](demo/index.html), the following invoked the tag:
 
 ```html
-{% demo_tag keyword1 name1='value1' unreferenced_key unreferenced_name="unreferenced_value" %}
+{% demo_inline_tag keyword1 name1='value1' unreferenced_key unreferenced_name="unreferenced_value" %}
 ```
 
-The `demo/_plugins/demo_tag.rb` plugin uses `@helper.parameter_specified?` provided by
+The `demo/_plugins/demo_inline_tag.rb` plugin uses `@helper.parameter_specified?` provided by
 `jekyll_support_plugin` to parse the string passed to the tag, which is
 `keyword1 name1='value1' unreferenced_key unreferenced_name="unreferenced_value"`.
 
@@ -241,6 +205,7 @@ derive your plugin from `JekyllBlockNoArgParsing` or `JekyllTagNoArgParsing`.
 `JekyllTag` and `JekyllBlock` subclasses of `jekyll_plugin_support` can utilize the `attribution`
 option if they are published as a gem.
 `JekyllTagNoArgParsing` and `JekyllBlockNoArgParsing` subclasses cannot.
+This feature is usually only desired for `JekyllBlock` subclasses.
 
 * When used as a keyword option, a default value is used for the attribution string.
 * When used as a name/value option, the attribution string can be specified.
@@ -263,10 +228,12 @@ The `id` attribute is in the sample HTML above is randomized so more than one at
 Typical usage for the `attribution` tag is:
 
 ```html
-{% my_tag attribution %}
+{% my_block_tag attribution %}
+  Content of my_block_tag.
+{% endmy_block_tag %}
 ```
 
-Normal processing of `my_tag` is augmented by interpolating the attribution format string,
+Normal processing of `my_block_tag` is augmented by interpolating the attribution format string,
 which is a Ruby-compatible interpolated string.
 
 The default attribution format string is:
@@ -299,12 +266,6 @@ For example, this is how the
 #{@helper.attribute if @helper.attribution}
 HEREDOC
 ```
-
-
-## Additional Information
-
-More information is available on
-[Mike Slinn&rsquo;s website](https://www.mslinn.com/jekyll_plugins/jekyll_plugin_support.html).
 
 
 ## Development

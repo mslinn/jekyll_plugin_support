@@ -6,6 +6,7 @@
 * Removed redundant class name in error message.
 * Improved handling of StandardError.
 * Demo site now shows how to define and handle custom errors.
+* Added `@tag_death` variable, which can be inspected to determine whether to die on various types of exceptions.
 * Added `format_error_message`, `maybe_reraise_error`, and `raise_error` to `JekyllBlock` and `JekyllTag`
 * Adds a method called `shorten_backtrace` to `StandardError` and all custom error
   classes defined by `JekyllSupport.define_error`.
