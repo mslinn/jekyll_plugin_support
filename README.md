@@ -2,7 +2,8 @@
 
 `Jekyll_plugin_support` is a Ruby gem that facilitates writing and testing Jekyll plugins.
 
-`Jekyll_plugin_support` can be used to create simple Jekyll plugins in the `_plugins/` directory, or gem-based Jekyll plugins.
+`Jekyll_plugin_support` can be used to create simple Jekyll plugins in
+the `_plugins/` directory of your Jekyll project, or gem-based Jekyll plugins.
 
 At present, only Jekyll tags and blocks are supported.
 
@@ -15,7 +16,8 @@ At present, only Jekyll tags and blocks are supported.
    spec.add_dependency 'jekyll_plugin_support', '>= 0.7.3'
    ```
 
-   Otherwise, add the following to `Gemfile`, inside the `jekyll_plugins` group:
+   Otherwise, add the following to your Jekyll project&rsquo;s `Gemfile`,
+   inside the `jekyll_plugins` group:
 
    ```ruby
    group :jekyll_plugins do
@@ -23,7 +25,7 @@ At present, only Jekyll tags and blocks are supported.
    end
    ```
 
-2. Install the `jekyll_plugin_support` Ruby gem and mark it as a dependency of your project:
+2. Install the `jekyll_plugin_support` Ruby gem and mark it as a dependency of your project by typing:
 
    ```shell
    $ bundle
@@ -35,7 +37,7 @@ At present, only Jekyll tags and blocks are supported.
    blah blah blah
 
    /* Start of jekyll_plugin_support css */
-   Copy this stuff
+   Copy these lines
    /* End of jekyll_plugin_support css */
 
    blah blah blah
@@ -44,34 +46,37 @@ At present, only Jekyll tags and blocks are supported.
 
 ## General Usage
 
-Please see the [`demo/`](demo/) project for a well-documented set of demonstration Jekyll plugins that use `jekyll_plugin_support`.
+Please see the [`demo/`](demo/) project for a well-documented set of demonstration Jekyll plugins that are built from `jekyll_plugin_support`.
+Additional information is available [here](https://mslinn.com/jekyll/10200-jekyll-plugin-background.html) and the
+[`jekyll_plugin_support`](https://www.mslinn.com/jekyll_plugins/jekyll_plugin_support.html) documentation.
 
 `JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag`
-provide support for Jekyll tag blocks and Jekyll inline tags, respectively.
-They are very similar in construction and usage.
+provide support for Jekyll block tags and Jekyll inline tags, respectively.
+They are similar in construction and usage.
 
 Instead of subclassing your Jekyll block tag class from `Liquid::Block`,
 subclass from `JekyllSupport::JekyllBlock` instead.
 
-Similarly, instead of subclassing your Jekyll inline tag class from `Liquid::Tag`,
+Likewise, instead of subclassing your Jekyll inline tag class from `Liquid::Tag`,
 subclass from `JekyllSupport::JekyllTag` instead.
 
 Both `JekyllSupport` classes instantiate new instances of
 [`PluginMetaLogger`](https://github.com/mslinn/jekyll_plugin_logger) (called `@logger`) and
 [`JekyllPluginHelper`](lib/jekyll_plugin_helper.rb) (called `@helper`).
 
+
+### Inline and Block Tag Plugin Implementation
+
 Both `JekyllSupport` classes define a generic `initialize` method,
 and your inline tag or block tag class should not override it.
 
 Also, your inline tag or block tag class should not define a method called `render`,
-because `JekyllBlock.initialize` defines one.
+because both `JekyllSupport` classes define this method.
+
 
 Instead, define a method called `render_impl`.
 For inline tags, `render_impl` does not accept any parameters.
 For block tags, a single parameter is required, which contains any text enclosed within your block.
-
-Additional information is available [here](https://mslinn.com/jekyll/10200-jekyll-plugin-background.html) and the
-[`jekyll_plugin_support`](https://www.mslinn.com/jekyll_plugins/jekyll_plugin_support.html) documentation.
 
 
 ## Predefined Variables
@@ -116,7 +121,7 @@ Additional information is available [here](https://mslinn.com/jekyll/10200-jekyl
 * `text` Content provided to your block tag.
 
 
-### Argument Parsing
+## Argument Parsing
 
 Tag arguments can be obtained within `render_impl`.
 Both keyword options and name/value parameters are supported.
@@ -138,7 +143,8 @@ both [`demo/_plugins/demo_inline_tag.rb`](demo/_plugins/demo_inline_tag.rb) and
 @name2     = @helper.parameter_specified? 'name2'
 ```
 
-In [`demo/index.html`](demo/index.html), the following invoked the tag:
+### Example
+[`demo/index.html`](demo/index.html), contains the following inline tag invocation:
 
 ```html
 {% demo_inline_tag keyword1 name1='value1' unreferenced_key unreferenced_name="unreferenced_value" %}
@@ -154,7 +160,12 @@ The `demo/_plugins/demo_inline_tag.rb` plugin uses `@helper.parameter_specified?
     that name/value pair is removed from the argument string.
 * The remainder of the argument string is now `unreferenced_key unreferenced_name="unreferenced_value"`.
 
-Name/value parameters can be quoted; if the value consists of only one token then it does not need to be quoted.
+
+### To Quote Or Not To Quote
+
+Parameter values can be quoted.
+
+If the value consists of only one token then quoting is optional.
 The following name/value parameters all have the same result:
 
 * `pay_tuesday="true"`
@@ -162,18 +173,19 @@ The following name/value parameters all have the same result:
 * `pay_tuesday=true`
 * `pay_tuesday`
 
-The following also have the same result, however note that because the value has more than one token, quotes must be used:
+If the values consist of more than one token, quotes must be used.
+The following examples both yield the same result:
 
 * `pay_tuesday="maybe not"`
 * `pay_tuesday='maybe not'`
 
-### Remaining Markup
+## Remaining Markup
 
 After your plugin has parsed all the keyword options and name/value parameters,
 call `@helper.remaining_markup` to obtain the remaining markup that was passed to your plugin.
 
 
-### Configuration Variables
+## Configuration Variable Definitions
 
 Liquid variables may be defined in `_config.yml`, in a section called `plugin-vars`.
 The following `_config.yml` fragment defines 3 variables called `var1`, `var2` and `var3`:
@@ -193,7 +205,7 @@ This is the value of <code>var1</code>: {{var1}}
 ```
 
 
-### `no_arg_parsing` Optimization
+## `no_arg_parsing` Optimization
 
 If your tag or block plugin only needs access to the raw arguments passed from the web page,
 without tokenization, and you expect that the plugin might be invoked with large amounts of text,
@@ -314,31 +326,56 @@ It can be used to debug the plugin or to run freely.
     $ demo/_bin/debug -r
     ```
 
- 2. View the generated website at [`http://localhost:4444`](http://localhost:4444)
+ 2. View the generated website,
+    which might be at [`http://localhost:4444`](http://localhost:4444),
+    depending on how you configured it.
 
 ### Plugin Debugging
 
  1. Set breakpoints in Visual Studio Code.
 
- 2. Initiate a debug session from the command line:
+ 2. Initiate a debug session from the command line by running the `demo/_bin/debug` script:
 
     ```shell
     $ demo/_bin/debug
+    Fetching gem metadata from https://rubygems.org/..........
+    Resolving dependencies...
+    Fetching public_suffix 5.0.4
+    Fetching nokogiri 1.15.5 (x86_64-linux)
+    Installing public_suffix 5.0.4
+    Installing nokogiri 1.15.5 (x86_64-linux)
+    Bundle complete! 17 Gemfile dependencies, 96 gems now installed.
+    Use `bundle info [gemname]` to see where a bundled gem is installed.
+
+    INFO PluginMetaLogger: Loaded DraftFilter plugin.
+    INFO PluginMetaLogger: Loaded outline_js v1.2.1 plugin.
+    INFO PluginMetaLogger: Loaded outline v1.2.1 plugin.
+    Configuration file: /mnt/f/jekyll_plugin_support/demo/_config.yml
+              Cleaner: Removing /mnt/f/jekyll_plugin_support/demo/_site...
+              Cleaner: Removing /mnt/f/jekyll_plugin_support/demo/.jekyll-metadata...
+              Cleaner: Removing /mnt/f/jekyll_plugin_support/demo/.jekyll-cache...
+              Cleaner: Nothing to do for .sass-cache.
+    DEBUGGER: Debugger can attach via TCP/IP (127.0.0.1:37177)
+    DEBUGGER: wait for debugger connection...
     ```
 
- 3. Once the `Fast Debugger` signon appears, launch the Visual Studio Code launch
-     configuration called `Attach with rdbg`.
+ 3. Once the `DEBUGGER: wait for debugger connection...` message appears,
+    run the Visual Studio Code launch configuration called `Attach with rdbg`.
 
- 4. View the generated website at [`http://localhost:4444`](http://localhost:4444)
+ 4. View the generated website,
+    which might be at [`http://localhost:4444`](http://localhost:4444),
+    depending on how you configured it.
 
 
 ### Build and Push to RubyGems
 
-To release a new version,
+To release a new version:
 
   1. Update the version number in `version.rb`.
-  2. Commit all changes to git; if you don't the next step might fail with an unexplainable error message.
-  3. Run the following:
+  2. Add an entry to `CHANGELOG.md` describing the changes since the previous version.
+  3. Commit all changes to git;
+     if you don't the next step might fail with an unexplainable error message.
+  4. Run the following:
 
      ```shell
      $ bundle exec rake release
