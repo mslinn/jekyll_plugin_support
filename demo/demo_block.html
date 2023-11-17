@@ -1,5 +1,6 @@
 ---
 layout: default
+order: 100
 title: Block Tag Plugins
 ---
 <h2 id="block"><span class="code">Demo_Block</span></h2>
@@ -9,7 +10,8 @@ title: Block Tag Plugins
   git_url_base={{git_url_base}} # Variable defined in _config.yml
 {% enddemo_block %}
 
+
 <h2 id="block_boom"><span class="code">Demo_Block</span> Exception Handling</h2>
-{% demo_block boom=true%}
+{% demo_block boom %}
 Contents of <code>demo_block</code>.
 {% enddemo_block %}

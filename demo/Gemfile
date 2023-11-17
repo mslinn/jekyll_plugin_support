@@ -6,6 +6,7 @@ group :jekyll_plugins do
   gem 'jekyll-assets'
   gem 'jekyll_draft'
   gem 'jekyll-environment-variables'
+  gem 'jekyll_outline'
   gem 'jekyll_plugin_support', path: '../'
   gem 'jekyll-sort'
   gem 'jekyll-tagging'

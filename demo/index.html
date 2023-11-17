@@ -1,9 +1,18 @@
 ---
 layout: default
-title: Tag Tests
+order: 0
+title: Front Page
 ---
 {% assign var_defined_in_page = 'var_value' %}
 <p>
   This demo website&rsquo;s <code>_plugins</code> directory cannot be used to test attribution.
   Attribution requires Jekyll plugins packaged as gems.
 </p>
+
+{% comment %}
+{% outline attribution %}
+000: Demonstrations / Exhaustive Examples
+{% endoutline %}
+
+{% outline_js wrap_in_script_tag %}
+{% endcomment %}
