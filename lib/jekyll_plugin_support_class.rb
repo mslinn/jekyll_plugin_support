@@ -50,7 +50,7 @@ module JekyllSupport
       scope[name] = value if value.instance_of? String
     end
 
-    # Set environment-specific values
+    # Override with environment-specific values
     plugin_variables[mode]&.each do |name, value|
       scope[name] = value if value.instance_of? String
     end
