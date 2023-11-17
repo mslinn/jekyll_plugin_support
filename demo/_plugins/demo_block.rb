@@ -17,8 +17,8 @@ module Jekyll
 
       config = @config['demo_tag']
       if config
-        @die_on_custom_error = config['die_on_custom_error'] == true
-        @die_on_run_error    = config['die_on_run_error']    == true
+        @die_on_custom_error   = config['die_on_custom_error']   == true
+        @die_on_standard_error = config['die_on_standard_error'] == true
       end
 
       raise CustomError, 'Fall down, go boom.' if @custom_error
