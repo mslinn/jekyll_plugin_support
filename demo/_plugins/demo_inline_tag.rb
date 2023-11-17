@@ -77,6 +77,6 @@ module Jekyll
       END_OUTPUT
     end
 
-    JekyllPluginHelper.register(self, 'demo_tag')
+    JekyllPluginHelper.register(self, 'demo_inline_tag')
   end
 end

@@ -1,0 +1,20 @@
+---
+description: This page exercises the inline tag support in the jekyll_plugin_support gem.
+layout: default
+order: 200
+title: Inline Tag Plugins
+---
+<h2 id="tag"><span class="code">demo_inline_tag</span></h2>
+{% demo_inline_tag keyword1 name1='git_url_base={{git_url_base}}' unreferenced_key unreferenced_name="unreferenced_value" %}
+
+
+<h2 id="tag_custom_error"><span class="code">demo_inline_tag Custom_error</span> Exception Handling</h2>
+{% demo_inline_tag raise_custom_error %}
+
+
+<h2 id="tag_standard_error"><span class="code">demo_inline_tag Standard_error</span> Exception Handling</h2>
+{% demo_inline_tag raise_standard_error %}
+
+
+<h2 id="tag_no_arg"><span class="code">demo_inline_tag_no_arg</span></h2>
+{% demo_inline_tag_no_arg This is an argument string; django-github = {{django-github}} %}

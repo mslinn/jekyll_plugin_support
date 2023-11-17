@@ -82,6 +82,6 @@ module Jekyll
       END_OUTPUT
     end
 
-    JekyllPluginHelper.register(self, 'demo_block')
+    JekyllPluginHelper.register(self, 'demo_block_tag')
   end
 end

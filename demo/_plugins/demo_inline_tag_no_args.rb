@@ -11,6 +11,6 @@ module Jekyll
       END_OUTPUT
     end
 
-    JekyllPluginHelper.register(self, 'demo_tag_no_arg')
+    JekyllPluginHelper.register(self, 'demo_inline_tag_no_arg')
   end
 end
