@@ -4,6 +4,8 @@
 
 * Restructured for better support of Liquid variables.
 * Removed redundant class name in error message.
+* Improved handling of StandardError.
+* Demo site now shows how to define and handle custom errors.
 * Added `format_error_message`, `maybe_reraise_error`, and `raise_error` to `JekyllBlock` and `JekyllTag`
 
 
