@@ -199,12 +199,16 @@ plugin-vars:
   var3: value3
 ```
 
-Variables are expanded transparently.
+Variable references embedded in a webpage are expanded transparently.
 They can be referenced like any other Liquid variable:
 
 ```html
 This is the value of <code>var1</code>: {{var1}}
 ```
+
+`Jekyll_plugin_support` expands all but one variable references before the values
+of the [variables described above](#predefined-variables) are set.
+The exception is `@argument_string`, which is not expanded.
 
 
 ## `no_arg_parsing` Optimization

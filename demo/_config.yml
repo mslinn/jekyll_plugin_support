@@ -48,9 +48,9 @@ plugins: # Use file name of the plugin entry point, not the gem name
   # - html-proofer
   - jekyll
 plugin-vars:
-  django-github: 'https://github.com/django/django/blob/3.1.7'
-  django-oscar-github: 'https://github.com/django-oscar/django-oscar/blob/3.0.2'
-  git_url_base: 'https://github.com/mslinn'
+  var1: 'https://github.com/django/django/blob/3.1.7'
+  var2: 'https://github.com/django-oscar/django-oscar/blob/3.0.2'
+  var3: 'https://github.com/mslinn'
 sass:
   style: compressed
 title: Jekyll Plugin Support Demo

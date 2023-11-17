@@ -1,3 +1,4 @@
+# Monkey patch StandardError so a new method called shorten_backtrace is added.
 class StandardError
   def shorten_backtrace(backtrace_element_count = 3)
     set_backtrace(backtrace[0..backtrace_element_count].map { |x| x.gsub(Dir.pwd + '/', './') })
@@ -13,6 +14,7 @@ module JekyllSupport
     error
   end
 
+  # @return a new StandardError subclass containing the shorten_backtrace method
   def self.define_error
     Class.new StandardError
   end
@@ -31,8 +33,10 @@ module JekyllSupport
   end
 
   # Add variable definitions from _config.yml to liquid_context
-  # Modifies liquid_context in caller
+  # Modifies liquid_context in the caller (call by reference)
   # @return modified liquid_context
+  # See README.md#configuration-variable-definitions
+  # See demo/variables.html
   def self.inject_vars(_logger, liquid_context)
     site = liquid_context.registers[:site]
     plugin_variables = site.config['plugin-vars']
