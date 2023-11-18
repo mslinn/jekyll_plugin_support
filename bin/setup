@@ -11,7 +11,7 @@ done
 DIR=$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )
 cd "$DIR/.." || exit
 
-if [[ $(which apt) ]]; then # Just for Ubuntu
+if [[ $(which apt) ]]; then # Just for Ubuntu, Mac users and other miscreants must ensure C libraries are installed
   for X in libffi-dev libyaml-dev; do
     if ! apt list $X --installed 2>/dev/null | grep -q installed; then
       yes | sudo apt install $X
