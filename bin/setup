@@ -11,8 +11,12 @@ done
 DIR=$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )
 cd "$DIR/.." || exit
 
-if [[ $(which apt) ]]; then
-  if [[ ! -f /usr/lib/x86_64-linux-gnu/libyaml.so ]]; then sudo apt install libyaml-dev; fi
+if [[ $(which apt) ]]; then # Just for Ubuntu
+  for X in libffi-dev libyaml-dev; do
+    if ! apt list $X --installed 2>/dev/null | grep -q installed; then
+      yes | sudo apt install $X
+    fi
+  done
 fi
 
 rm -f Gemfile.lock
