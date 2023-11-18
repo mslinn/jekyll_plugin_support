@@ -15,9 +15,10 @@ module JekyllSupport
   end
 
   # @return a new StandardError subclass containing the shorten_backtrace method
-  def self.define_error
+  def define_error
     Class.new StandardError
   end
+  module_function :define_error
 
   JekyllPluginSupportError = define_error
 
@@ -40,6 +41,8 @@ module JekyllSupport
   def self.inject_vars(_logger, liquid_context)
     site = liquid_context.registers[:site]
     plugin_variables = site.config['plugin-vars']
+    return liquid_context unless plugin_variables
+
     scope = liquid_context.scopes.last
 
     env = site.config['env']
@@ -66,15 +69,6 @@ module JekyllSupport
       end
     end
     markup
-  end
-
-  def self.maybe_reraise_error(error, throw: true)
-    fmsg = format_error_message "#{error.class}: #{error.msg.strip}"
-    @logger.error { fmsg }
-    return "<span class='jekyll_plugin_support_error'>#{fmsg}</span>" unless throw
-
-    error.set_backtrace error.backtrace[0..9]
-    raise error
   end
 
   def self.warn_short_trace(logger, error)
