@@ -1,7 +1,12 @@
+require_relative 'jekyll_plugin_error_handling'
+
 module JekyllSupport
   # Base class for Jekyll block tags
   class JekyllBlock < Liquid::Block
     attr_reader :argument_string, :helper, :line_number, :logger, :page, :site, :text
+
+    include JekyllSupportErrorHandling
+    extend JekyllSupportErrorHandling
 
     # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
     # @param tag_name [String] the name of the tag, which we usually know.
@@ -19,19 +24,6 @@ module JekyllSupport
       @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
       @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
       @helper = JekyllPluginHelper.new tag_name, markup, @logger, respond_to?(:no_arg_parsing)
-    end
-
-    def format_error_message(message)
-      "on line #{line_number} (after front matter) of #{@page['path']}.\n#{message}"
-    end
-
-    def maybe_reraise_error(error, throw_error: true)
-      fmsg = format_error_message "#{error.class}: #{error.message.strip}"
-      @logger.error { fmsg }
-      return "<span class='jekyll_plugin_support_error'>#{fmsg}</span>" unless throw_error
-
-      error.set_backtrace error.backtrace[0..9]
-      raise error
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.
@@ -80,10 +72,6 @@ module JekyllSupport
     # @return [String] The result to be rendered to the invoking page
     def render_impl(text)
       text
-    end
-
-    def warn_short_trace(error)
-      JekyllSupport.warn_short_trace(@logger, error)
     end
   end
 end

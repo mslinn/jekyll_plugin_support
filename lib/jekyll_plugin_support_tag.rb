@@ -1,7 +1,12 @@
+require_relative 'jekyll_plugin_error_handling'
+
 module JekyllSupport
   # Base class for Jekyll tags
   class JekyllTag < Liquid::Tag
     attr_reader :argument_string, :helper, :line_number, :logger, :page, :site
+
+    include JekyllSupportErrorHandling
+    extend JekyllSupportErrorHandling
 
     # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
     # @param tag_name [String] the name of the tag, which we usually know.
@@ -19,43 +24,6 @@ module JekyllSupport
       @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
       @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
       @helper = JekyllPluginHelper.new(tag_name, argument_string, @logger, respond_to?(:no_arg_parsing))
-    end
-
-    # If a Jekyll plugin needs to crash exit, and stop Jekyll, call this method.
-    # It does not generate a stack trace.
-    # This method does not return because the process is abruptly terminated.
-    #
-    # @param error StandardError or a subclass of StandardError is required
-    #
-    # Do not raise the error before calling this method, just create it via 'new', like this:
-    # exit_without_stack_trace StandardError.new('This is my error message')
-    #
-    # If you want to call this method from a handler method, the default index for the backtrace array must be specified.
-    # The default backtrace index is 1, which means the calling method.
-    # To specify the calling method's caller, pass in 2, like this:
-    # exit_without_stack_trace StandardError.new('This is my error message'), 2
-    def exit_without_stack_trace(error, caller_index = 1)
-      raise error
-    rescue StandardError => e
-      file, line_number, caller = e.backtrace[caller_index].split(':')
-      caller = caller.tr('`', "'")
-      warn "#{error.msg} #{caller} on line #{line_number} (after front matter) of #{file}".red
-      # Process.kill('HUP', Process.pid) # generates huge stack trace
-      exec "echo ''"
-    end
-
-    def format_error_message(message)
-      page = " of #{@page['path']}" if @page
-      "on line #{line_number} (after front matter)#{page}.\n#{message}"
-    end
-
-    def maybe_reraise_error(error, throw_error: true)
-      fmsg = format_error_message "#{error.class}: #{error.message.strip}"
-      @logger.error { fmsg }
-      return "<span class='jekyll_plugin_support_error'>#{fmsg}</span>" unless throw_error
-
-      error.set_backtrace error.backtrace[0..9]
-      raise error
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.
@@ -99,10 +67,6 @@ module JekyllSupport
     #   @argument_string, @config, @envs, @helper, @layout, @logger, @mode, @page, @paginator, @site, @tag_name and @theme
     def render_impl
       abort "#{self.class}.render_impl for tag #{@tag_name} must be overridden, but it was not."
-    end
-
-    def warn_short_trace(error)
-      JekyllSupport.warn_short_trace(@logger, error)
     end
   end
 end
