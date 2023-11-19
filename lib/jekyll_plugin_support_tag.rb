@@ -1,3 +1,4 @@
+require 'pry'
 require_relative 'jekyll_plugin_error_handling'
 
 module JekyllSupport
@@ -49,6 +50,8 @@ module JekyllSupport
 
       @mode = @config['env']&.key?('JEKYLL_ENV') ? @config['env']['JEKYLL_ENV'] : 'development'
 
+      puts "JekyllPluginSupport.render: argument_string is a #{argument_string.class} with value '#{argument_string}'.".yellow
+      puts "JekyllPluginSupport.render: @argument_string is a #{@argument_string.class} with value '#{@argument_string}'.".yellow
       @helper.reinitialize JekyllSupport.lookup_liquid_variables liquid_context, @argument_string
 
       render_impl
@@ -56,6 +59,7 @@ module JekyllSupport
       e.shorten_backtrace
       msg = format_error_message e.full_message
       @logger.error msg
+      binding.pry if @pry_on_standard_error
       raise e if @die_on_standard_error
 
       "<div class='standard_error'>#{e.class}: #{msg}</div>"

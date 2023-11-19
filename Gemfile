@@ -3,9 +3,10 @@ source 'https://rubygems.org'
 # Specify the gem's dependencies in jekyll_outline.gemspec
 gemspec
 
+gem 'pry'
+
 group :test, :development do
   gem 'debug', '>= 1.0.0', require: false
-  gem 'pry', '>= 0.14.2'
   gem 'rake', require: false
   gem 'rspec', require: false
   gem 'rubocop', require: false

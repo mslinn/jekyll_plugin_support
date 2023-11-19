@@ -62,17 +62,13 @@ module JekyllSupport
       scope[name] = value if value.instance_of? String
     end
 
-    # dump_vars(@logger, liquid_context)
     liquid_context
   end
 
   def self.lookup_liquid_variables(liquid_context, markup)
-    puts "markup is a #{markup.class} with value '#{markup}'.".yellow
-    raise JekyllPluginSupportError, "markup is a #{markup.class} with value '#{markup}'." unless markup.instance_of? String
-
     liquid_context.scopes.each do |scope|
       scope.each do |name, value|
-        markup = markup.gsub("{{#{name}}}", value)
+        markup = markup.gsub("{{#{name}}}", value.to_s)
       end
     end
     markup
