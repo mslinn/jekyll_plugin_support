@@ -1,7 +1,11 @@
 # Monkey patch StandardError so a new method called shorten_backtrace is added.
 class StandardError
   def shorten_backtrace(backtrace_element_count = 3)
-    set_backtrace(backtrace[0..backtrace_element_count].map { |x| x.gsub(Dir.pwd + '/', './') })
+    # self.backtrace = backtrace[0..backtrace_element_count].map do |x|
+    #   raise JekyllPluginSupportError, "backtrace contains a #{x.class} with value '#{x}'." unless x.instance_of? String
+
+    #   x.gsub(Dir.pwd + '/', './')
+    # end
   end
 end
 
@@ -63,9 +67,12 @@ module JekyllSupport
   end
 
   def self.lookup_liquid_variables(liquid_context, markup)
+    puts "markup is a #{markup.class} with value '#{markup}'.".yellow
+    raise JekyllPluginSupportError, "markup is a #{markup.class} with value '#{markup}'." unless markup.instance_of? String
+
     liquid_context.scopes.each do |scope|
       scope.each do |name, value|
-        markup = markup.to_s.gsub("{{#{name}}}", value)
+        markup = markup.gsub("{{#{name}}}", value)
       end
     end
     markup

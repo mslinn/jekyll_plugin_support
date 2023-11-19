@@ -32,8 +32,8 @@
       "script": "${workspaceRoot}/lib/call_chain.rb"
     },
     {
-      "debugPort": "0",
-      "name": "Attach with rdbg",
+      "debugPort": "45373",
+      "name": "Attach with rdbg to 45373",
       "request": "attach",
       "type": "rdbg",
     },

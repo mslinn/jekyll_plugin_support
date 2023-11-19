@@ -20,7 +20,9 @@ module JekyllSupport
     def initialize(tag_name, markup, parse_context)
       super
       @tag_name = tag_name
-      @argument_string = markup.to_s
+      raise JekyllPluginSupportError, "markup is a #{markup.class} with value '#{markup}'." unless markup.instance_of? String
+
+      @argument_string = markup
       @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
       @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
       @helper = JekyllPluginHelper.new(tag_name, @argument_string, @logger, respond_to?(:no_arg_parsing))
@@ -47,7 +49,7 @@ module JekyllSupport
 
       @mode = @config['env']&.key?('JEKYLL_ENV') ? @config['env']['JEKYLL_ENV'] : 'development'
 
-      @helper.reinitialize JekyllSupport.lookup_liquid_variables liquid_context, @argument_string.strip
+      @helper.reinitialize JekyllSupport.lookup_liquid_variables liquid_context, @argument_string
 
       render_impl
     rescue StandardError => e
