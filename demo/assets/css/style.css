@@ -134,37 +134,6 @@ pre {
   padding-right: 0.5em;
 }
 
-
-/* Start of jekyll_plugin_support css */
-
-.custom_error, .standard_error, .jekyll_plugin_support_error {
-  background-color: rgb(248, 149, 149);
-  color: black;
-  font-family: Monaco,"Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
-  font-stretch: semi-condensed;
-  font-size: 9pt;
-  line-height: 160%;
-  padding: 5px;
-  border-radius: 4pt;
-  border: rgb(155, 141, 141) 2px solid;
-}
-
-.jps_attribute {
-  display: flex;
-}
-
-.jps_attribute div {
-  flex-grow: 1;
-  font-family: Verdana, Arial, Helvetica, sans-serif;
-  font-size: 8pt;
-  line-height: 1.3;
-  text-align: center;
-  width: 0;
-}
-
-/* End of jekyll_plugin_support css */
-
-
 @media only screen and (min-width: 768px) and (max-width: 959px) {
   .inner {
     width: 740px;

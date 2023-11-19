@@ -31,17 +31,7 @@ At present, only Jekyll tags and blocks are supported.
    $ bundle
    ```
 
-3. Copy the CSS from `demo/assets/css/styles.css` between the comments to your Jekyll project's CSS file:
-
-   ```css
-   blah blah blah
-
-   /* Start of jekyll_plugin_support css */
-   Copy these lines
-   /* End of jekyll_plugin_support css */
-
-   blah blah blah
-   ```
+3. Copy the CSS classes from `demo/assets/css/jekyll_plugin_support.css` to your Jekyll project's CSS file.
 
 
 ## General Usage
