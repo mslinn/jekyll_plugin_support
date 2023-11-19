@@ -23,7 +23,7 @@ module JekyllSupport
       @argument_string = markup.to_s
       @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
       @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
-      @helper = JekyllPluginHelper.new(tag_name, argument_string, @logger, respond_to?(:no_arg_parsing))
+      @helper = JekyllPluginHelper.new(tag_name, @argument_string, @logger, respond_to?(:no_arg_parsing))
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.
@@ -47,10 +47,7 @@ module JekyllSupport
 
       @mode = @config['env']&.key?('JEKYLL_ENV') ? @config['env']['JEKYLL_ENV'] : 'development'
 
-      @helper.reinitialize(@markup.strip)
-
-      markup = JekyllSupport.lookup_liquid_variables liquid_context, @argument_string
-      @helper.reinitialize markup
+      @helper.reinitialize JekyllSupport.lookup_liquid_variables liquid_context, @argument_string.strip
 
       render_impl
     rescue StandardError => e
