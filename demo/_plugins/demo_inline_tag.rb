@@ -12,9 +12,9 @@ module Jekyll
       @name2          = @helper.parameter_specified? 'name2'
       @standard_error = @helper.parameter_specified? 'raise_standard_error'
 
-      if @tag_death
-        @die_on_custom_error   = @tag_death['die_on_custom_error']   == true
-        @die_on_standard_error = @tag_death['die_on_standard_error'] == true
+      if @tag_config
+        @die_on_custom_error   = @tag_config['die_on_custom_error']   == true
+        @die_on_standard_error = @tag_config['die_on_standard_error'] == true
       end
 
       raise CustomError, 'Fall down, go boom.' if @custom_error

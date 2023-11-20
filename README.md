@@ -101,7 +101,7 @@ For block tags, a single parameter is required, which contains any text enclosed
 
 * [`@site`](https://jekyllrb.com/docs/variables/#site-variables) Site variables
 
-* [`@tag_death`](lib/jekyll_plugin_support_tag.rb)
+* [`@tag_config`](lib/jekyll_plugin_support_tag.rb)
   Contents of the section of `_config.yml` named after your plugin.
 
 * `@tag_name` Name of your Jekyll block tag or inline tag plugin.
@@ -340,6 +340,19 @@ jekyll_plugin_support (0.1.0)
     Installed at: /home/mslinn/.gems
 
     Provides support for writing Jekyll plugins.
+```
+
+
+### Pry Breakpoint On StandardError
+
+A `pry` breakpoint will be set in the `StandardError` handler if `pry_on_standard_error: true`
+is set in variable configuration section of `_config.yml`.
+
+For example, if your plugin is called `blah`, enable the breakpoint with the following section:
+
+```yml
+blah:
+  pry_on_standard_error: true
 ```
 
 

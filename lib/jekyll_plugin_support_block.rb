@@ -38,8 +38,8 @@ module JekyllSupport
       @scopes    = liquid_context.scopes
       @site      = liquid_context.registers[:site]
 
-      @config    = @site.config
-      @tag_death = @config[@tag_name]
+      @config = @site.config
+      @tag_config = @config[@tag_name]
 
       @layout    = @envs[:layout]
       @paginator = @envs[:paginator]

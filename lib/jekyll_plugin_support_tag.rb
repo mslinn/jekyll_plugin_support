@@ -41,7 +41,9 @@ module JekyllSupport
       @site      = liquid_context.registers[:site]
 
       @config = @site.config
-      @tag_death = @config[@tag_name]
+      @tag_config = @config[@tag_name]
+      @jps = @config['jekyll_plugin_support']
+      @pry_on_standard_error = @jps['pry_on_standard_error'] || false if @jps
 
       # @envs.keys are :content, :highlighter_prefix, :highlighter_suffix, :jekyll, :layout, :page, :paginator, :site, :theme
       @layout    = @envs[:layout]
@@ -50,8 +52,6 @@ module JekyllSupport
 
       @mode = @config['env']&.key?('JEKYLL_ENV') ? @config['env']['JEKYLL_ENV'] : 'development'
 
-      puts "JekyllPluginSupport.render: argument_string is a #{argument_string.class} with value '#{argument_string}'.".yellow
-      puts "JekyllPluginSupport.render: @argument_string is a #{@argument_string.class} with value '#{@argument_string}'.".yellow
       @helper.reinitialize JekyllSupport.lookup_liquid_variables liquid_context, @argument_string
 
       render_impl
@@ -59,7 +59,7 @@ module JekyllSupport
       e.shorten_backtrace
       msg = format_error_message e.full_message
       @logger.error msg
-      binding.pry if @pry_on_standard_error
+      binding.pry if @pry_on_standard_error # rubocop:disable Lint/Debugger
       raise e if @die_on_standard_error
 
       "<div class='standard_error'>#{e.class}: #{msg}</div>"

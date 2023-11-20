@@ -44,6 +44,7 @@ module JekyllSupport
   # See demo/variables.html
   def self.inject_vars(_logger, liquid_context)
     site = liquid_context.registers[:site]
+
     plugin_variables = site.config['plugin-vars']
     return liquid_context unless plugin_variables
 

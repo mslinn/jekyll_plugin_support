@@ -29,6 +29,8 @@ demo_inline_tag:
   die_on_custom_error: false
   die_on_standard_error: false
 ignore_theme_config: true
+jekyll_plugin_support:
+  pry_on_standard_error: true
 liquid:
   error_mode: strict
   # strict_filters: true
