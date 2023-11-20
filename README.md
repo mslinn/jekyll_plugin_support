@@ -169,7 +169,7 @@ The following examples both yield the same result:
 * `pay_tuesday="maybe not"`
 * `pay_tuesday='maybe not'`
 
-## Remaining Markup
+### Remaining Markup
 
 After your plugin has parsed all the keyword options and name/value parameters,
 call `@helper.remaining_markup` to obtain the remaining markup that was passed to your plugin.
@@ -179,11 +179,11 @@ call `@helper.remaining_markup` to obtain the remaining markup that was passed t
 
 `jekyll_plugin_support` provides support for
 [Liquid variables](https://shopify.github.io/liquid/tags/variable/)
-to be defined in `_config.yml`, in a section called `plugin-vars`.
+to be defined in `_config.yml`, in a section called `liquid-vars`.
 The following `_config.yml` fragment defines 3 variables called `var1`, `var2` and `var3`:
 
 ```yaml
-plugin-vars:
+liquid-vars:
   var1: value1
   var2: 'value 2'
   var3: value3
@@ -218,7 +218,7 @@ and then refers to other definitions that are not overridden.
 Here is an example:
 
 ```yaml
-plugin-vars:
+liquid-vars:
   development:
     var1: 'http://localhost:4444/demo_block_tag.html'
     var2: 'http://localhost:4444/demo_inline_tag.html'

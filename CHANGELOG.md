@@ -1,6 +1,6 @@
 # Change Log
 
-## 0.7.3 / 2023-11-14
+## 0.8.0 / 2023-11-14
 
 * Restructured for better support of Liquid variables.
 * Removed redundant class name in error message.
@@ -11,6 +11,7 @@
 * Adds a method called `shorten_backtrace` to `StandardError` and all custom error
   classes defined by `JekyllSupport.define_error`.
   See the `demo/` directory for examples of how to use this optional feature.
+* The `plugin-vars` section in `_config.yml` was renamed to `liquid-vars`.
 
 
 ## 0.7.2 / 2023-08-14

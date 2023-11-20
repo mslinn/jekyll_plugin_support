@@ -49,7 +49,7 @@ plugins: # Use file name of the plugin entry point, not the gem name
   - jekyll_plugin_logger
   # - html-proofer
   - jekyll
-plugin-vars:
+liquid-vars:
   development:
     var1: 'http://localhost:4444/demo_block_tag.html'
     var2: 'http://localhost:4444/demo_inline_tag.html'
