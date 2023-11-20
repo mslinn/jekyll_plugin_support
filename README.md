@@ -177,8 +177,9 @@ call `@helper.remaining_markup` to obtain the remaining markup that was passed t
 
 ## Liquid Variable Definitions
 
+`jekyll_plugin_support` provides support for
 [Liquid variables](https://shopify.github.io/liquid/tags/variable/)
-may be defined in `_config.yml`, in a section called `plugin-vars`.
+to be defined in `_config.yml`, in a section called `plugin-vars`.
 The following `_config.yml` fragment defines 3 variables called `var1`, `var2` and `var3`:
 
 ```yaml
@@ -202,7 +203,7 @@ The exception is `@argument_string`, which is not expanded.
 
 ### Liquid Variable Values Specific To Production And Development Modes
 
-Liquid variables defined in `_config.yml` can have different values
+`jekyll_plugin_support` allows Liquid variables defined in `_config.yml` to have different values
 when Jekyll is running in `development` and `production` modes.
 When injecting variables into your Jekyll website, `Jekyll_plugin_support`
 refers to definitions specific to the current environment,
@@ -234,7 +235,7 @@ For the above, the following variable values are set in `development` mode:
 * `var3`: `https://github.com/mslinn`
 
 
-### Liquid Variables in JekyllPluginSupport Subclasses
+### Liquid Variables in `jekyll_plugin_support` Subclasses
 
 You can define additional Liquid variables in plugins built using `jekyll_plugin_support`.
 To do this, make entries in `_config.yml` under a key named after the value of `@tag_name`.
