@@ -109,37 +109,6 @@ For block tags, a single parameter is required, which contains any text enclosed
 * `text` Content provided to your block tag.
 
 
-### Subclass Variables
-
-You can define additional variables in plugins built using `jekyll_plugin_support`.
-To do this, make entries in `_config.yml` under a key named after the value of `@tag_name`.
-
-For example, let&rsquo;s imagine you create a plugin using `jekyll_plugin_support`,
-and hou register it with the name `phonetic_alphabet`.
-You could define variables that would be made available to content pages in web applications that
-incorporate the `phonetic_alphabet` plugin.
-The following section in `_config.yml` defines variables called `x`, `y` and `z`,
-with values `xray`, `yankee` and `zulu`, respectively:
-
-```yaml
-phonetic_alphabet:
-  x: xray
-  y: yankee
-  z: zulu
-```
-
-The above definitions allow you to write content pages that use those variables, like the following page containing markup:
-
-```html
----
-layout: default
-title: Variable demo
----
-The letter `x` is pronounced {{x}}.
-Similarly, the letters `y` and `z` are pronounced {{y}} and {{z}}.
-```
-
-
 ## Argument Parsing
 
 Tag arguments can be obtained within `render_impl`.
@@ -269,6 +238,37 @@ For the above, the following variable values are set in `development` mode:
 If your tag or block plugin only needs access to the raw arguments passed from the web page,
 without tokenization, and you expect that the plugin might be invoked with large amounts of text,
 derive your plugin from `JekyllBlockNoArgParsing` or `JekyllTagNoArgParsing`.
+
+
+### Subclass Variables
+
+You can define additional variables in plugins built using `jekyll_plugin_support`.
+To do this, make entries in `_config.yml` under a key named after the value of `@tag_name`.
+
+For example, let&rsquo;s imagine you create a plugin using `jekyll_plugin_support`,
+and hou register it with the name `phonetic_alphabet`.
+You could define variables that would be made available to content pages in web applications that
+incorporate the `phonetic_alphabet` plugin.
+The following section in `_config.yml` defines variables called `x`, `y` and `z`,
+with values `xray`, `yankee` and `zulu`, respectively:
+
+```yaml
+phonetic_alphabet:
+  x: xray
+  y: yankee
+  z: zulu
+```
+
+The above definitions allow you to write content pages that use those variables, like the following page containing markup:
+
+```html
+---
+layout: default
+title: Variable demo
+---
+The letter `x` is pronounced {{x}}.
+Similarly, the letters `y` and `z` are pronounced {{y}} and {{z}}.
+```
 
 
 ## Subclass Attribution
