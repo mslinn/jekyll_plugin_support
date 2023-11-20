@@ -1,6 +1,6 @@
 # `jekyll_plugin_support` [![Gem Version](https://badge.fury.io/rb/jekyll_plugin_support.svg)](https://badge.fury.io/rb/jekyll_plugin_support)
 
-`Jekyll_plugin_support` is a Ruby gem that facilitates writing and testing Jekyll plugins.
+`Jekyll_plugin_support` is a Ruby gem that provides a framework for writing and testing Jekyll plugins.
 
 `Jekyll_plugin_support` can be used to create simple Jekyll plugins in
 the `_plugins/` directory of your Jekyll project, or gem-based Jekyll plugins.
@@ -80,8 +80,6 @@ For block tags, a single parameter is required, which contains any text enclosed
 * [`@config`](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll#configuring-jekyll-in-your-github-pages-site)
   [YAML](https://yaml.org/) Jekyll site configuration file
 
-* `@envs` Undocumented Jekyll variable, can be insightful when exploring.
-
 * [`@helper`](https://github.com/mslinn/jekyll_plugin_support/blob/master/lib/jekyll_plugin_helper.rb)
   `JekyllPluginHelper` instance for your plugin.
 
@@ -109,6 +107,37 @@ For block tags, a single parameter is required, which contains any text enclosed
 * [`@theme`](https://jekyllrb.com/docs/variables/#global-variables) Theme variables
 
 * `text` Content provided to your block tag.
+
+
+### Subclass Variables
+
+You can define additional variables in plugins built using `jekyll_plugin_support`.
+To do this, make entries in `_config.yml` under a key named after the value of `@tag_name`.
+
+For example, let&rsquo;s imagine you create a plugin using `jekyll_plugin_support`,
+and hou register it with the name `phonetic_alphabet`.
+You could define variables that would be made available to content pages in web applications that
+incorporate the `phonetic_alphabet` plugin.
+The following section in `_config.yml` defines variables called `x`, `y` and `z`,
+with values `xray`, `yankee` and `zulu`, respectively:
+
+```yaml
+phonetic_alphabet:
+  x: xray
+  y: yankee
+  z: zulu
+```
+
+The above definitions allow you to write content pages that use those variables, like the following page containing markup:
+
+```html
+---
+layout: default
+title: Variable demo
+---
+The letter `x` is pronounced {{x}}.
+Similarly, the letters `y` and `z` are pronounced {{y}} and {{z}}.
+```
 
 
 ## Argument Parsing
