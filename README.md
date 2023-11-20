@@ -189,15 +189,21 @@ plugin-vars:
   var3: value3
 ```
 
-Liquid variable references defined in this manner are intended to be embedded in a webpage.
-They are expanded transparently, and can be referenced like any other Liquid variable:
+Liquid variables defined in this manner are intended to be embedded in a webpage.
+They are expanded transparently, and can be referenced like any other Liquid variable.
+These Liquid variables can be passed as parameters to other plugins and includes.
+
+In the following example web page, the Liquid variable called `var1` is expanded as part of the displayed page.
+Liquid variables `var` and `var2` are expanded and passed to the `my_plugin` plugin.
 
 ```html
-This is the value of <code>var1</code>: {{var1}}
+This is the value of <code>var1</code>: {{var1}}.
+
+{% my_plugin param1="{{var1}}" param2="{{var2}}" %}
 ```
 
-`Jekyll_plugin_support` expands all but one variable references before the values
-of the [plugin variables described above](#predefined-variables) are set.
+`Jekyll_plugin_support` expands all but one [plugin variables described above](#predefined-variables),
+replacing Liquid variable references with their values.
 The exception is `@argument_string`, which is not expanded.
 
 
