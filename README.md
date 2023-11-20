@@ -69,9 +69,9 @@ For inline tags, `render_impl` does not accept any parameters.
 For block tags, a single parameter is required, which contains any text enclosed within your block.
 
 
-## Predefined Variables
+## Predefined Plugin Variables
 
-`Jekyll_plugin_support` defines the following variables that you can use in your plugin&rsquo;s `render_impl` method:
+`Jekyll_plugin_support` defines the following Ruby variables that you can use in your plugin&rsquo;s `render_impl` method:
 
 * `@argument_string` Unparsed markup passed as a parameter to your block tag and inline tag.
 
@@ -197,7 +197,7 @@ This is the value of <code>var1</code>: {{var1}}
 ```
 
 `Jekyll_plugin_support` expands all but one variable references before the values
-of the [variables described above](#predefined-variables) are set.
+of the [plugin variables described above](#predefined-variables) are set.
 The exception is `@argument_string`, which is not expanded.
 
 
