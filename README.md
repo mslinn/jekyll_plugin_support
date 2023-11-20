@@ -175,9 +175,10 @@ After your plugin has parsed all the keyword options and name/value parameters,
 call `@helper.remaining_markup` to obtain the remaining markup that was passed to your plugin.
 
 
-## Configuration Variable Definitions
+## Liquid Variable Definitions
 
-Liquid variables may be defined in `_config.yml`, in a section called `plugin-vars`.
+[Liquid variables](https://shopify.github.io/liquid/tags/variable/)
+may be defined in `_config.yml`, in a section called `plugin-vars`.
 The following `_config.yml` fragment defines 3 variables called `var1`, `var2` and `var3`:
 
 ```yaml
@@ -187,8 +188,8 @@ plugin-vars:
   var3: value3
 ```
 
-Variable references embedded in a webpage are expanded transparently.
-They can be referenced like any other Liquid variable:
+Liquid variable references defined in this manner are intended to be embedded in a webpage.
+They are expanded transparently, and can be referenced like any other Liquid variable:
 
 ```html
 This is the value of <code>var1</code>: {{var1}}
@@ -199,7 +200,7 @@ of the [variables described above](#predefined-variables) are set.
 The exception is `@argument_string`, which is not expanded.
 
 
-### Variable Values Specific To Production And Development Modes
+### Liquid Variable Values Specific To Production And Development Modes
 
 Liquid variables defined in `_config.yml` can have different values
 when Jekyll is running in `development` and `production` modes.
@@ -233,21 +234,14 @@ For the above, the following variable values are set in `development` mode:
 * `var3`: `https://github.com/mslinn`
 
 
-## `no_arg_parsing` Optimization
+### Liquid Variables in JekyllPluginSupport Subclasses
 
-If your tag or block plugin only needs access to the raw arguments passed from the web page,
-without tokenization, and you expect that the plugin might be invoked with large amounts of text,
-derive your plugin from `JekyllBlockNoArgParsing` or `JekyllTagNoArgParsing`.
-
-
-### Subclass Variables
-
-You can define additional variables in plugins built using `jekyll_plugin_support`.
+You can define additional Liquid variables in plugins built using `jekyll_plugin_support`.
 To do this, make entries in `_config.yml` under a key named after the value of `@tag_name`.
 
 For example, let&rsquo;s imagine you create a plugin using `jekyll_plugin_support`,
 and hou register it with the name `phonetic_alphabet`.
-You could define variables that would be made available to content pages in web applications that
+You could define Liquid variables that would be made available to content pages in web applications that
 incorporate the `phonetic_alphabet` plugin.
 The following section in `_config.yml` defines variables called `x`, `y` and `z`,
 with values `xray`, `yankee` and `zulu`, respectively:
@@ -269,6 +263,13 @@ title: Variable demo
 The letter `x` is pronounced {{x}}.
 Similarly, the letters `y` and `z` are pronounced {{y}} and {{z}}.
 ```
+
+
+## `no_arg_parsing` Optimization
+
+If your tag or block plugin only needs access to the raw arguments passed from the web page,
+without tokenization, and you expect that the plugin might be invoked with large amounts of text,
+derive your plugin from `JekyllBlockNoArgParsing` or `JekyllTagNoArgParsing`.
 
 
 ## Subclass Attribution
