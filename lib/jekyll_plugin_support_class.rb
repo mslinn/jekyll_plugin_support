@@ -45,7 +45,7 @@ module JekyllSupport
   def self.inject_vars(_logger, liquid_context)
     site = liquid_context.registers[:site]
 
-    plugin_variables = site.config['liquid-vars']
+    plugin_variables = site.config['liquid_vars']
     return liquid_context unless plugin_variables
 
     scope = liquid_context.scopes.last

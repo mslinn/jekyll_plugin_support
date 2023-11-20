@@ -11,7 +11,7 @@
 * Adds a method called `shorten_backtrace` to `StandardError` and all custom error
   classes defined by `JekyllSupport.define_error`.
   See the `demo/` directory for examples of how to use this optional feature.
-* The `plugin-vars` section in `_config.yml` was renamed to `liquid-vars`.
+* The `plugin-vars` section in `_config.yml` was renamed to `liquid_vars`.
 
 
 ## 0.7.2 / 2023-08-14
