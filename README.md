@@ -7,31 +7,98 @@ the `_plugins/` directory of your Jekyll project, or gem-based Jekyll plugins.
 
 At present, only Jekyll tags and blocks are supported.
 
+Plugins that use `jekyll_plugin_support` include:
+
+<ul style="columns: 2">
+  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_all_collections'><code>jekyll_all_collections</code></a></li>
+  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_badge'><code>jekyll_badge</code></a></li>
+  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_emoji'><code>jekyll_emoji</code></a></li>
+  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_flexible_include.html'><code>jekyll_flexible_include</code></a></li>
+  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_href.html'><code>jekyll_href</code></a></li>
+  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_img.html'><code>jekyll_img</code></a></li>
+  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_plugin_template.html'><code>jekyll_plugin_template</code></a></li>
+  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_outline.html'><code>jekyll_outline</code></a></li>
+  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_pre.html'><code>jekyll_pre</code></a></li>
+  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_quote.html'><code>jekyll_quote</code></a></li>
+</ul>
+
+... and also the demonstration plugins in
+{% href https://github.com/mslinn/jekyll_plugin_support/tree/master/demo/_plugins <code>jekyll_plugin_support</code> %}
+
 
 ## Installation
 
-1. If your Jekyll plugin is packaged as a Ruby gem, add the following to your project&rsquo;s `.gemspec`:
+`Jekyll_plugin_support` is packaged as a Ruby gem.
+If your project is a custom plugin that will reside in a Jekyll project’s `_plugins` directory,
+add the following line to your Jekyll plugin’s `Gemfile`.
 
-   ```ruby
-   spec.add_dependency 'jekyll_plugin_support', '>= 0.7.3'
-   ```
+```ruby
+group :jekyll_plugins do
+  ...
+  gem 'jekyll_plugin_support', '>= 0.8.0'
+  ...
+end
+```
 
-   Otherwise, add the following to your Jekyll project&rsquo;s `Gemfile`,
-   inside the `jekyll_plugins` group:
+Otherwise, if your custom plugin will be packaged into a gem, add the following to your plugin’s `.gemspec`:
 
-   ```ruby
-   group :jekyll_plugins do
-     gem 'jekyll_plugin_support'
-   end
-   ```
+```ruby
+Gem::Specification.new do |spec|
+  ...
+  spec.add_dependency 'jekyll_plugin_support', '>= 0.8.0'
+  ...
+end
+```
 
-2. Install the `jekyll_plugin_support` Ruby gem and mark it as a dependency of your project by typing:
+Install the `jekyll_plugin_support` Ruby gem and mark it as a dependency of your project by typing:
 
-   ```shell
-   $ bundle
-   ```
+  ```shell
+  $ bundle
+  ```
 
-3. Copy the CSS classes from `demo/assets/css/jekyll_plugin_support.css` to your Jekyll project's CSS file.
+Copy the CSS classes from `demo/assets/css/jekyll_plugin_support.css` to your Jekyll project&rsquo;s CSS file.
+
+
+## About `jekyll_plugin_support`
+
+`JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag`
+provide support for [Jekyll tag block plugins](https://jekyllrb.com/docs/plugins/tags/#tag-blocks)
+and [Jekyll inline tag plugins](https://jekyllrb.com/docs/plugins/tags/), respectively.
+They are very similar in construction and usage.
+
+Instead of subclassing your custom Jekyll block tag class from `Liquid::Block`,
+subclass from `JekyllSupport::JekyllBlock`.
+Similarly, instead of subclassing your custom Jekyll tag class from `Liquid::Tag`,
+subclass from `JekyllSupport::JekyllTag`.
+
+Both JekyllSupport classes instantiate new instances of
+[`PluginMetaLogger`](https://github.com/mslinn/jekyll_plugin_logger) (called `@logger`) and
+[`JekyllPluginHelper`](https://github.com/mslinn/jekyll_plugin_support/blob/master/lib/jekyll_plugin_support_helper.rb)
+(called `@helper`).
+
+`JekyllPluginHelper` defines a generic initialize method, and your tag or block tag class should not need to override it.
+Also, your tag or block tag class should not define a method called render, because `jekyll_plugin_support` defines one.
+
+Instead, define a method called `render_impl`.
+For inline tags, `render_impl` does not accept any parameters.
+For block tags, a single parameter is required, which contains text passed from your block in the page.
+
+Your implementation of render_impl can parse parameters passed to the tag / block tag, as described in
+[Tag Parameter Parsing](http://mslinn.com/jekyll/10100-jekyll-plugin-background.html#params).
+
+The following variables are predefined within `render`.
+See the [Jekyll documentation](https://jekyllrb.com/docs/variables/) for more information.
+
+* `@argument_string` – Original unparsed string from the tag in the web page
+* `@config` – Jekyll [configuration data](https://jekyllrb.com/docs/configuration/)
+* `@layout` – Front matter specified in layouts
+* `@mode` – [possible values](https://jekyllrb.com/docs/configuration/environments/)
+  are `development`, `production`, or `test`
+* `@page` – Jekyll [page variable](https://jekyllrb.com/docs/variables/#page-variables)
+* `@paginator` – Only has a value when a paginator is active; they are only available in index files.
+* `@site` – Jekyll [site variable](https://jekyllrb.com/docs/variables/#site-variables)
+* `@tag_name` – Name of the inline tag or block plugin
+* `@theme` – Theme variables (introduced in Jekyll 4.3.0)
 
 
 ## General Usage
@@ -194,7 +261,7 @@ They are expanded transparently, and can be referenced like any other Liquid var
 These Liquid variables can be passed as parameters to other plugins and includes.
 
 In the following example web page, the Liquid variable called `var1` is expanded as part of the displayed page.
-Liquid variables `var` and `var2` are expanded and passed to the `my_plugin` plugin.
+Liquid variables `var1` and `var2` are expanded and passed to the `my_plugin` plugin.
 
 ```html
 This is the value of <code>var1</code>: {{var1}}.
@@ -202,7 +269,8 @@ This is the value of <code>var1</code>: {{var1}}.
 {% my_plugin param1="{{var1}}" param2="{{var2}}" %}
 ```
 
-`Jekyll_plugin_support` expands all but one [plugin variables described above](#predefined-variables),
+`Jekyll_plugin_support` expands all but one of the
+[plugin variables described above](#predefined-variables),
 replacing Liquid variable references with their values.
 The exception is `@argument_string`, which is not expanded.
 
@@ -210,7 +278,7 @@ The exception is `@argument_string`, which is not expanded.
 ### Liquid Variable Values Specific To Production And Development Modes
 
 `jekyll_plugin_support` allows Liquid variables defined in `_config.yml` to have different values
-when Jekyll is running in `development` and `production` modes.
+when Jekyll is running in `development`, `production` and `test` modes.
 When injecting variables into your Jekyll website, `Jekyll_plugin_support`
 refers to definitions specific to the current environment,
 and then refers to other definitions that are not overridden.
@@ -234,7 +302,7 @@ For the above, the following variable values are set in `development` mode:
 * `var2`: `http://localhost:4444/demo_inline_tag.html`
 * `var3`: `https://github.com/mslinn`
 
-... and the following variable values are set in `production` mode:
+... and the following variable values are set in `production` and `test` modes:
 
 * `var1`: `https://github.com/django/django/blob/3.1.7`
 * `var2`: `https://github.com/django-oscar/django-oscar/blob/3.0.2`
@@ -349,9 +417,9 @@ HEREDOC
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies.
+After checking out the `jekyll_plugin_suppprt` repository, run `bin/setup` to install dependencies.
 
-You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+`bin/console` provides an interactive prompt that allows you to experiment.
 
 
 To build and install this gem onto your local machine, run:
@@ -393,7 +461,7 @@ blah:
 ```
 
 
-## Demo
+## Demonstration Plugins and Website
 
 A demo / test website is provided in the `demo` directory.
 It can be used to debug the plugin or to run freely.

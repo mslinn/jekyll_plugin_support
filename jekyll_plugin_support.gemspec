@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   END_MESSAGE
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>= 2.6.0'
-  spec.summary = 'Provides support for writing Jekyll plugins.'
+  spec.summary = 'Provides a framework for writing and testing Jekyll plugins'
   spec.test_files = spec.files.grep %r{^(test|spec|features)/}
   spec.version = JekyllPluginSupportVersion::VERSION
 

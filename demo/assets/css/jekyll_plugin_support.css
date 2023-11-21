@@ -15,6 +15,14 @@
   font-size: 10pt;
 }
 
+.jekyll_pre + .jekyll_pre {
+  margin-top: 2em;
+}
+
+.jekyll_pre + ul, .jekyll_pre + ol, .jekyll_pre + dl {
+  margin-top: 0;
+}
+
 .jps_attribute {
   display: flex;
 }
