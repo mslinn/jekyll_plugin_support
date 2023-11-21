@@ -23,7 +23,7 @@ Plugins that use `jekyll_plugin_support` include:
 </ul>
 
 ... and also the demonstration plugins in
-{% href https://github.com/mslinn/jekyll_plugin_support/tree/master/demo/_plugins <code>jekyll_plugin_support</code> %}
+[`jekyll_plugin_support`](https://github.com/mslinn/jekyll_plugin_support/tree/master/demo/_plugins)
 
 
 ## Installation
