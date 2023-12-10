@@ -69,6 +69,7 @@ module JekyllSupport
     rescue StandardError => e
       e.shorten_backtrace
       @logger.error { "#{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} by #{tag_name} - #{e.message}" }
+      binding.pry if @pry_on_standard_error # rubocop:disable Lint/Debugger
       raise e if @die_on_standard_error
 
       "<div class='standard_error'>#{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} by #{tag_name}: #{e.message}</div>"

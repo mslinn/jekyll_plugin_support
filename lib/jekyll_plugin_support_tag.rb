@@ -67,12 +67,11 @@ module JekyllSupport
       render_impl
     rescue StandardError => e
       e.shorten_backtrace
-      msg = format_error_message e.full_message
-      @logger.error msg
+      @logger.error { "#{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} while processing #{tag_name} - #{e.message}" }
       binding.pry if @pry_on_standard_error # rubocop:disable Lint/Debugger
       raise e if @die_on_standard_error
 
-      "<div class='standard_error'>#{e.class}: #{msg}</div>"
+      "<div class='standard_error'>#{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} while processing #{tag_name}: #{e.message}</div>"
     end
 
     # Jekyll plugins must override this method, not render, so their plugin can be tested more easily
