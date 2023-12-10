@@ -26,6 +26,10 @@ class JekyllPluginHelper
     PluginMetaLogger.instance.info { "Loaded #{name} v#{version} plugin." }
   end
 
+  def self.remove_html_tags(string)
+    string.gsub(/<[^>]*>/, '')
+  end
+
   # strip leading and trailing quotes if present
   def self.remove_quotes(string)
     string.strip.gsub(/\A'|\A"|'\Z|"\Z/, '').strip if string

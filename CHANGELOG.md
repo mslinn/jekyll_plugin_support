@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.8.1 / 2023-12-10
+
+* Added the `JekyllPluginHelper.remove_html_tags` method.
+
+
 ## 0.8.0 / 2023-11-14
 
 * Restructured for better support of Liquid variables.
