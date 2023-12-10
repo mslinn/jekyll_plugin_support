@@ -27,7 +27,7 @@ class JekyllPluginHelper
   end
 
   def self.remove_html_tags(string)
-    string.gsub(/<[^>]*>/, '')
+    string.gsub(/<[^>]*>/, '').strip
   end
 
   # strip leading and trailing quotes if present
