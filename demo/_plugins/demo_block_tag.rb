@@ -2,36 +2,36 @@ require 'cgi'
 require 'jekyll_plugin_support'
 
 module Jekyll
-  CustomError = JekyllSupport.define_error
+  DemoBlockError = JekyllSupport.define_error
 
   class DemoBlock < JekyllSupport::JekyllBlock
     VERSION = '0.1.2'.freeze
 
     def render_impl(text)
-      @custom_error   = @helper.parameter_specified? 'raise_custom_error'
-      @keyword1       = @helper.parameter_specified? 'keyword1'
-      @keyword2       = @helper.parameter_specified? 'keyword2'
-      @name1          = @helper.parameter_specified? 'name1'
-      @name2          = @helper.parameter_specified? 'name2'
-      @standard_error = @helper.parameter_specified? 'raise_standard_error'
+      @demo_block_error = @helper.parameter_specified? 'raise_demo_block_error'
+      @keyword1         = @helper.parameter_specified? 'keyword1'
+      @keyword2         = @helper.parameter_specified? 'keyword2'
+      @name1            = @helper.parameter_specified? 'name1'
+      @name2            = @helper.parameter_specified? 'name2'
+      @standard_error   = @helper.parameter_specified? 'raise_standard_error'
 
       if @tag_config
-        @die_on_custom_error   = @tag_config['die_on_custom_error']   == true
-        @die_on_standard_error = @tag_config['die_on_standard_error'] == true
+        @die_on_demo_block_error = @tag_config['die_on_demo_block_error'] == true
+        @die_on_standard_error   = @tag_config['die_on_standard_error'] == true
       end
 
-      raise CustomError, 'Fall down, go boom.' if @custom_error
+      raise DemoBlockError, 'Fall down, go boom.' if @demo_block_error
 
       _infinity = 1 / 0 if @standard_error
 
       output text
-    rescue CustomError => e # jekyll_plugin_support handles StandardError
+    rescue DemoBlockError => e # jekyll_plugin_support handles StandardError
       e.shorten_backtrace
       msg = format_error_message e.message
       @logger.error "#{e.class} raised #{msg}"
-      raise e if @die_on_custom_error
+      raise e if @die_on_demo_block_error
 
-      "<div class='custom_error'>#{e.class} raised in #{self.class};\n#{msg}</div>"
+      "<div class='demo_block_error'>#{e.class} raised in #{self.class};\n#{msg}</div>"
     end
 
     private

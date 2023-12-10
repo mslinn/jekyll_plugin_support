@@ -23,14 +23,14 @@ exclude:  # Wildcards are not supported yet https://github.com/jekyll/jekyll-wat
   - Gemfile.lock
   - README.md
 demo_block_tag:
-  die_on_custom_error: false
+  die_on_demo_block_error: false
   die_on_standard_error: false
 demo_inline_tag:
-  die_on_custom_error: false
+  die_on_demo_tag_error: false
   die_on_standard_error: false
 ignore_theme_config: true
 jekyll_plugin_support:
-  pry_on_standard_error: true
+  pry_on_standard_error: false
 liquid:
   error_mode: strict
   # strict_filters: true

@@ -1,11 +1,13 @@
 require 'jekyll_plugin_support'
 
 module Jekyll
+  DemoTagError = JekyllSupport.define_error
+
   class DemoTag < JekyllSupport::JekyllTag
     VERSION = '0.1.2'.freeze
 
     def render_impl
-      @custom_error   = @helper.parameter_specified? 'raise_custom_error'
+      @demo_tag_error = @helper.parameter_specified? 'raise_demo_tag_error'
       @keyword1       = @helper.parameter_specified? 'keyword1'
       @keyword2       = @helper.parameter_specified? 'keyword2'
       @name1          = @helper.parameter_specified? 'name1'
@@ -13,22 +15,22 @@ module Jekyll
       @standard_error = @helper.parameter_specified? 'raise_standard_error'
 
       if @tag_config
-        @die_on_custom_error   = @tag_config['die_on_custom_error']   == true
+        @die_on_demo_tag_error = @tag_config['die_on_demo_tag_error'] == true
         @die_on_standard_error = @tag_config['die_on_standard_error'] == true
       end
 
-      raise CustomError, 'Fall down, go boom.' if @custom_error
+      raise DemoTagError, 'Fall down, go boom.' if @demo_tag_error
 
       _infinity = 1 / 0 if @standard_error
 
       output
-    rescue CustomError => e # jekyll_plugin_support handles StandardError
+    rescue DemoTagError => e # jekyll_plugin_support handles StandardError
       e.shorten_backtrace
       msg = format_error_message e.message
       @logger.error "#{e.class} raised #{msg}"
-      raise e if @die_on_custom_error
+      raise e if @die_on_demo_tag_error
 
-      "<div class='custom_error'>#{e.class} raised in #{self.class};\n#{msg}</div>"
+      "<div class='demo_tag_error'>#{e.class} raised in #{self.class};\n#{msg}</div>"
     end
 
     private

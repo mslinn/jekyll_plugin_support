@@ -29,9 +29,17 @@ module JekyllSupport
       @helper = JekyllPluginHelper.new(tag_name, @argument_string, @logger, respond_to?(:no_arg_parsing))
     end
 
+    def set_error_context(error_class_name) # rubocop:disable Naming/AccessorMethodName
+      error_class = Object.const_get error_class_name
+      error_class.class_variable_set(:@@tag_name, @tag_name) # rubocop:disable Style/ClassVars
+      error_class.class_variable_set(:@@argument_string, @argument_string) # rubocop:disable Style/ClassVars
+    end
+
     # Method prescribed by the Jekyll plugin lifecycle.
     def render(liquid_context)
       return if @helper.excerpt_caller
+
+      set_error_context self.class.name.split('::').last + 'Error'
 
       @helper.liquid_context = JekyllSupport.inject_vars @logger, liquid_context
 

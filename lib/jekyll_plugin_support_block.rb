@@ -8,6 +8,12 @@ module JekyllSupport
     include JekyllSupportErrorHandling
     extend JekyllSupportErrorHandling
 
+    def set_error_context(error_class_name) # rubocop:disable Naming/AccessorMethodName
+      error_class = Object.const_get error_class_name
+      error_class.class_variable_set(:@@tag_name, @tag_name) # rubocop:disable Style/ClassVars
+      error_class.class_variable_set(:@@argument_string, @argument_string) # rubocop:disable Style/ClassVars
+    end
+
     # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
     # @param tag_name [String] the name of the tag, which we usually know.
     # @param argument_string [String] the arguments passed to the tag, as a single string.
@@ -30,6 +36,8 @@ module JekyllSupport
     # Defines @config, @envs, @mode, @page and @site
     # @return [String]
     def render(liquid_context)
+      set_error_context self.class.name.split('::').last + 'Error'
+
       @helper.liquid_context = JekyllSupport.inject_vars @logger, liquid_context
       text = super # Liquid variable values in content are looked up and substituted
 

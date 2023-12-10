@@ -1,3 +1,5 @@
+require_relative 'jekyll_custom_error'
+
 # Monkey patch StandardError so a new method called shorten_backtrace is added.
 class StandardError
   def shorten_backtrace(backtrace_element_count = 3)
@@ -20,7 +22,7 @@ module JekyllSupport
 
   # @return a new StandardError subclass containing the shorten_backtrace method
   def define_error
-    Class.new StandardError
+    Class.new Jekyll::CustomError
   end
   module_function :define_error
 
