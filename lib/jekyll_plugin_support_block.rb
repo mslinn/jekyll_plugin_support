@@ -68,10 +68,10 @@ module JekyllSupport
       render_impl text
     rescue StandardError => e
       e.shorten_backtrace
-      @logger.error e.message
+      @logger.error { "#{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} by #{tag_name} - #{e.message}" }
       raise e if @die_on_standard_error
 
-      "<div class='standard_error'>#{e.class}: #{e.message}</div>"
+      "<div class='standard_error'>#{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} by #{tag_name}: #{e.message}</div>"
     end
 
     # Jekyll plugins should override this method, not render,
