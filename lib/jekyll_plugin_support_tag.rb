@@ -31,15 +31,15 @@ module JekyllSupport
 
     def set_error_context(error_class_name) # rubocop:disable Naming/AccessorMethodName
       error_class = Object.const_get error_class_name
-      error_class.class_variable_set(:@@tag_name, @tag_name) # rubocop:disable Style/ClassVars
-      error_class.class_variable_set(:@@argument_string, @argument_string) # rubocop:disable Style/ClassVars
+      error_class.class_variable_set(:@@argument_string, @argument_string)
+      error_class.class_variable_set(:@@line_number, @line_number)
+      error_class.class_variable_set(:@@path, @page['path'])
+      error_class.class_variable_set(:@@tag_name, @tag_name)
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.
     def render(liquid_context)
       return if @helper.excerpt_caller
-
-      set_error_context self.class.name.split('::').last + 'Error'
 
       @helper.liquid_context = JekyllSupport.inject_vars @logger, liquid_context
 
@@ -52,6 +52,8 @@ module JekyllSupport
       @tag_config = @config[@tag_name]
       @jps = @config['jekyll_plugin_support']
       @pry_on_standard_error = @jps['pry_on_standard_error'] || false if @jps
+
+      set_error_context self.class.name + 'Error'
 
       # @envs.keys are :content, :highlighter_prefix, :highlighter_suffix, :jekyll, :layout, :page, :paginator, :site, :theme
       @layout    = @envs[:layout]

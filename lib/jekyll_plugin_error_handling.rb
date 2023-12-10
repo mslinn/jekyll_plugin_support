@@ -19,20 +19,23 @@ module JekyllSupportErrorHandling
   rescue StandardError => e
     file, line_number, caller = e.backtrace[caller_index].split(':')
     caller = caller.tr('`', "'")
-    warn "#{error.msg} #{caller} on line #{line_number} (after front matter) of #{file}".red
+    warn "#{error.message} #{caller} on line #{line_number} (after front matter) of #{file}".red
     # Process.kill('HUP', Process.pid) # generates huge stack trace
     exec "echo ''"
   end
 
+  # TODO: Delete this
   def format_error_message(message)
     page = " of #{@page['path']}" if @page
     remove_ansi_color "on line #{line_number} (after front matter)#{page}.\n#{message}"
   end
 
+  # TODO: Delete this
   def remove_ansi_color(string)
     string.gsub(/\e\[([;\d]+)?m/, '')
   end
 
+  # TODO: Delete this
   def maybe_reraise_error(error, throw_error: true)
     fmsg = format_error_message "#{error.class}: #{error.message.strip}"
     @logger.error { fmsg }

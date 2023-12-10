@@ -10,8 +10,10 @@ module JekyllSupport
 
     def set_error_context(error_class_name) # rubocop:disable Naming/AccessorMethodName
       error_class = Object.const_get error_class_name
-      error_class.class_variable_set(:@@tag_name, @tag_name) # rubocop:disable Style/ClassVars
-      error_class.class_variable_set(:@@argument_string, @argument_string) # rubocop:disable Style/ClassVars
+      error_class.class_variable_set(:@@argument_string, @argument_string)
+      error_class.class_variable_set(:@@line_number, @line_number)
+      error_class.class_variable_set(:@@path, @page['path'])
+      error_class.class_variable_set(:@@tag_name, @tag_name)
     end
 
     # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
@@ -36,8 +38,6 @@ module JekyllSupport
     # Defines @config, @envs, @mode, @page and @site
     # @return [String]
     def render(liquid_context)
-      set_error_context self.class.name.split('::').last + 'Error'
-
       @helper.liquid_context = JekyllSupport.inject_vars @logger, liquid_context
       text = super # Liquid variable values in content are looked up and substituted
 
@@ -48,6 +48,8 @@ module JekyllSupport
 
       @config = @site.config
       @tag_config = @config[@tag_name]
+
+      set_error_context self.class.name + 'Error'
 
       @layout    = @envs[:layout]
       @paginator = @envs[:paginator]
@@ -66,11 +68,10 @@ module JekyllSupport
       render_impl text
     rescue StandardError => e
       e.shorten_backtrace
-      msg = format_error_message e.full_message
-      @logger.error msg
+      @logger.error e.message
       raise e if @die_on_standard_error
 
-      "<div class='standard_error'>#{e.class}: #{msg}</div>"
+      "<div class='standard_error'>#{e.class}: #{e.message}</div>"
     end
 
     # Jekyll plugins should override this method, not render,

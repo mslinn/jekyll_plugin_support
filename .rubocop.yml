@@ -64,6 +64,9 @@ RSpec/IndexedLet:
 RSpec/MultipleExpectations:
   Max: 15
 
+Style/ClassVars:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false
 

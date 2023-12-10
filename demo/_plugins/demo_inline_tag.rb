@@ -26,11 +26,10 @@ module Jekyll
       output
     rescue DemoTagError => e # jekyll_plugin_support handles StandardError
       e.shorten_backtrace
-      msg = format_error_message e.message
-      @logger.error "#{e.class} raised #{msg}"
+      @logger.error e.logger_message
       raise e if @die_on_demo_tag_error
 
-      "<div class='demo_tag_error'>#{e.class} raised in #{self.class};\n#{msg}</div>"
+      e.html_message
     end
 
     private

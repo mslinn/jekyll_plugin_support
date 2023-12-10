@@ -25,7 +25,7 @@ class JekyllPluginHelper
     @markup = markup
   rescue StandardError => e
     e.shorten_backtrace
-    @logger.error { e.msg }
+    @logger.error { e.message }
   end
 
   # @return undefined if parameter was specified, removes it from the available tokens and returns value

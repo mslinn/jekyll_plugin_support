@@ -80,7 +80,7 @@ module JekyllSupport
   def self.warn_short_trace(logger, error)
     remaining = error.backtrace.length - DISPLAYED_CALLS
     logger.warn do
-      error.msg + "\n" +
+      error.message + "\n" +
         error.backtrace.take(DISPLAYED_CALLS).join("\n") +
         "\n...Remaining #{remaining} call sites elided.\n"
     end
