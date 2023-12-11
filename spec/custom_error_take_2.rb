@@ -36,7 +36,7 @@ module M1
   end
 end
 
-# Application code that creates the StandardError subclass
+# Application code that creates the StandardError subclass with class-level context
 module M2
   class C
     def initialize
@@ -60,10 +60,12 @@ puts "defined? M2::CError                => #{defined? M2::CError}"             
 puts "Object.const_defined? 'M2::CError' => #{Object.const_defined? 'M2::CError'}" # => true
 
 # The point of the example is to be able to establish the error context before creating any instances.
-# This would be called from JekyllTag.initialize
+# The following would be called from JekyllTag.initialize:
 c.set_error_context('blah', 123, '/', 'my_tag')
 
-# The following represents application code:
+# The following represents application code.
+# Creating the error copies the class-level context to the instance.
+# This allows the new error class instance to behave just like any other StandardError subclass.
 begin
   raise M2::CError, 'asdf'
 rescue M2::CError => e
@@ -78,5 +80,4 @@ rescue M2::CError => e
   puts <<~END_MSG
     Caught an #{e.class.name} with message #{e.message}
   END_MSG
-  # argument_string=#{e.argument_string}end
 end
