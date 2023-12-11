@@ -5,8 +5,8 @@ class JekyllCustomErrorTest
   @tag_name = 'test_tag'
   @argument_string = 'This is the argument string'
   AnError = JekyllSupport.define_error
-  AnError.class_variable_set(:@@tag_name, @tag_name) # rubocop:disable Style/ClassVars
-  AnError.class_variable_set(:@@argument_string, @argument_string) # rubocop:disable Style/ClassVars
+  AnError.class_variable_set(:@@tag_name, @tag_name)
+  AnError.class_variable_set(:@@argument_string, @argument_string)
 
   puts "AnError is a #{AnError.class}; StandardError is a #{StandardError.class}"
   begin

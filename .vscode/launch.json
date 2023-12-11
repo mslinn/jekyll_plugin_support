@@ -5,6 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "rdbg",
+      "name": "Debug wtf2",
+      "request": "launch",
+      "script": "spec/wtf2.rb",
+    },
+    {
       "args": [
         "serve",
         "--livereload_port", "35732",

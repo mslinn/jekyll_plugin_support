@@ -1,7 +1,7 @@
 require 'jekyll_plugin_support'
 
 module Jekyll
-  DemoTagError = JekyllSupport.define_error
+  # DemoTagError = JekyllSupport.define_error
 
   class DemoTag < JekyllSupport::JekyllTag
     VERSION = '0.1.2'.freeze

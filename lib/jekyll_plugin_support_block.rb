@@ -8,7 +8,7 @@ module JekyllSupport
     include JekyllSupportErrorHandling
     extend JekyllSupportErrorHandling
 
-    def set_error_context(error_class_name) # rubocop:disable Naming/AccessorMethodName
+    def set_error_context
       error_class = Object.const_get error_class_name
       error_class.class_variable_set(:@@argument_string, @argument_string)
       error_class.class_variable_set(:@@line_number, @line_number)
@@ -32,6 +32,9 @@ module JekyllSupport
       @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
       @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
       @helper = JekyllPluginHelper.new tag_name, markup, @logger, respond_to?(:no_arg_parsing)
+
+      @error_name = "#{tag_name.camelcase(:upper)}Error"
+      Jekyll::CustomError.factory @error_name
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.
@@ -49,7 +52,7 @@ module JekyllSupport
       @config = @site.config
       @tag_config = @config[@tag_name]
 
-      set_error_context self.class.name + 'Error'
+      set_error_context @error_name
 
       @layout    = @envs[:layout]
       @paginator = @envs[:paginator]
@@ -72,7 +75,11 @@ module JekyllSupport
       binding.pry if @pry_on_standard_error # rubocop:disable Lint/Debugger
       raise e if @die_on_standard_error
 
-      "<div class='standard_error'>#{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} by #{tag_name}: #{e.message}</div>"
+      <<~END_MSG
+        <div class='standard_error'>
+          #{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} by #{tag_name}: #{e.message}
+        </div>
+      END_MSG
     end
 
     # Jekyll plugins should override this method, not render,

@@ -1,7 +1,17 @@
+require 'facets/string/camelcase'
+require 'facets/string/snakecase'
+
 module Jekyll
   # Use like this:
   # CustomError.new(:MyError, 'blah', 'asdf')
   class CustomError < StandardError
+    def self.factory(name)
+      return if Object.const_defined? name
+
+      puts "Defining #{name}".yellow
+      eval "#{name} = Class.new Jekyll::CustomError" # rubocop:disable Style/EvalWithLocation, Security/Eval
+    end
+
     def error_name
       self.class.name.split('::').last
     end
@@ -11,12 +21,13 @@ module Jekyll
       file_fq
     end
 
+    # @return HTML <div> tag with class set to the snake_case version of the error class name.
     def html_message
       shorten_backtrace
       line_number = self.class.class_variable_get :@@line_number
       path = self.class.class_variable_get :@@path
       <<~END_MSG
-        <div class='#{error_name}_error'>
+        <div class='#{error_name.snakecase}'>
           #{self.class} raised in #{calling_file} while processing line #{line_number} (after front matter) of #{path}
           #{message}
         </div>

@@ -27,10 +27,13 @@ module JekyllSupport
       @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
       @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
       @helper = JekyllPluginHelper.new(tag_name, @argument_string, @logger, respond_to?(:no_arg_parsing))
+
+      @error_name = "#{tag_name.camelcase(:upper)}Error"
+      Jekyll::CustomError.factory @error_name
     end
 
-    def set_error_context(error_class_name) # rubocop:disable Naming/AccessorMethodName
-      error_class = Object.const_get error_class_name
+    def set_error_context
+      error_class = Object.const_get @error_name
       error_class.class_variable_set(:@@argument_string, @argument_string)
       error_class.class_variable_set(:@@line_number, @line_number)
       error_class.class_variable_set(:@@path, @page['path'])
@@ -53,7 +56,7 @@ module JekyllSupport
       @jps = @config['jekyll_plugin_support']
       @pry_on_standard_error = @jps['pry_on_standard_error'] || false if @jps
 
-      set_error_context self.class.name + 'Error'
+      set_error_context @error_name
 
       # @envs.keys are :content, :highlighter_prefix, :highlighter_suffix, :jekyll, :layout, :page, :paginator, :site, :theme
       @layout    = @envs[:layout]
@@ -71,7 +74,11 @@ module JekyllSupport
       binding.pry if @pry_on_standard_error # rubocop:disable Lint/Debugger
       raise e if @die_on_standard_error
 
-      "<div class='standard_error'>#{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} while processing #{tag_name}: #{e.message}</div>"
+      <<~END_MSG
+        <div class='standard_error'>
+          #{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} while processing #{tag_name}: #{e.message}
+        </div>
+      END_MSG
     end
 
     # Jekyll plugins must override this method, not render, so their plugin can be tested more easily

@@ -2,7 +2,7 @@ require 'cgi'
 require 'jekyll_plugin_support'
 
 module Jekyll
-  DemoBlockError = JekyllSupport.define_error
+  # DemoBlockError = JekyllSupport.define_error
 
   class DemoBlock < JekyllSupport::JekyllBlock
     VERSION = '0.1.2'.freeze
