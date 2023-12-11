@@ -6,9 +6,9 @@
   "configurations": [
     {
       "type": "rdbg",
-      "name": "Debug wtf2",
+      "name": "Debug custom_error_take_3.rb",
       "request": "launch",
-      "script": "spec/wtf2.rb",
+      "script": "spec/custom_error_take_3.rb",
     },
     {
       "args": [

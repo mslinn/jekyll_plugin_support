@@ -1,4 +1,4 @@
-# The following makes sense to me:
+# Attempt #1: Use eval to create a StandardError subclass without any extra attributes or methods
 
 name = 'MyError'
 eval "#{name} = Class.new StandardError" # rubocop:disable Style/EvalWithLocation, Security/Eval
