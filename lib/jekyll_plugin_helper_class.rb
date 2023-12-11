@@ -17,17 +17,18 @@ class JekyllPluginHelper
 
   def self.generate_message(klass, tag_name, version)
     error_ruby_class_name = "#{klass.name.camelcase(:upper)}Error"
-    config_die_key = "die_on_#{error_ruby_class_name}"
-    error_css_class_name = error_ruby_class_name.snakecase
-
-    config = YAML.load_file('../_config.yml')
+    config_die_key = "die_on_#{error_ruby_class_name.snakecase}"
+    error_css_class_name = error_ruby_class_name.split('::').last.snakecase
+    # config_file_fq = File.realpath 'demo/_config.yml'
+    config = YAML.load_file('demo/_config.yml')
     tag_config = config[tag_name]
-    tag_config_msg = if tag_config.empty?
+    tag_config_msg = if tag_config.nil?
                        <<~END_MSG
                          _config.yml does not contain configuration information for this plugin.
-                         You could add a section containing default values like this:
-                            #{tag_name}:
-                              #{config_die_key}: false
+                           You could add a section containing default values like this:
+
+                               #{tag_name}:
+                                 #{config_die_key}: false
                        END_MSG
                      else
                        <<~END_MSG
@@ -38,8 +39,9 @@ class JekyllPluginHelper
 
     <<~END_MSG
       Loaded plugin #{tag_name} v#{version}. It has:
-        Error class: #{error_ruby_class_name}.
+        Error class: #{error_ruby_class_name}
         CSS class for error messages: #{error_css_class_name}
+
         #{tag_config_msg}
     END_MSG
   end

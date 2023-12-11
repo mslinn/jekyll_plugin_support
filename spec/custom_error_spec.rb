@@ -1,12 +1,16 @@
 require_relative '../lib/jekyll_custom_error'
 require_relative '../lib/jekyll_plugin_support_class'
 
-class JekyllCustomErrorTest
-  @tag_name = 'test_tag'
-  @argument_string = 'This is the argument string'
+class Dummy
+  def just_for_testing; end
+end
+
+class CustomErrorSpec
+  tag_name = 'test_tag'
+  argument_string = 'This is the argument string'
   AnError = JekyllSupport.define_error
-  AnError.class_variable_set(:@@tag_name, @tag_name)
-  AnError.class_variable_set(:@@argument_string, @argument_string)
+  AnError.class_variable_set(:@@tag_name, tag_name)
+  AnError.class_variable_set(:@@argument_string, argument_string)
 
   puts "AnError is a #{AnError.class}; StandardError is a #{StandardError.class}"
   begin
@@ -19,8 +23,11 @@ class JekyllCustomErrorTest
 
   RSpec.describe JekyllPluginHelper do
     it 'generates messages' do
-      msg = described_class.generate_message(JekyllCustomErrorTest, @tag_name, '0.1.0')
-      expect { msg }.to include('asdf')
+      msg = described_class.generate_message(Dummy, tag_name, '0.1.0')
+      puts msg
+      expect(msg).to include(match(/Error class. DummyError/))
+      expect msg.to include(match(/CSS class for error messages. dummy_error/))
+      expect msg.to include(match(/die_on_dummy_error. false/))
     end
   end
 

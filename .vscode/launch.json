@@ -6,9 +6,9 @@
   "configurations": [
     {
       "type": "rdbg",
-      "name": "Debug custom_error_take_3.rb",
+      "name": "Debug custom_error_take_2.rb",
       "request": "launch",
-      "script": "experiments/custom_error_take_3.rb",
+      "script": "experiments/custom_error_take_2.rb",
     },
     {
       "args": [
