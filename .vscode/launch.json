@@ -8,7 +8,7 @@
       "type": "rdbg",
       "name": "Debug custom_error_take_3.rb",
       "request": "launch",
-      "script": "spec/custom_error_take_3.rb",
+      "script": "experiments/custom_error_take_3.rb",
     },
     {
       "args": [

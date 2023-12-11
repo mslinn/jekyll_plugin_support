@@ -17,6 +17,13 @@ class JekyllCustomErrorTest
     puts "Caught CustomError: #{e.message}"
   end
 
+  RSpec.describe JekyllPluginHelper do
+    it 'generates messages' do
+      msg = described_class.generate_message(JekyllCustomErrorTest, @tag_name, '0.1.0')
+      expect { msg }.to include('asdf')
+    end
+  end
+
   RSpec.describe Jekyll::CustomError do
     it 'can create custom errors' do
       expect { raise AnError, 'Oops' }.to raise_error(AnError)

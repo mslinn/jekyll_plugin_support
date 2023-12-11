@@ -1,3 +1,7 @@
+require 'facets/string/camelcase'
+require 'facets/string/snakecase'
+require 'yaml'
+
 # Class methods for JekyllPluginHelper
 class JekyllPluginHelper
   # Expand an environment variable reference
@@ -11,19 +15,49 @@ class JekyllPluginHelper
     end
   end
 
-  def self.register(klass, name)
-    abort("Error: The #{name} plugin does not define VERSION") \
+  def self.generate_message(klass, tag_name, version)
+    error_ruby_class_name = "#{klass.name.camelcase(:upper)}Error"
+    config_die_key = "die_on_#{error_ruby_class_name}"
+    error_css_class_name = error_ruby_class_name.snakecase
+
+    config = YAML.load_file('../_config.yml')
+    tag_config = config[tag_name]
+    tag_config_msg = if tag_config.empty?
+                       <<~END_MSG
+                         _config.yml does not contain configuration information for this plugin.
+                         You could add a section containing default values like this:
+                            #{tag_name}:
+                              #{config_die_key}: false
+                       END_MSG
+                     else
+                       <<~END_MSG
+                         The section in _config.yml containing configuration information for this plugin is:
+                           #{tag_config}
+                       END_MSG
+                     end
+
+    <<~END_MSG
+      Loaded plugin #{tag_name} v#{version}. It has:
+        Error class: #{error_ruby_class_name}.
+        CSS class for error messages: #{error_css_class_name}
+        #{tag_config_msg}
+    END_MSG
+  end
+
+  def self.register(klass, tag_name)
+    abort("Error: The #{tag_name} plugin does not define VERSION") \
       unless klass.const_defined?(:VERSION)
 
     version = klass.const_get(:VERSION)
 
-    abort("Error: The #{name} plugin is not an instance of JekyllSupport::JekyllBlock or JekyllSupport::JekyllTag") \
+    abort("Error: The #{tag_name} plugin is not an instance of JekyllSupport::JekyllBlock or JekyllSupport::JekyllTag") \
       unless klass.instance_of?(Class) &&
              (klass.ancestors.include?(JekyllSupport::JekyllBlock) ||
               klass.ancestors.include?(JekyllSupport::JekyllTag))
 
-    Liquid::Template.register_tag(name, klass)
-    PluginMetaLogger.instance.info { "Loaded #{name} v#{version} plugin." }
+    Liquid::Template.register_tag(tag_name, klass)
+    msg = generate_message(klass, tag_name, version)
+    PluginMetaLogger.instance.info msg
   end
 
   def self.remove_html_tags(string)
