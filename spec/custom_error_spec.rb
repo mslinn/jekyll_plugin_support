@@ -26,8 +26,8 @@ class CustomErrorSpec
       msg = described_class.generate_message(Dummy, tag_name, '0.1.0')
       puts msg
       expect(msg).to include(match(/Error class. DummyError/))
-      expect msg.to include(match(/CSS class for error messages. dummy_error/))
-      expect msg.to include(match(/die_on_dummy_error. false/))
+      expect(msg).to include(match(/CSS class for error messages. dummy_error/))
+      expect(msg).to include(match(/die_on_dummy_error. false/))
     end
   end
 

@@ -32,7 +32,7 @@ class JekyllPluginHelper
                        END_MSG
                      else
                        <<~END_MSG
-                         The section in _config.yml containing configuration information for this plugin is:
+                         _config.yml contains the following configuration for this plugin is:
                            #{tag_config}
                        END_MSG
                      end
