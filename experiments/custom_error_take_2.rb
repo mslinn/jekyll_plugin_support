@@ -16,10 +16,10 @@ class CustomError < StandardError
   # Instance attributes; will contain the same values as the class attributes
   attr_accessor :argument_string, :line_number, :path, :tag_name
 
+  # Creates a CustomError subclass, with the given name
   def self.factory(error_class_name)
     return if Object.const_defined? error_class_name
 
-    puts "Defining #{error_class_name}"
     eval "#{error_class_name} = Class.new CustomError" # rubocop:disable Style/EvalWithLocation, Security/Eval
   end
 
@@ -37,10 +37,11 @@ end
 # Application code that creates the StandardError subclass with class-level context
 module M2
   class C
+    # Creates a CustomError subclass, not scoped within a module, with the given name
     def initialize
       @error_name = "#{self.class.name.split('::').last.camelcase(:upper)}Error" # => CError
       CustomError.factory "::#{@error_name}"
-      puts Object.const_defined?(:CError)
+      # puts Object.const_defined?(:CError)
     end
 
     def set_error_context(argument_string, line_number, path, tag_name)
