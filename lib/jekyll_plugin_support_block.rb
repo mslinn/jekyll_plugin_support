@@ -9,7 +9,9 @@ module JekyllSupport
     extend JekyllSupportErrorHandling
 
     def set_error_context
-      error_class = Object.const_get error_class_name
+      return unless Object.const_defined? @error_name
+
+      error_class = Object.const_get @error_name
       error_class.class_variable_set(:@@argument_string, @argument_string)
       error_class.class_variable_set(:@@line_number, @line_number)
       error_class.class_variable_set(:@@path, @page['path'])
@@ -52,7 +54,7 @@ module JekyllSupport
       @config = @site.config
       @tag_config = @config[@tag_name]
 
-      set_error_context @error_name
+      set_error_context
 
       @layout    = @envs[:layout]
       @paginator = @envs[:paginator]

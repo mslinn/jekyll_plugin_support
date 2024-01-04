@@ -5,11 +5,11 @@ module Jekyll
   # Use like this:
   # CustomError.new(:MyError, 'blah', 'asdf')
   class CustomError < StandardError
-    def self.factory(name)
-      return if Object.const_defined? name
+    def self.factory(error_class_name)
+      return if Object.const_defined? error_class_name
 
-      puts "Defining #{name}".yellow
-      eval "#{name} = Class.new Jekyll::CustomError" # rubocop:disable Style/EvalWithLocation, Security/Eval
+      puts "Defining #{error_class_name}".yellow
+      eval "#{error_class_name} = Class.new CustomError" # rubocop:disable Style/EvalWithLocation, Security/Eval
     end
 
     def error_name

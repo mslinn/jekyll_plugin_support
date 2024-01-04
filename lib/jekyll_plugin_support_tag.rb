@@ -33,6 +33,8 @@ module JekyllSupport
     end
 
     def set_error_context
+      return unless Object.const_defined? @error_name
+
       error_class = Object.const_get @error_name
       error_class.class_variable_set(:@@argument_string, @argument_string)
       error_class.class_variable_set(:@@line_number, @line_number)
@@ -56,7 +58,7 @@ module JekyllSupport
       @jps = @config['jekyll_plugin_support']
       @pry_on_standard_error = @jps['pry_on_standard_error'] || false if @jps
 
-      set_error_context @error_name
+      set_error_context
 
       # @envs.keys are :content, :highlighter_prefix, :highlighter_suffix, :jekyll, :layout, :page, :paginator, :site, :theme
       @layout    = @envs[:layout]

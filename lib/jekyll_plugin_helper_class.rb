@@ -19,8 +19,8 @@ class JekyllPluginHelper
     error_ruby_class_name = "#{klass.name.camelcase(:upper)}Error"
     config_die_key = "die_on_#{error_ruby_class_name.snakecase}"
     error_css_class_name = error_ruby_class_name.split('::').last.snakecase
-    # config_file_fq = File.realpath 'demo/_config.yml'
-    config = YAML.load_file('demo/_config.yml')
+    # config_file_fq = File.realpath '_config.yml'
+    config = YAML.load_file('_config.yml')
     tag_config = config[tag_name]
     tag_config_msg = if tag_config.nil?
                        <<~END_MSG
@@ -59,7 +59,7 @@ class JekyllPluginHelper
 
     Liquid::Template.register_tag(tag_name, klass)
     msg = generate_message(klass, tag_name, version)
-    PluginMetaLogger.instance.info msg
+    PluginMetaLogger.instance.info { msg }
   end
 
   def self.remove_html_tags(string)
