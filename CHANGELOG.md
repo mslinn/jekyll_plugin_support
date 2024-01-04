@@ -1,5 +1,38 @@
 # Change Log
 
+
+## 0.8.2 / 2024-01-03
+
+* `JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag` subclasses now have automatically created error classes,
+  named after the subclass.
+* Error class methods have been provided for standardized and convenient error handling:
+  * `shorten_backtrace`
+  * `logger_message`
+  * `html_message`
+* When each tag is registered, it self-reports, for example:
+
+  ```text
+  INFO PluginMetaLogger: Loaded plugin demo_inline_tag v0.1.2. It has:
+    Error class: DemoTagError
+    CSS class for error messages: demo_tag_error
+
+    _config.yml contains the following configuration for this plugin:
+      {"die_on_demo_tag_error"=>false, "die_on_standard_error"=>false}
+
+
+  INFO PluginMetaLogger: Loaded plugin demo_inline_tag_no_arg v0.1.0. It has:
+    Error class: DemoTagNoArgsError
+    CSS class for error messages: demo_tag_no_args_error
+
+    _config.yml does not contain configuration information for this plugin.
+    You could add a section containing default values by specifying a section for the tag name,
+    and an entry whose name starts with `die_on_`, followed by a snake_case version of the error name.
+
+      demo_inline_tag_no_arg:
+        die_on_demo_tag_no_args_error: false
+  ```
+
+
 ## 0.8.1 / 2023-12-10
 
 * Added the `JekyllPluginHelper.remove_html_tags` method.

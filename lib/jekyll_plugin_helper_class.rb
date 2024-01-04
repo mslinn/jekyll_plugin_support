@@ -16,7 +16,8 @@ class JekyllPluginHelper
   end
 
   def self.generate_message(klass, tag_name, version)
-    error_ruby_class_name = "#{klass.name.camelcase(:upper)}Error"
+    error_name_stub = klass.name.include?('::') ? klass.name.split('::')[1] : klass.name
+    error_ruby_class_name = "#{error_name_stub.camelcase(:upper)}Error"
     config_die_key = "die_on_#{error_ruby_class_name.snakecase}"
     error_css_class_name = error_ruby_class_name.split('::').last.snakecase
     config = YAML.load_file('_config.yml')
@@ -24,14 +25,15 @@ class JekyllPluginHelper
     tag_config_msg = if tag_config.nil?
                        <<~END_MSG
                          _config.yml does not contain configuration information for this plugin.
-                           You could add a section containing default values like this:
+                           You could add a section containing default values by specifying a section for the tag name,
+                           and an entry whose name starts with `die_on_`, followed by a snake_case version of the error name.
 
-                               #{tag_name}:
-                                 #{config_die_key}: false
+                             #{tag_name}:
+                               #{config_die_key}: false
                        END_MSG
                      else
                        <<~END_MSG
-                         _config.yml contains the following configuration for this plugin is:
+                         _config.yml contains the following configuration for this plugin:
                            #{tag_config}
                        END_MSG
                      end

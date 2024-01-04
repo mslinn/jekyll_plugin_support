@@ -199,6 +199,74 @@ both [`demo/_plugins/demo_inline_tag.rb`](demo/_plugins/demo_inline_tag.rb) and
 ```
 
 
+### Automatically Created Error Classes
+
+`JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag` subclasses now have
+automatically created error classes, named after the registered tag name.
+
+For example, if you create a `JekyllSupport::JekyllBlock` subclass, you might register it with the name `demo_block_tag`,
+like this:
+
+```ruby
+JekyllPluginHelper.register(self, 'demo_block_tag')
+```
+
+The automatically generated error class will be called `DemoBlockTagError`.
+
+Although you could use it as you would any other error class, `JekyllPluginSupport` provides some helper methods.
+These methods fill in the page path and line number that caused the error, shortens the stack trace,
+log an error message, and can be used to return an HTML-friendly version of the message to the web page.
+
+The following example is a shortened version of `demo/_plugins/demo_block_tag.rb`.
+You might want to write similar code in your `rescue` blocks.
+
+```ruby
+class DemoBlock < JekyllSupport::JekyllBlock
+  VERSION = '0.1.2'.freeze
+
+  def render_impl(text)
+      raise DemoBlockTagError, 'Fall down, go boom.'
+  rescue DemoBlockTagError => e
+    e.shorten_backtrace
+    @logger.error e.logger_message
+    raise e if @die_on_demo_block_error
+
+    e.html_message
+  end
+end
+```
+
+Error class methods have been provided for standardized and convenient error handling:
+
+* `shorten_backtrace` - most of the lines that spew from a Jekyll backtrace are uninteresting.
+* `logger_message` - The message is constructed from the string provided when the error was raised,
+   with the page path and line number added.
+* `html_message` - The same as `logger_message`, but constructed with HTML.
+
+
+### Self-Reporting Upon Registration
+
+When each tag is registered, it self-reports, for example:
+
+```text
+INFO PluginMetaLogger: Loaded plugin demo_inline_tag v0.1.2. It has:
+  Error class: Jekyll::DemoInlineTagError
+  CSS class for error messages: demo_inline_tag_error
+
+  _config.yml contains the following configuration for this plugin is:
+  {"die_on_demo_tag_error"=>false, "die_on_standard_error"=>false}
+
+INFO PluginMetaLogger: Loaded plugin demo_inline_tag_no_arg v0.1.0. It has:
+  Error class: Jekyll::DemoInlineTagNoArgsError
+  CSS class for error messages: demo_inline_tag_no_args_error
+
+  _config.yml does not contain configuration information for this plugin.
+  You could add a section containing default values like this:
+
+      demo_inline_tag_no_arg:
+        die_on_jekyll::demo_tag_no_args_error: false
+```
+
 ### Example
 
 [`demo/index.html`](demo/index.html), contains the following inline tag invocation:
