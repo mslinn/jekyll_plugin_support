@@ -225,7 +225,7 @@ class DemoBlock < JekyllSupport::JekyllBlock
   VERSION = '0.1.2'.freeze
 
   def render_impl(text)
-      raise DemoBlockTagError, 'Fall down, go boom.'
+    raise DemoBlockTagError, 'Fall down, go boom.'
   rescue DemoBlockTagError => e
     e.shorten_backtrace
     @logger.error e.logger_message
