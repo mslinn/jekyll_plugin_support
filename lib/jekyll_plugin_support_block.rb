@@ -8,16 +8,6 @@ module JekyllSupport
     include JekyllSupportErrorHandling
     extend JekyllSupportErrorHandling
 
-    def set_error_context
-      return unless Object.const_defined? @error_name
-
-      error_class = Object.const_get @error_name
-      error_class.class_variable_set(:@@argument_string, @argument_string)
-      error_class.class_variable_set(:@@line_number, @line_number)
-      error_class.class_variable_set(:@@path, @page['path'])
-      error_class.class_variable_set(:@@tag_name, @tag_name)
-    end
-
     # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
     # @param tag_name [String] the name of the tag, which we usually know.
     # @param argument_string [String] the arguments passed to the tag, as a single string.
@@ -91,6 +81,16 @@ module JekyllSupport
     # @return [String] The result to be rendered to the invoking page
     def render_impl(text)
       text
+    end
+
+    def set_error_context
+      return unless Object.const_defined? @error_name
+
+      error_class = Object.const_get @error_name
+      error_class.class_variable_set(:@@argument_string, @argument_string)
+      error_class.class_variable_set(:@@line_number, @line_number)
+      error_class.class_variable_set(:@@path, @page['path'])
+      error_class.class_variable_set(:@@tag_name, @tag_name)
     end
   end
 end

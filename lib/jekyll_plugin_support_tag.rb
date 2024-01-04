@@ -32,16 +32,6 @@ module JekyllSupport
       Jekyll::CustomError.factory @error_name
     end
 
-    def set_error_context
-      return unless Object.const_defined? @error_name
-
-      error_class = Object.const_get @error_name
-      error_class.class_variable_set(:@@argument_string, @argument_string)
-      error_class.class_variable_set(:@@line_number, @line_number)
-      error_class.class_variable_set(:@@path, @page['path'])
-      error_class.class_variable_set(:@@tag_name, @tag_name)
-    end
-
     # Method prescribed by the Jekyll plugin lifecycle.
     def render(liquid_context)
       return if @helper.excerpt_caller
@@ -88,6 +78,16 @@ module JekyllSupport
     #   @argument_string, @config, @envs, @helper, @layout, @logger, @mode, @page, @paginator, @site, @tag_name and @theme
     def render_impl
       abort "#{self.class}.render_impl for tag #{@tag_name} must be overridden, but it was not."
+    end
+
+    def set_error_context
+      return unless Object.const_defined? @error_name
+
+      error_class = Object.const_get @error_name
+      error_class.class_variable_set(:@@argument_string, @argument_string)
+      error_class.class_variable_set(:@@line_number, @line_number)
+      error_class.class_variable_set(:@@path, @page['path'])
+      error_class.class_variable_set(:@@tag_name, @tag_name)
     end
   end
 end

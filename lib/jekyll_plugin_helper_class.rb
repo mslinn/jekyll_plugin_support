@@ -19,7 +19,6 @@ class JekyllPluginHelper
     error_ruby_class_name = "#{klass.name.camelcase(:upper)}Error"
     config_die_key = "die_on_#{error_ruby_class_name.snakecase}"
     error_css_class_name = error_ruby_class_name.split('::').last.snakecase
-    # config_file_fq = File.realpath '_config.yml'
     config = YAML.load_file('_config.yml')
     tag_config = config[tag_name]
     tag_config_msg = if tag_config.nil?

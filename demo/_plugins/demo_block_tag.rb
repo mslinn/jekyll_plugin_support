@@ -20,12 +20,12 @@ module Jekyll
         @die_on_standard_error   = @tag_config['die_on_standard_error'] == true
       end
 
-      raise DemoBlockError, 'Fall down, go boom.' if @demo_block_error
+      raise DemoBlockTagError, 'Fall down, go boom.' if @demo_block_error
 
       _infinity = 1 / 0 if @standard_error
 
       output text
-    rescue DemoBlockError => e # jekyll_plugin_support handles StandardError
+    rescue DemoBlockTagError => e # jekyll_plugin_support handles StandardError
       e.shorten_backtrace
       @logger.error e.logger_message
       raise e if @die_on_demo_block_error

@@ -20,7 +20,7 @@ class CustomError < StandardError
   def self.factory(error_class_name)
     return if Object.const_defined? error_class_name
 
-    eval "#{error_class_name} = Class.new CustomError" # rubocop:disable Style/EvalWithLocation, Security/Eval
+    Object.const_set error_class_name, Class.new(CustomError)
   end
 
   # Make copies of the class attributes as instance variables
@@ -40,7 +40,7 @@ module M2
     # Creates a CustomError subclass, not scoped within a module, with the given name
     def initialize
       @error_name = "#{self.class.name.split('::').last.camelcase(:upper)}Error" # => CError
-      CustomError.factory "::#{@error_name}"
+      CustomError.factory @error_name
       # puts Object.const_defined?(:CError)
     end
 
