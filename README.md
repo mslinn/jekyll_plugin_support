@@ -201,20 +201,14 @@ both [`demo/_plugins/demo_inline_tag.rb`](demo/_plugins/demo_inline_tag.rb) and
 
 ### Automatically Created Error Classes
 
-`JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag` subclasses now have
-automatically created error classes, named after the registered tag name.
+`JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag` subclasses
+automatically create error classes, named after the subclass.
 
-For example, if you create a `JekyllSupport::JekyllBlock` subclass, you might register it with the name `demo_block_tag`,
-like this:
-
-```ruby
-JekyllPluginHelper.register(self, 'demo_block_tag')
-```
-
-The automatically generated error class will be called `DemoBlockTagError`.
+For example, if you create a `JekyllSupport::JekyllBlock` subclass called `DemoBlockTag`,
+the automatically generated error class will be called `DemoBlockTagError`.
 
 Although you could use it as you would any other error class, `JekyllPluginSupport` provides some helper methods.
-These methods fill in the page path and line number that caused the error, shortens the stack trace,
+These methods fill in the page path and line number that caused the error, shorten the stack trace,
 log an error message, and can be used to return an HTML-friendly version of the message to the web page.
 
 The following example is a shortened version of `demo/_plugins/demo_block_tag.rb`.
