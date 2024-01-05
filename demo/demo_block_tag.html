@@ -3,12 +3,16 @@ description: This page exercises the block tag support in the jekyll_plugin_supp
 layout: default
 order: 100
 title: Block Tag Plugin
+front_var: 'Defined in page front matter'
 ---
 <h2 id="demo_block_tag"><span class="code">demo_block_tag</span></h2>
+{% assign var_assigned_in_page='Hi there' %}
 {% demo_block_tag keyword1 name1='value1' unreferenced_key unreferenced_name="unreferenced_value" %}
   Contents of <code>demo_block_tag</code>.
-  var_defined_in_page={{var_defined_in_page}}
-  var3={{var3}} # Variable defined in _config.yml
+  default_layout_var='{{layout.default_layout_var}}'
+  front_var='{{page.front_var}}'
+  var_assigned_in_page='{{var_assigned_in_page}}'
+  var3='{{var3}}' # Variable defined in _config.yml
 {% enddemo_block_tag %}
 
 

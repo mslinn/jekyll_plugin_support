@@ -36,11 +36,7 @@ module Jekyll
 
     def output
       <<~END_OUTPUT
-        <pre>@helper.tag_name=#{@helper.tag_name}
-
-        @mode=#{@mode}
-
-        # jekyll_plugin_support becomes able to perform variable substitution after this variable is defined.
+        <pre># jekyll_plugin_support becomes able to perform variable substitution after this variable is defined.
         # The value could be updated at a later stage, but no need to add that complexity unless there is a use case.
         @argument_string="#{@argument_string}"
 
@@ -55,25 +51,15 @@ module Jekyll
         @helper.keys_values=
           #{(@helper.keys_values&.map { |k, v| "#{k}=#{v}" })&.join("\n  ")}
 
+        @layout='#{@layout}'
+        @page.keys='#{@page.keys}'
+
         remaining_markup='#{@helper.remaining_markup}'
 
-        @envs=#{@envs.keys.sort.join(', ')}
-
-        @config['url']='#{@config['url']}'
-
-        @site.collection_names=#{@site.collection_names&.sort&.join(', ')}
-
-        @page['description']=#{@page['description']}
-
-        @page['path']=#{@page['path']}
-
-        @keyword1=#{@keyword1}
-
-        @keyword2=#{@keyword2}
-
-        @name1=#{@name1}
-
-        @name2=#{@name2}</pre>
+        @keyword1='#{@keyword1}'
+        @keyword2='#{@keyword2}'
+        @name1='#{@name1}'
+        @name2='#{@name2}'</pre>
       END_OUTPUT
     end
 

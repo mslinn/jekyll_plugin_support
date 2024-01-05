@@ -1,16 +1,18 @@
 ---
 layout: default
 order: 300
-param_1: set_in_front_matter
+param_1: set_in_page_front_matter
 title: Variable Test
 ---
+<!-- #region intro -->
 <p>
   Variables can be defined in one of the following ways:
 </p>
 <ol>
   <li>
     Page front matter.
-    Variable assignments made in the front matter of a page are stored in the <code>page</code> hash, along with many other name/value pairs.
+    Variable assignments made in the front matter of a page are stored in the <code>page</code> and <code>layout</code> hashes,
+    along with many other name/value pairs.
   </li>
   <li>
     By <code>assign</code> and <code>capture</code> statements within a page or include.
@@ -44,18 +46,40 @@ title: Variable Test
 <p>
   The following demonstrates all of the above.
 </p>
+<!-- endregion -->
 
-<h2>Prior to including anything</h2>
-{% assign param_1 = 'param_1_set_by_assignment_in_include_test.html' %}
+
+<!-- #region Prior to including anything -->
+<h2 id="x1">Prior to including anything</h2>
+<pre>Unqualified param_1={{param_1}} # param_1 has not been assigned a value yet
+page.param_1='{{page.param_1}}'
+layout.default_layout_var='{{layout.default_layout_var}}'</pre>
+{% assign param_1 = 'Set by assignment in variables.html' %}
+<pre>Unqualified param_1='{{param_1}}'' # param_1 now has a value
+page.param_1='{{page.param_1}}'
+layout.default_layout_var='{{layout.default_layout_var}}'</pre>
+<!-- endregion -->
+
+<!-- #region After include_test_plugin -->
+<h2 id="x2">After include_test_plugin</h2>
 <pre>{% include_test_plugin %}</pre>
+<pre>Unqualified param_1='{{param_1}}'
+page.param_1='{{page.param_1}}'
+layout.default_layout_var='{{layout.default_layout_var}}'</pre>
+<!-- endregion -->
 
 
-<h2>Include without passing parameters</h2>
+<!-- #region Include without passing parameters -->
+<h2 id="x3">Include without passing parameters</h2>
 <pre>{% include a.html %}
 Back in include_test.html.
-Unqualified param_1={{param_1}}
-page.param_1={{page.param_1}}</pre>
+Unqualified param_1='{{param_1}}'
+page.param_1='{{page.param_1}}'
+layout.default_layout_var='{{layout.default_layout_var}}'</pre>
+<!-- endregion -->
 
+
+<!-- #region Include that passes param_1 as a parameter -->
 <h2>Include that passes param_1 as a parameter</h2>
 <p>
   Passing <code>param_1</code> as a parameter adds a definition for
@@ -64,7 +88,7 @@ page.param_1={{page.param_1}}</pre>
 </p>
 <pre>{% include a.html param_1="param_1_overridden_as_parameter_to_include" %}</pre>
 
-<p>Back in <code>include_test.html</code>, <code>param_1={{param_1}}</code>.</p>
+<p>Back in <code>include_test.html</code>, <code>param_1='{{param_1}}'</code>.</p>
 <pre>{% include b.html %}</pre>
 
 <p>
@@ -72,3 +96,4 @@ page.param_1={{page.param_1}}</pre>
 </p>
 
 <pre>{% include_test_plugin %}</pre>
+<!-- endregion -->

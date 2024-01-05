@@ -198,6 +198,25 @@ both [`demo/_plugins/demo_inline_tag.rb`](demo/_plugins/demo_inline_tag.rb) and
 @name2     = @helper.parameter_specified? 'name2'
 ```
 
+If an argument has a variable reference in it, the value of the variable is substituted for the reference.
+For example, given:
+
+* `_layouts/default.html` defines a variable called `var_layout` in its front matter.
+* `index.html` defines a variable called `var_page` in its front matter.
+* `index.html` assigns a variable called `x` via the liquid `assign` statement.
+
+... then the following references in a page will be substituted for their values in arguments and in block tag bodies:
+
+```html
+{% my_block_tag param1="x={{x}}" param2="var_page={{page.var_page}}" param3="var_layout={{layout.var_layout}}" %}
+Assigned variables do not need a namespace: x={{x}}
+Page variables must be qualified with the 'page' namespace: var_page={{page.var_page}}
+Layout variables must be qualified with the 'layout' namespace: var_layout={{layout.var_layout}}
+{% endmy_block_tag %}
+```
+
+You can see similar code in [`demo/demo_inline_tag.html`](demo/demo_inline_tag.html).
+
 
 ### Automatically Created Error Classes
 

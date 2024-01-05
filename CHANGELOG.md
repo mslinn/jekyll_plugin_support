@@ -1,6 +1,11 @@
 # Change Log
 
 
+## 0.8.3 / 2024-01-05
+
+* Variables defined in front matter of layouts and pages are now handled.
+
+
 ## 0.8.2 / 2024-01-03
 
 * `JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag` subclasses now have automatically created error classes,

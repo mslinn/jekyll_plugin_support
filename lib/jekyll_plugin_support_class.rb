@@ -69,6 +69,21 @@ module JekyllSupport
   end
 
   def self.lookup_liquid_variables(liquid_context, markup)
+    page = liquid_context.registers[:page]
+    envs   = liquid_context.environments.first
+    layout = envs[:layout]
+
+    # process layout variables
+    layout.each do |name, value|
+      markup = markup.gsub("{{layout.#{name}}}", value.to_s)
+    end
+
+    # process page variables
+    page.each do |name, value|
+      markup = markup.gsub("{{page.#{name}}}", value.to_s)
+    end
+
+    # Process assigned, captured and injected variables
     liquid_context.scopes.each do |scope|
       scope.each do |name, value|
         markup = markup.gsub("{{#{name}}}", value.to_s)

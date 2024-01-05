@@ -5,7 +5,11 @@ order: 200
 title: Inline Tag Plugins
 ---
 <h2 id="tag"><span class="code">demo_inline_tag</span></h2>
-{% demo_inline_tag keyword1 name1='var3={{var3}}' unreferenced_key unreferenced_name="unreferenced_value" %}
+{% assign var_assigned_in_page='Hi there' %}
+{% demo_inline_tag keyword1 name1='var3: {{var3}}' unreferenced_key unreferenced_name="unreferenced_value" %}
+{% demo_inline_tag keyword1 name1='var_assigned_in_page: {{var_assigned_in_page}}' unreferenced_key unreferenced_name="unreferenced_value" %}
+{% demo_inline_tag keyword1 name1='page.title: {{page.title}}' unreferenced_key unreferenced_name="unreferenced_value" %}
+{% demo_inline_tag keyword1 name1='layout.default_layout_var: {{layout.default_layout_var}}' unreferenced_key unreferenced_name="unreferenced_value" %}
 
 
 <h2 id="tag_demo_tag_error"><span class="code">demo_inline_tag Demo_tag_error</span> Exception Handling</h2>
