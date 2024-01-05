@@ -57,7 +57,8 @@ module JekyllSupport
 
       @mode = @config['env']&.key?('JEKYLL_ENV') ? @config['env']['JEKYLL_ENV'] : 'development'
 
-      @helper.reinitialize JekyllSupport.lookup_liquid_variables liquid_context, @argument_string
+      markup = JekyllSupport.lookup_liquid_variables liquid_context, @argument_string
+      @helper.reinitialize markup
 
       render_impl
     rescue StandardError => e

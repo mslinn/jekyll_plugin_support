@@ -80,7 +80,7 @@ module JekyllSupport
     end
 
     # process page variables
-    page&.except('excerpt')&.except('next')&.except('previous')&.each do |name, value|
+    page&.to_hash&.each do |name, value|
       markup = markup.gsub("{{page.#{name}}}", value.to_s)
     end
 
