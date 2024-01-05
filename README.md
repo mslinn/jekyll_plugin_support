@@ -217,8 +217,9 @@ Layout variables must be qualified with the 'layout' namespace: var_layout={{lay
 
 You can see similar code in [`demo/demo_inline_tag.html`](demo/demo_inline_tag.html).
 
-The `page['excerpt']` key/value pair is removed from processing because of recursion issues.
-You cannot look up the excerpt value.
+The `page['excerpt']`, `page['next']` and `page['previous']` key/value pairs are
+removed from processing because of recursion issues.
+You cannot look up those values.
 
 
 ### Automatically Created Error Classes
