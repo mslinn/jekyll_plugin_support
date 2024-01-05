@@ -1,3 +1,4 @@
+require 'facets/hash/except'
 require_relative 'jekyll_custom_error'
 
 # Monkey patch StandardError so a new method called shorten_backtrace is added.
@@ -74,18 +75,18 @@ module JekyllSupport
     layout = envs[:layout]
 
     # process layout variables
-    layout.each do |name, value|
+    layout&.each do |name, value|
       markup = markup.gsub("{{layout.#{name}}}", value.to_s)
     end
 
     # process page variables
-    page.each do |name, value|
+    page&.except('excerpt')&.each do |name, value|
       markup = markup.gsub("{{page.#{name}}}", value.to_s)
     end
 
     # Process assigned, captured and injected variables
     liquid_context.scopes.each do |scope|
-      scope.each do |name, value|
+      scope&.each do |name, value|
         markup = markup.gsub("{{#{name}}}", value.to_s)
       end
     end
