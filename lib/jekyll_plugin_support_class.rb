@@ -102,6 +102,9 @@ module JekyllSupport
     %w[excerpt output].each { |key| keys.delete key }
     # puts "  Filtered keys: #{keys.join ' '}"
     # keys.each { |key| puts "  #{key}: #{page[key]}" }
+    keys&.each do |key|
+      markup.gsub!("{{page.#{key}}}", page[key].to_s)
+    end
 
     # Process assigned, captured and injected variables
     liquid_context.scopes.each do |scope|
