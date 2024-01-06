@@ -26,6 +26,27 @@ Plugins that use `jekyll_plugin_support` include:
 [`jekyll_plugin_support`](https://github.com/mslinn/jekyll_plugin_support/tree/master/demo/_plugins)
 
 
+## Features
+
+Jekyll plugin tags created from `jekyll-plugin-support` framework automatically have the following features:
+
+1. Boilerplate is removed, so you can focus on the required logic and output.
+2. Arguments are parsed for keywords and name/value parameters.
+3. Single or double quotes can be used for arguments and parameters.
+4. Important variables are defined.
+5. Error handling is standardized, and includes an automatically defined error type
+   and corresponding CSS tag for each Jekyll tag.
+6. Liquid variables can be passed as parameters to tags, and used in the body of block tags.
+7. Registration is automatic, and important configuration details are reported during registration.
+8. A custom logger is created for each tag, independent of the default Jekyll logger.
+9. Variables can be defined in `_config.yml`, and optionally have different values for debug mode,
+   production mode and test mode.
+10. An attribution message is available.
+11. Draft pages are automatically detected.
+
+In addition, a demonstration website is provided for easy testing of your plugins.
+
+
 ## Installation
 
 `Jekyll_plugin_support` is packaged as a Ruby gem.
