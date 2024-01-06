@@ -1,4 +1,3 @@
-require 'facets/hash/except'
 require_relative 'jekyll_custom_error'
 
 # Monkey patch StandardError so a new method called shorten_backtrace is added.
@@ -41,11 +40,13 @@ module JekyllSupport
   end
 
   # Add variable definitions from _config.yml to liquid_context
-  # Modifies liquid_context in the caller (call by reference)
+  # Modifies liquid_context in the caller
+  # (call by object reference, see https://stackoverflow.com/a/1872159/553865)
   # @return modified liquid_context
   # See README.md#configuration-variable-definitions
   # See demo/variables.html
   def self.inject_vars(_logger, liquid_context)
+    # TODO: Modify a deep clone? Do I dare?
     site = liquid_context.registers[:site]
 
     plugin_variables = site.config['liquid_vars']
@@ -69,25 +70,43 @@ module JekyllSupport
     liquid_context
   end
 
-  def self.lookup_liquid_variables(liquid_context, markup)
+  def self.dump_stack(stack, cycles, interval)
+    stack_depth = stack.length
+    puts "Stack depth is #{stack_depth}"
+    num_entries = cycles * interval
+    return unless stack_depth > interval * 5
+
+    stack.last(num_entries).each_with_index do |x, i|
+      msg = "  #{i}: #{x}"
+      (i % interval).zero? ? puts(msg.yellow) : puts(msg)
+    end
+  end
+
+  # Modifies a clone of markup_original so variable references are replaced by their values
+  # @param markup_original to be cloned
+  # @return modified markup_original
+  def self.lookup_liquid_variables(liquid_context, markup_original)
+    markup = markup_original.clone
     page = liquid_context.registers[:page]
     envs   = liquid_context.environments.first
     layout = envs[:layout]
 
     # process layout variables
     layout&.each do |name, value|
-      markup = markup.gsub("{{layout.#{name}}}", value.to_s)
+      markup.gsub!("{{layout.#{name}}}", value.to_s)
     end
 
     # process page variables
-    page&.to_hash&.each do |name, value|
-      markup = markup.gsub("{{page.#{name}}}", value.to_s)
-    end
+    # puts "\nStarting page variable processing of #{page['path']}; stack has #{caller.length} elements".green
+    keys = page.keys
+    %w[excerpt output].each { |key| keys.delete key }
+    # puts "  Filtered keys: #{keys.join ' '}"
+    # keys.each { |key| puts "  #{key}: #{page[key]}" }
 
     # Process assigned, captured and injected variables
     liquid_context.scopes.each do |scope|
       scope&.each do |name, value|
-        markup = markup.gsub("{{#{name}}}", value.to_s)
+        markup.gsub!("{{#{name}}}", value.to_s)
       end
     end
     markup

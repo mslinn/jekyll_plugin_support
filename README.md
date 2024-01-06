@@ -86,20 +86,6 @@ For block tags, a single parameter is required, which contains text passed from 
 Your implementation of render_impl can parse parameters passed to the tag / block tag, as described in
 [Tag Parameter Parsing](http://mslinn.com/jekyll/10100-jekyll-plugin-background.html#params).
 
-The following variables are predefined within `render`.
-See the [Jekyll documentation](https://jekyllrb.com/docs/variables/) for more information.
-
-* `@argument_string` – Original unparsed string from the tag in the web page
-* `@config` – Jekyll [configuration data](https://jekyllrb.com/docs/configuration/)
-* `@layout` – Front matter specified in layouts
-* `@mode` – [possible values](https://jekyllrb.com/docs/configuration/environments/)
-  are `development`, `production`, or `test`
-* `@page` – Jekyll [page variable](https://jekyllrb.com/docs/variables/#page-variables)
-* `@paginator` – Only has a value when a paginator is active; they are only available in index files.
-* `@site` – Jekyll [site variable](https://jekyllrb.com/docs/variables/#site-variables)
-* `@tag_name` – Name of the inline tag or block plugin
-* `@theme` – Theme variables (introduced in Jekyll 4.3.0)
-
 
 ## General Usage
 
@@ -107,8 +93,9 @@ Please see the [`demo/`](demo/) project for a well-documented set of demonstrati
 Additional information is available [here](https://mslinn.com/jekyll/10200-jekyll-plugin-background.html) and the
 [`jekyll_plugin_support`](https://www.mslinn.com/jekyll_plugins/jekyll_plugin_support.html) documentation.
 
-`JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag`
-provide support for Jekyll block tags and Jekyll inline tags, respectively.
+[`JekyllSupport::JekyllBlock`](https://github.com/mslinn/jekyll_plugin_support/blob/master/lib/jekyll_plugin_support_block.rb) and
+[`JekyllSupport::JekyllTag`](https://github.com/mslinn/jekyll_plugin_support/blob/master/lib/jekyll_plugin_support_tag.rb) provide
+support for Jekyll block tags and Jekyll inline tags, respectively.
 They are similar in construction and usage.
 
 Instead of subclassing your Jekyll block tag class from `Liquid::Block`,
@@ -152,10 +139,10 @@ For block tags, a single parameter is required, which contains any text enclosed
 
 * [`@layout`](https://jekyllrb.com/docs/variables/#global-variables) Layout information
 
-* [`@logger`](jekyll_plugin_logger) `jekyll_plugin_logger` instance for your Jekyll plugin.
+* `@logger` [`jekyll_plugin_logger`](https://github.com/mslinn/jekyll_plugin_logger) instance for your Jekyll plugin.
 
 * [`@mode`](https://jekyllrb.com/docs/configuration/environments/)
-  Indicates `production` or `development` mode.
+  Indicates `production`, `test` or `development` mode.
 
 * [`@page`](https://jekyllrb.com/docs/variables/#page-variables) Page variables
 
@@ -208,104 +195,84 @@ For example, given:
 ... then the following references in a page will be substituted for their values in arguments and in block tag bodies:
 
 ```html
-{% my_block_tag param1="x={{x}}" param2="var_page={{page.var_page}}" param3="var_layout={{layout.var_layout}}" %}
+{% my_block_tag
+  param1="x={{x}}"
+  param2="var_page={{page.var_page}}"
+  param3="var_layout={{layout.var_layout}}"
+%}
+
 Assigned variables do not need a namespace: x={{x}}
-Page variables must be qualified with the 'page' namespace: var_page={{page.var_page}}
-Layout variables must be qualified with the 'layout' namespace: var_layout={{layout.var_layout}}
+
+Page variables must be qualified with the 'page' namespace:
+  var_page={{page.var_page}}
+
+Layout variables must be qualified with the 'layout' namespace:
+  var_layout={{layout.var_layout}}
 {% endmy_block_tag %}
 ```
 
 You can see similar code in [`demo/demo_inline_tag.html`](demo/demo_inline_tag.html).
 
-The `page['excerpt']`, `page['next']` and `page['previous']` key/value pairs are
-removed from processing because of recursion issues.
-You cannot look up those values.
+The `page['excerpt']` and `page['output']` key/value pairs are removed from processing because of recursion issues.
+You cannot look up those values from a `jekyll_plugin_support` plugin.
 
 
-### Automatically Created Error Classes
+### Keyword Options
 
-`JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag` subclasses
-automatically create error classes, named after the subclass.
-
-For example, if you create a `JekyllSupport::JekyllBlock` subclass called `DemoBlockTag`,
-the automatically generated error class will be called `DemoBlockTagError`.
-
-Although you could use it as you would any other error class, `JekyllPluginSupport` provides some helper methods.
-These methods fill in the page path and line number that caused the error, shorten the stack trace,
-log an error message, and can be used to return an HTML-friendly version of the message to the web page.
-
-The following example is a shortened version of `demo/_plugins/demo_block_tag.rb`.
-You might want to write similar code in your `rescue` blocks.
-
-```ruby
-class DemoBlock < JekyllSupport::JekyllBlock
-  VERSION = '0.1.2'.freeze
-
-  def render_impl(text)
-    raise DemoBlockTagError, 'Fall down, go boom.'
-  rescue DemoBlockTagError => e
-    e.shorten_backtrace
-    @logger.error e.logger_message
-    raise e if @die_on_demo_block_error
-
-    e.html_message
-  end
-end
-```
-
-Error class methods have been provided for standardized and convenient error handling:
-
-* `shorten_backtrace` - most of the lines that spew from a Jekyll backtrace are uninteresting.
-* `logger_message` - The message is constructed from the string provided when the error was raised,
-   with the page path and line number added.
-* `html_message` - The same as `logger_message`, but constructed with HTML.
+For all keyword options, values specified in the document _may_ be provided.
+If a value is not provided, the value `true` is assumed.
+Otherwise, if a value is provided, it _must_ be wrapped in single or double quotes.
 
 
-### Self-Reporting Upon Registration
+### Examples
 
-When each tag is registered, it self-reports, for example:
-
-```text
-INFO PluginMetaLogger: Loaded plugin demo_inline_tag v0.1.2. It has:
-  Error class: DemoTagError
-  CSS class for error messages: demo_tag_error
-
-  _config.yml contains the following configuration for this plugin:
-    {"die_on_demo_tag_error"=>false, "die_on_standard_error"=>false}
+The following examples use the `die_if_error` keyword option for the
+[`pre`](https://www.mslinn.com/jekyll_plugins/jekyll_pre.html#tag) and
+[`exec`](https://www.mslinn.com/jekyll_plugins/jekyll_pre.html#tag_exec)
+tags from the [`jekyll_pre`](https://www.mslinn.com/jekyll_plugins/jekyll_pre.html) plugin %}.
 
 
-INFO PluginMetaLogger: Loaded plugin demo_inline_tag_no_arg v0.1.0. It has:
-  Error class: DemoTagNoArgsError
-  CSS class for error messages: demo_tag_no_args_error
+#### Specifying Tag Option Values
 
-  _config.yml does not contain configuration information for this plugin.
-  You could add a section containing default values by specifying a section for the tag name,
-  and an entry whose name starts with `die_on_`, followed by a snake_case version of the error name.
-
-    demo_inline_tag_no_arg:
-      die_on_demo_tag_no_args_error: false
-```
-
-### Example
-
-[`demo/index.html`](demo/index.html), contains the following inline tag invocation:
+The following sets `die_if_error` `true`:
 
 ```html
-{% demo_inline_tag keyword1 name1='value1' unreferenced_key unreferenced_name="unreferenced_value" %}
+{% pre die_if_error %} ... {% endpre %}
 ```
 
-The `demo/_plugins/demo_inline_tag.rb` plugin uses `@helper.parameter_specified?` provided by
-`jekyll_support_plugin` to parse the string passed to the tag, which is
-`keyword1 name1='value1' unreferenced_key unreferenced_name="unreferenced_value"`.
+The above is the same as writing:
 
-* Because `keyword1` was referenced by `@helper.parameter_specified?` above,
-    that keyword option is removed from the argument string.
-* Because the `name1` key/value parameter was referenced by `@helper.parameter_specified?` above,
-    that name/value pair is removed from the argument string.
-* The remainder of the argument string is now `unreferenced_key unreferenced_name="unreferenced_value"`.
+```html
+{% pre die_if_error='true' %} ... {% endpre %}
+```
+
+Or writing:
+
+```html
+{% pre die_if_error="true" %} ... {% endpre %}
+```
+
+Neglecting to provide surrounding quotes around the provided value causes the parser to not recognize the option.
+Instead, what you had intended to be the keyword/value pair will be parsed as part of the command.
+For the `pre` tag, this means the erroneous string becomes part of the `label` value,
+unless `label` is explicitly specified.
+For the `exec` tag, this means the erroneous string becomes part of the command to execute.
+The following demonstrates the error.
+
+```html
+{% pre die_if_error=false %} ... {% endpre %}
+```
+
+The above causes the label to be `die_if_error=false`.
+
+```html
+{% exec die_if_error=false ls %} ... {% endpre %}
+```
+
+The above causes the command to be executed to be `die_if_error=false ls` instead of `ls`.
 
 
-### To Quote Or Not To Quote
+### Quoting
 
 Parameter values can be quoted.
 
@@ -322,6 +289,7 @@ The following examples both yield the same result:
 
 * `pay_tuesday="maybe not"`
 * `pay_tuesday='maybe not'`
+
 
 ### Remaining Markup
 
@@ -351,13 +319,12 @@ In the following example web page, the Liquid variable called `var1` is expanded
 Liquid variables `var1` and `var2` are expanded and passed to the `my_plugin` plugin.
 
 ```html
-This is the value of <code>var1</code>: {{var1}}.
+This is the value of var1: {{var1}}.
 
 {% my_plugin param1="{{var1}}" param2="{{var2}}" %}
 ```
 
-`Jekyll_plugin_support` expands all but one of the
-[plugin variables described above](#predefined-variables),
+`Jekyll_plugin_support` expands most of the [plugin variables described above](#predefined-variables),
 replacing Liquid variable references with their values.
 The exception is `@argument_string`, which is not expanded.
 
@@ -427,6 +394,71 @@ Similarly, the letters `y` and `z` are pronounced {{y}} and {{z}}.
 ```
 
 
+### Automatically Created Error Classes
+
+`JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag` subclasses
+automatically create error classes, named after the subclass.
+
+For example, if you create a `JekyllSupport::JekyllBlock` subclass called `DemoBlockTag`,
+the automatically generated error class will be called `DemoBlockTagError`.
+
+Although you could use it as you would any other error class, `JekyllPluginSupport` provides some helper methods.
+These methods fill in the page path and line number that caused the error, shorten the stack trace,
+log an error message, and can be used to return an HTML-friendly version of the message to the web page.
+
+The following example is a shortened version of `demo/_plugins/demo_block_tag.rb`.
+You might want to write similar code in your `rescue` blocks.
+
+```ruby
+class DemoBlock < JekyllSupport::JekyllBlock
+  VERSION = '0.1.2'.freeze
+
+  def render_impl(text)
+    raise DemoBlockTagError, 'Fall down, go boom.'
+  rescue DemoBlockTagError => e
+    e.shorten_backtrace
+    @logger.error e.logger_message
+    raise e if @die_on_demo_block_error
+
+    e.html_message
+  end
+end
+```
+
+Error class methods have been provided for standardized and convenient error handling:
+
+* `shorten_backtrace` - most of the lines that spew from a Jekyll backtrace are uninteresting.
+* `logger_message` - The message is constructed from the string provided when the error was raised,
+   with the page path and line number added.
+* `html_message` - The same as `logger_message`, but constructed with HTML.
+
+
+### Self-Reporting Upon Registration
+
+When each tag is registered, it self-reports, for example:
+
+```text
+INFO PluginMetaLogger: Loaded plugin demo_inline_tag v0.1.2. It has:
+  Error class: DemoTagError
+  CSS class for error messages: demo_tag_error
+
+  _config.yml contains the following configuration for this plugin:
+    {"die_on_demo_tag_error"=>false, "die_on_standard_error"=>false}
+
+
+INFO PluginMetaLogger: Loaded plugin demo_inline_tag_no_arg v0.1.0. It has:
+  Error class: DemoTagNoArgsError
+  CSS class for error messages: demo_tag_no_args_error
+
+  _config.yml does not contain configuration information for this plugin.
+  You could add a section containing default values by specifying a section for the tag name,
+  and an entry whose name starts with `die_on_`, followed by a snake_case version of the error name.
+
+    demo_inline_tag_no_arg:
+      die_on_demo_tag_no_args_error: false
+```
+
+
 ## `no_arg_parsing` Optimization
 
 If your tag or block plugin only needs access to the raw arguments passed from the web page,
@@ -457,6 +489,22 @@ Using the `attribution` option cause subclasses to replace their usual output wi
 The `id` attribute is in the sample HTML above is randomized so more than one attribution can appear on a page.
 
 
+### Attribution Generation
+
+You can decide where you want the attribution string for your Jekyll tag to appear by invoking `@helper.attribute`.
+For example, this is how the
+[`jekyll_outline` tag](https://github.com/mslinn/jekyll_outline/blob/v1.1.1/lib/outline_tag.rb#L32-L46) generates output:
+
+```html
+<<~HEREDOC
+  <div class="outer_posts">
+  #{make_entries(collection)&.join("\n")}
+  </div>
+  #{@helper.attribute if @helper.attribution}
+HEREDOC
+```
+
+
 ### Usage
 
 Typical usage for the `attribution` tag is:
@@ -467,7 +515,7 @@ Typical usage for the `attribution` tag is:
 {% endmy_block_tag %}
 ```
 
-Normal processing of `my_block_tag` is augmented by interpolating the attribution format string,
+The normal processing of `my_block_tag` is augmented by interpolating the attribution format string,
 which is a Ruby-compatible interpolated string.
 
 The default attribution format string is:
@@ -484,21 +532,6 @@ An alternative attribution string can be specified properties can be output usin
 
 ```html
 {% my_tag attribution="Generated by the #{name} #{version} Jekyll plugin, written by #{author} #{date}" %}
-```
-
-### Attribution Generation
-
-You can decide where you want the attribution string for your Jekyll tag to appear by invoking `@helper.attribute`.
-For example, this is how the
-[`jekyll_outline` tag](https://github.com/mslinn/jekyll_outline/blob/v1.1.1/lib/outline_tag.rb#L32-L46) generates output:
-
-```html
-<<~HEREDOC
-<div class="outer_posts">
-#{make_entries(collection)&.join("\n")}
-</div>
-#{@helper.attribute if @helper.attribution}
-HEREDOC
 ```
 
 
