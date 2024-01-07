@@ -346,6 +346,13 @@ Jekyll does not expand Liquid variable references passes as parameters to tag an
 However, plugins made from `jekyll_plugin_support` automatically
 expand all types of variable references passed as parameters and in block tag bodies.
 
+`Jekyll_plugin_support` tag and block plugins expand the following types of variables:
+
+* Jekyll_plugin_support configuration variables, discussed above.
+* Jekyll [page](https://jekyllrb.com/docs/variables/#page-variables) and
+  [layout](https://jekyllrb.com/docs/layouts/#variables) variables.
+* Inline Liquid variables (defined in [assign](https://shopify.dev/docs/api/liquid/tags/assign) and [capture](https://shopify.dev/docs/api/liquid/tags/capture) statements).
+
 In the following example web page, Jekyll expands the `var1` reference within the `<p></p>` tag,
 but not the `var1` or `var2` references passed to `my_plugin`.
 
