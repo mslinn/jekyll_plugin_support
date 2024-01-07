@@ -28,7 +28,7 @@ Plugins that use `jekyll_plugin_support` include:
 
 ## Features
 
-Jekyll plugin tags created from `jekyll-plugin-support` framework automatically have the following features:
+Jekyll plugin tags created from `jekyll_plugin_support` framework automatically have the following features:
 
 1. Boilerplate is removed, so you can focus on the required logic and output.
 2. Arguments are parsed for keywords and name/value parameters.
@@ -318,11 +318,14 @@ After your plugin has parsed all the keyword options and name/value parameters,
 call `@helper.remaining_markup` to obtain the remaining markup that was passed to your plugin.
 
 
-## Liquid Variable Definitions
+## Configuration Variables
 
 `jekyll_plugin_support` provides support for
 [Liquid variables](https://shopify.github.io/liquid/tags/variable/)
 to be defined in `_config.yml`, in a section called `liquid-vars`.
+These variables behave exactly like Liquid variables defined by `assign` and `capture` expressions,
+except they are global in scope; these variables are available in every Jekyll web page.
+
 The following `_config.yml` fragment defines 3 variables called `var1`, `var2` and `var3`:
 
 ```yaml
@@ -333,17 +336,36 @@ liquid-vars:
 ```
 
 Liquid variables defined in this manner are intended to be embedded in a webpage.
-They are expanded transparently, and can be referenced like any other Liquid variable.
-These Liquid variables can be passed as parameters to other plugins and includes.
+They are can be used like any other Liquid variable.
 
-In the following example web page, the Liquid variable called `var1` is expanded as part of the displayed page.
-Liquid variables `var1` and `var2` are expanded and passed to the `my_plugin` plugin.
+
+### Variable Expansion
+
+Jekyll expands Liquid variable references during the page rendering process.
+Jekyll does not expand Liquid variable references passes as parameters to tag and block plugins, however.
+However, plugins made from `jekyll_plugin_support` automatically
+expand all types of variable references passed as parameters and in block tag bodies.
+
+In the following example web page, Jekyll expands the `var1` reference within the `<p></p>` tag,
+but not the `var1` or `var2` references passed to `my_plugin`.
 
 ```html
-This is the value of var1: {{var1}}.
+<p>This is the value of var1: {{var1}}.</p>
 
 {% my_plugin param1="{{var1}}" param2="{{var2}}" %}
 ```
+
+Assuming that `my_plugin` was written as a `jekyll_plugin_support` plugin,
+all variable references in its parameters are expanded.
+Thus, the above is interpreted as follows when `my_plugin` is evaluated during the Jekyll rendering process:
+</p>
+
+```html
+<p>This is the value of var1: value1.</p>
+
+{% my_plugin param1="value1" param2="value 2" %}
+```
+
 
 `Jekyll_plugin_support` expands most of the [plugin variables described above](#predefined-variables),
 replacing Liquid variable references with their values.
