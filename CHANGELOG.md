@@ -4,6 +4,7 @@
 ## 0.8.4 / 2024-02-27
 
 * Problem in error handler fixed.
+* A warning is logged if an environment variable is undefined and `die_if_undefined` is not set.
 
 
 ## 0.8.3 / 2024-01-05

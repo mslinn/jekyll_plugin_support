@@ -5,12 +5,19 @@ require 'yaml'
 # Class methods for JekyllPluginHelper
 class JekyllPluginHelper
   # Expand an environment variable reference
-  def self.expand_env(str, die_if_undefined: false)
-    str&.gsub(/\$([a-zA-Z_][a-zA-Z0-9_]*)|\${\g<1>}|%\g<1>%/) do
+  def self.expand_env(str, logger = nil, die_if_undefined: false)
+    str&.gsub(/\$([a-zA-Z_][a-zA-Z0-9_]*)|\${\g<1>}/) do
       envar = Regexp.last_match(1)
-      raise JekyllPluginSupportError, "jekyll_plugin_support error: #{envar} is undefined".red, [] \
-        if !ENV.key?(envar) && die_if_undefined # Suppress stack trace
+      unless ENV.key? envar
+        msg = "jekyll_plugin_support error: environment variable #{envar} is undefined"
+        raise JekyllPluginSupportError, msg.red, [] if die_if_undefined
 
+        if logger
+          logger.warn msg
+        else
+          puts msg.red
+        end
+      end
       ENV.fetch(envar, nil)
     end
   end
