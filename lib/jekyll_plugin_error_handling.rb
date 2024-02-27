@@ -35,7 +35,6 @@ module JekyllSupportErrorHandling
     string.gsub(/\e\[([;\d]+)?m/, '')
   end
 
-  # TODO: Delete this
   def maybe_reraise_error(error, throw_error: true)
     fmsg = format_error_message "#{error.class}: #{error.message.strip}"
     @logger.error { fmsg }
