@@ -1,6 +1,11 @@
 # Change Log
 
 
+## 0.8.4 / 2024-02-27
+
+* Problem in error handler fixed.
+
+
 ## 0.8.3 / 2024-01-05
 
 * Variables defined in front matter of layouts and pages are now handled.
