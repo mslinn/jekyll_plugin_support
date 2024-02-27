@@ -63,7 +63,9 @@ module JekyllSupport
       render_impl
     rescue StandardError => e
       e.shorten_backtrace
-      @logger.error { "#{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} while processing #{tag_name} - #{e.message}" }
+      file_name = e.backtrace[0]&.split(':')&.first
+      of_file_name = "of #{file_name} " if file_name
+      @logger.error { "#{e.class} on line #{@line_number} #{of_file_name}while processing #{tag_name} - #{e.message}" }
       binding.pry if @pry_on_standard_error # rubocop:disable Lint/Debugger
       raise e if @die_on_standard_error
 
