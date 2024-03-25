@@ -29,6 +29,12 @@ module JekyllSupport
       Jekyll::CustomError.factory @error_name
     end
 
+    # Liquid::Block subclasses do not render if there is no content within the tag
+    # This override fixes that
+    def blank?
+      false
+    end
+
     # Method prescribed by the Jekyll plugin lifecycle.
     # Defines @config, @envs, @mode, @page and @site
     # @return [String]
@@ -52,7 +58,7 @@ module JekyllSupport
 
       @mode = @config['env']&.key?('JEKYLL_ENV') ? @config['env']['JEKYLL_ENV'] : 'development'
 
-      @helper.reinitialize(@markup.strip)
+      @helper.reinitialize @markup.strip
 
       @attribution = @helper.parameter_specified?('attribution') || false unless @no_arg_parsing
       @logger.debug { "@keys_values='#{@keys_values}'" }
@@ -60,7 +66,7 @@ module JekyllSupport
       markup = JekyllSupport.lookup_liquid_variables liquid_context, @argument_string
       @helper.reinitialize markup
 
-      render_impl text
+      render_impl(text)
     rescue StandardError => e
       e.shorten_backtrace
       @logger.error { "#{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} by #{tag_name} - #{e.message}" }

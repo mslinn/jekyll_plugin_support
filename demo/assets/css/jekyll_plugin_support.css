@@ -1,4 +1,4 @@
-.demo_block_error, .demo_tag_error, .flexible_error, .jekyll_plugin_support_error, .standard_error {
+.demo_block_error, .demo_block_tag_error, .flexible_error, .jekyll_plugin_support_error, .standard_error {
   background-color: rgb(248, 149, 149);
   border-radius: 4pt;
   border: rgb(155, 141, 141) 2px solid;

@@ -1,6 +1,11 @@
 # Change Log
 
 
+## 0.8.5 / 2024-03-25
+
+* Empty block tags now return a value. See https://talk.jekyllrb.com/t/empty-liquid-block-not-rendering
+
+
 ## 0.8.4 / 2024-02-27
 
 * Problem in error handler fixed.
