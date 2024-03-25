@@ -20,6 +20,12 @@ module JekyllSupport
       JekyllSupport.error_short_trace(@logger, e)
     end
 
+    # Liquid::Block subclasses do not render if there is no content within the tag
+    # This override fixes that
+    def blank?
+      false
+    end
+
     # Jekyll plugins must override this method, not render, so their plugin can be tested more easily
     # The following variables are predefined:
     #   @argument_string, @config, @envs, @helper, @layout, @logger, @mode, @page, @paginator, @site, @tag_name and @theme
