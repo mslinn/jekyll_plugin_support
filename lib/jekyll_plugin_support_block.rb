@@ -56,7 +56,8 @@ module JekyllSupport
       @paginator = @envs[:paginator]
       @theme     = @envs[:theme]
 
-      @mode = @config['env']&.key?('JEKYLL_ENV') ? @config['env']['JEKYLL_ENV'] : 'development'
+      env = @config['env']
+      @mode = env&.key?('JEKYLL_ENV') ? env['JEKYLL_ENV'] : 'development'
 
       @helper.reinitialize @markup.strip
 
@@ -69,13 +70,13 @@ module JekyllSupport
       render_impl(text)
     rescue StandardError => e
       e.shorten_backtrace
-      @logger.error { "#{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} by #{tag_name} - #{e.message}" }
+      @logger.error { "#{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} by #{@tag_name} - #{e.message}" }
       binding.pry if @pry_on_standard_error # rubocop:disable Lint/Debugger
       raise e if @die_on_standard_error
 
       <<~END_MSG
         <div class='standard_error'>
-          #{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} by #{tag_name}: #{e.message}
+          #{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} by #{@tag_name}: #{e.message}
         </div>
       END_MSG
     end
