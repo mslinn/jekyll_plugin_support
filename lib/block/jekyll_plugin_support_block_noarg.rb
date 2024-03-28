@@ -1,4 +1,4 @@
-require_relative 'jekyll_plugin_error_handling'
+require_relative '../error/jekyll_plugin_error_handling'
 
 module JekyllSupport
   class JekyllBlockNoArgParsing < JekyllBlock

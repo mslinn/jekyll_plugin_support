@@ -8,8 +8,8 @@ compress_html:
     envs: [development]
   profile: false
   startings: [html, head, body]
-domain: bogus.jekylldemo.com
-email: bogus@jekylldemo.com
+domain: mslinn.com
+email: bogus@example.com
 exclude:  # Wildcards are not supported yet https://github.com/jekyll/jekyll-watch/pull/93
   - .git
   - .github
@@ -48,6 +48,7 @@ plugin_loggers:
   CleanHook: warn
   DocumentHooks: warn
   DraftFilter: debug
+  QRCodeGenerator: debug
   MyBlock: warn
   PageHooks: warn
   PostHooks: warn
@@ -57,6 +58,9 @@ plugins: # Use file name of the plugin entry point, not the gem name
   - jekyll_plugin_logger
   # - html-proofer
   - jekyll
+qrcode:
+  bg_color: '#666'
+  fg_color: black
 sass:
   style: compressed
 title: Jekyll Plugin Support Demo

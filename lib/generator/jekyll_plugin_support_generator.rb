@@ -1,8 +1,9 @@
 require 'jekyll'
-require_relative 'jekyll_plugin_error_handling'
+require_relative '../error/jekyll_plugin_error_handling'
 
 module JekyllSupport
-  # Base class for Jekyll block tags
+  # Base class for Jekyll generators.
+  # PluginMetaLogger.instance.config is populated with the contents of `_config.yml` before Jekyll::Generator instances run.
   class JekyllGenerator < Jekyll::Generator
     attr_reader :helper, :line_number, :logger, :site
 
@@ -26,6 +27,8 @@ module JekyllSupport
       @mode = ENV['JEKYLL_ENV'] || 'development'
 
       # set_error_context(self.class)
+
+      generate_impl
     rescue StandardError => e
       e.shorten_backtrace
       @logger.error { "#{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} by #{self.class.name} - #{e.message}" }

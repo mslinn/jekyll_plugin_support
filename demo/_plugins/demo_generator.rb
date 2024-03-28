@@ -1,4 +1,4 @@
-require 'jekyll_plugin_support_generator'
+require 'jekyll_plugin_support'
 
 class DemoGenerator < JekyllSupport::JekyllGenerator
   VERSION = '0.1.0'.freeze

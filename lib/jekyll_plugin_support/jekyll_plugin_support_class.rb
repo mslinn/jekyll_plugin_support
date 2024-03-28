@@ -1,4 +1,4 @@
-require_relative 'jekyll_custom_error'
+require_relative '../error/jekyll_custom_error'
 
 # Monkey patch StandardError so a new method called shorten_backtrace is added.
 class StandardError

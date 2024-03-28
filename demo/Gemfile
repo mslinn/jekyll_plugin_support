@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'jekyll', '~> 4.3.2'
+gem 'jekyll', '~> 4.3.3'
 
 group :jekyll_plugins do
   gem 'jekyll-assets'
@@ -8,7 +8,8 @@ group :jekyll_plugins do
   gem 'jekyll-environment-variables'
   gem 'jekyll_href'
   gem 'jekyll_outline'
-  gem 'jekyll_plugin_support', '>= 0.8.3', path: '../'
+  gem 'jekyll_plugin_support', '>= 0.8.5', path: '../'
+  gem 'jekyll_qr_generator'
   gem 'jekyll-sort'
   gem 'jekyll-tagging'
   gem 'kramdown'

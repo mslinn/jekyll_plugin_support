@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.9.0 / 2024-03-26
+
+* Generator support added.
+
 
 ## 0.8.5 / 2024-03-25
 
