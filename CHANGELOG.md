@@ -1,8 +1,9 @@
 # Change Log
 
-## 0.9.0 / 2024-03-26
 
-* Generator support added.
+## 0.8.6 / 2024-06-11
+
+* Fixup version, containing what was supposed to be in v0.8.5
 
 
 ## 0.8.5 / 2024-03-25
