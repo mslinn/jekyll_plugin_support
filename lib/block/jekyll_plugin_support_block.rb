@@ -49,6 +49,8 @@ module JekyllSupport
 
       @config = @site.config
       @tag_config = @config[@tag_name]
+      @jps = @config['jekyll_plugin_support']
+      @pry_on_standard_error = @jps['pry_on_standard_error'] || false if @jps
 
       set_error_context
 

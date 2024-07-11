@@ -55,10 +55,11 @@ module JekyllSupport
       @paginator = @envs[:paginator]
       @theme     = @envs[:theme]
 
-      @mode = @config['env']&.key?('JEKYLL_ENV') ? @config['env']['JEKYLL_ENV'] : 'development'
+      env = @config['env']
+      @mode = env&.key?('JEKYLL_ENV') ? env['JEKYLL_ENV'] : 'development'
 
       markup = JekyllSupport.lookup_liquid_variables liquid_context, @argument_string
-      @helper.reinitialize markup
+      @helper.reinitialize markup.strip
 
       render_impl
     rescue StandardError => e

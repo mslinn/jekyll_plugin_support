@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.8.7 / 2024-07-11
+
+* Made tag and block code more consistent
+
 
 ## 0.8.6 / 2024-06-11
 
