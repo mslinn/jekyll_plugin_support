@@ -1,7 +1,7 @@
 require 'facets/string/camelcase'
 require 'facets/string/snakecase'
 
-module Jekyll
+module JekyllSupport
   # Use like this:
   # CustomError.new(:MyError, 'blah', 'asdf')
   class CustomError < StandardError

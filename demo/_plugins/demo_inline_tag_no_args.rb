@@ -1,7 +1,8 @@
 require 'jekyll_plugin_support'
 
-module Jekyll
-  class DemoTagNoArgs < JekyllSupport::JekyllTagNoArgParsing
+# Use the JekyllSupport module namespace so the self methods are automajically found
+module JekyllSupport
+  class DemoTagNoArgs < JekyllTagNoArgParsing
     VERSION = '0.1.0'.freeze
 
     def render_impl

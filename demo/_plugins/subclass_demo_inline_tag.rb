@@ -1,7 +1,8 @@
 require_relative 'demo_inline_tag'
 
+# Use the JekyllSupport module namespace so the self methods are automajically found
 module JekyllSupport
-  JekyllTag.redef_without_warning 'VERSION', '0.1.0'.freeze
+  redef_without_warning 'VERSION', '0.1.0'.freeze
 
   class SubclassTag < Jekyll::DemoTag
     def render_impl

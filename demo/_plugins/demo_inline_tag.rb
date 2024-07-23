@@ -1,9 +1,10 @@
 require 'jekyll_plugin_support'
 
-module Jekyll
+# Use the JekyllSupport module namespace so the self methods are automajically found
+module JekyllSupport
   DemoInlineTagError = JekyllSupport.define_error
 
-  class DemoTag < JekyllSupport::JekyllTag
+  class DemoTag < JekyllTag
     VERSION = '0.1.2'.freeze
     # JekyllSupport.redef_without_warning 'VERSION', '0.1.2'.freeze
 

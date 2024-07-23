@@ -1,10 +1,11 @@
 require 'cgi'
 require 'jekyll_plugin_support'
 
-module Jekyll
-  # DemoBlockError = JekyllSupport.define_error
+# Use the JekyllSupport module namespace so the self methods are automajically found
+module JekyllSupport
+  DemoBlockError = JekyllSupport.define_error
 
-  class DemoBlock < JekyllSupport::JekyllBlock
+  class DemoBlock < JekyllBlock
     VERSION = '0.1.2'.freeze
 
     def render_impl(text)

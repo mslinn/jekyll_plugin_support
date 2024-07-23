@@ -1,8 +1,9 @@
 require 'cgi'
 require 'jekyll_plugin_support'
 
-module Jekyll
-  class IncludeTestTag < JekyllSupport::JekyllTag
+# Use the JekyllSupport module namespace so the self methods are automajically found
+module JekyllSupport
+  class IncludeTestTag < JekyllTag
     VERSION = '0.1.2'.freeze
 
     def render_impl

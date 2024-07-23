@@ -1,4 +1,4 @@
-module JekyllSupportErrorHandling
+module JekyllSupport
   attr_reader :logger, :page
 
   # If a Jekyll plugin needs to crash exit, and stop Jekyll, call this method.

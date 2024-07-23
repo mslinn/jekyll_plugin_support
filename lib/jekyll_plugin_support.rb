@@ -8,6 +8,13 @@ def require_directory(dir)
   end
 end
 
+module JekyllSupport
+  def self.redef_without_warning(const, value)
+    send(:remove_const, const) if const_defined?(const)
+    const_set const, value
+  end
+end
+
 module NoArgParsing
   attr_accessor :no_arg_parsing
 
