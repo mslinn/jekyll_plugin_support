@@ -1,6 +1,8 @@
 .qrcode {
+  border: 2px solid grey;
   float: left;
-  padding: 0.4rem;
-  width: 150px;
+  margin: 0.4rem 1rem 0 0.4rem;
+  padding: 5px;
+  width: 145px;
   height: auto;
 }
