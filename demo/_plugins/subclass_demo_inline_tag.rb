@@ -4,7 +4,7 @@ require_relative 'demo_inline_tag'
 module JekyllSupport
   redef_without_warning 'VERSION', '0.1.0'.freeze
 
-  class SubclassTag < Jekyll::DemoTag
+  class SubclassTag < JekyllSupport::DemoTag
     def render_impl
       @magic_word = @helper.parameter_specified? 'magic_word'
       @demo_tag_error = @helper.parameter_specified? 'raise_subclass_demo_tag_error'

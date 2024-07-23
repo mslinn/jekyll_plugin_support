@@ -34,7 +34,7 @@ Metrics/AbcSize:
 
 Metrics/BlockLength:
   Exclude:
-    - jekyll_all_collections.gemspec
+    - jekyll_plugin_support.gemspec
   Max: 30
 
 Metrics/CyclomaticComplexity:

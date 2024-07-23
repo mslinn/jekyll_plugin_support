@@ -21,7 +21,7 @@ body {
 code, pre, tt, .code, .codeLabel, h2 .code, h3 .code, h4 .code, h5 .code, h6.code {
   font-family: Monaco,"Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
   font-stretch: semi-condensed;
-  font-size: 9pt;
+  font-size: smaller;
 }
 
 h1, .h1 {

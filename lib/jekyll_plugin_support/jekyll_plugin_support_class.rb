@@ -22,7 +22,7 @@ module JekyllSupport
 
   # @return a new StandardError subclass containing the shorten_backtrace method
   def define_error
-    Class.new Jekyll::CustomError
+    Class.new JekyllSupport::CustomError
   end
   module_function :define_error
 

@@ -17,7 +17,7 @@ class CustomErrorSpec
     raise AnError, 'Oops'
   rescue AnError => e
     puts "Caught AnError: #{e.message}"
-  rescue Jekyll::CustomError => e
+  rescue JekyllSupport::CustomError => e
     puts "Caught CustomError: #{e.message}"
   end
 
@@ -31,7 +31,7 @@ class CustomErrorSpec
     end
   end
 
-  RSpec.describe Jekyll::CustomError do
+  RSpec.describe JekyllSupport::CustomError do
     it 'can create custom errors' do
       expect { raise AnError, 'Oops' }.to raise_error(AnError)
     end

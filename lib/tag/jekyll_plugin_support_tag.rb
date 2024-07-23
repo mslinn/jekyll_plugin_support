@@ -6,9 +6,6 @@ module JekyllSupport
   class JekyllTag < Liquid::Tag
     attr_reader :argument_string, :helper, :line_number, :logger, :page, :site
 
-    include JekyllSupportErrorHandling
-    extend JekyllSupportErrorHandling
-
     # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
     # @param tag_name [String] the name of the tag, which we usually know.
     # @param argument_string [String] the arguments passed to the tag, as a single string.
@@ -29,7 +26,7 @@ module JekyllSupport
       @helper = JekyllPluginHelper.new(tag_name, @argument_string, @logger, respond_to?(:no_arg_parsing))
 
       @error_name = "#{tag_name.camelcase(:upper)}Error"
-      Jekyll::CustomError.factory @error_name
+      JekyllSupport::CustomError.factory @error_name
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.

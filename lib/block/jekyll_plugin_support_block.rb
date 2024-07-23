@@ -5,9 +5,6 @@ module JekyllSupport
   class JekyllBlock < Liquid::Block
     attr_reader :argument_string, :helper, :line_number, :logger, :page, :site, :text
 
-    include JekyllSupportErrorHandling
-    extend JekyllSupportErrorHandling
-
     # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
     # @param tag_name [String] the name of the tag, which we usually know.
     # @param argument_string [String] the arguments passed to the tag, as a single string.
@@ -26,7 +23,7 @@ module JekyllSupport
       @helper = JekyllPluginHelper.new tag_name, markup, @logger, respond_to?(:no_arg_parsing)
 
       @error_name = "#{tag_name.camelcase(:upper)}Error"
-      Jekyll::CustomError.factory @error_name
+      JekyllSupport::CustomError.factory @error_name
     end
 
     # Liquid::Block subclasses do not render if there is no content within the tag

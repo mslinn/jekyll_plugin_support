@@ -7,9 +7,6 @@ module JekyllSupport
   class JekyllGenerator < Jekyll::Generator
     attr_reader :helper, :line_number, :logger, :site
 
-    include JekyllSupportErrorHandling
-    extend JekyllSupportErrorHandling
-
     # Method prescribed by the Jekyll plugin lifecycle.
     # Defines @config, @envs, @mode and @site
     # @return [void]
@@ -17,7 +14,7 @@ module JekyllSupport
       @logger ||= PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
 
       @error_name = "#{self.class.name}Error"
-      # Jekyll::CustomError.factory @error_name
+      # JekyllSupport::CustomError.factory @error_name
 
       @site   = site
       @config = @site.config

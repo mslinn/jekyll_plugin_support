@@ -4,9 +4,6 @@ module JekyllSupport
   class JekyllBlockNoArgParsing < JekyllBlock
     attr_reader :argument_string, :helper, :line_number, :logger, :page, :site
 
-    include JekyllSupportErrorHandling
-    extend JekyllSupportErrorHandling
-
     def initialize(tag_name, argument_string, parse_context)
       class << self
         include NoArgParsing
