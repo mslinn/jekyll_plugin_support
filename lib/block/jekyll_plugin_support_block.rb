@@ -35,6 +35,13 @@ module JekyllSupport
       false
     end
 
+    def redef_without_warning(const, value)
+      send(:remove_const, const) if const_defined?(const)
+      const_set const, value
+    end
+
+    module_function :redef_without_warning
+
     # Method prescribed by the Jekyll plugin lifecycle.
     # Defines @config, @envs, @mode, @page and @site
     # @return [String]
