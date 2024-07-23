@@ -32,7 +32,7 @@ module JekyllSupport
     def output
       <<~END_OUTPUT
         <p>
-          The magic word for the subclass_demo_inline_tag version #{VERSION} is <b>#{@magic_word}</b>.
+          The magic word for <code>subclass_demo_inline_tag</code> version #{VERSION} is <b>#{@magic_word}</b>.
         </p>
       END_OUTPUT
     end
