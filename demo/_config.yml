@@ -22,6 +22,7 @@ exclude:  # Wildcards are not supported yet https://github.com/jekyll/jekyll-wat
   - Gemfile
   - Gemfile.lock
   - README.md
+  - /assets/images/qrcodes/
 demo_block_tag:
   die_on_demo_block_error: false
   die_on_standard_error: false

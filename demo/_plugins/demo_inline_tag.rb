@@ -1,10 +1,11 @@
 require 'jekyll_plugin_support'
 
 module Jekyll
-  # DemoTagError = JekyllSupport.define_error
+  DemoInlineTagError = JekyllSupport.define_error
 
   class DemoTag < JekyllSupport::JekyllTag
     VERSION = '0.1.2'.freeze
+    # JekyllSupport.redef_without_warning 'VERSION', '0.1.2'.freeze
 
     def render_impl
       @demo_tag_error = @helper.parameter_specified? 'raise_demo_tag_error'

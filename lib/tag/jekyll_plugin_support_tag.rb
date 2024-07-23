@@ -9,6 +9,11 @@ module JekyllSupport
     include JekyllSupportErrorHandling
     extend JekyllSupportErrorHandling
 
+    def self.redef_without_warning(const, value)
+      send(:remove_const, const) if const_defined?(const)
+      const_set const, value
+    end
+
     # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
     # @param tag_name [String] the name of the tag, which we usually know.
     # @param argument_string [String] the arguments passed to the tag, as a single string.
@@ -31,13 +36,6 @@ module JekyllSupport
       @error_name = "#{tag_name.camelcase(:upper)}Error"
       Jekyll::CustomError.factory @error_name
     end
-
-    def redef_without_warning(const, value)
-      send(:remove_const, const) if const_defined?(const)
-      const_set const, value
-    end
-
-    module_function :redef_without_warning
 
     # Method prescribed by the Jekyll plugin lifecycle.
     def render(liquid_context)
