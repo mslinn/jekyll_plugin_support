@@ -38,6 +38,18 @@ def check_and_execute(&commands)
   execute_in_each_project(gemspecs { commands })
 end
 
+def check_jekyll_plugin_support
+  gem_name = 'jekyll_plugin_support'
+  spec = load_gemspec gemspec_file ENV.fetch(gem_name, nil)
+  this_version = spec.version.to_s
+  latest_version = latest_gem_version gem_name
+  return unless this_version != latest_version
+
+  msg = ' -- Run rake release' if latest_version < this_version
+  puts "#{gem_name} has this_version=#{this_version}, latest_version=#{latest_version}#{msg}".red
+  exit 4
+end
+
 # Warns user of any jekyll_plugin_support projects that need to be released
 # @param gemspecs[String] points to checked out git code for a jekyll_support_plugin
 # @return truthy (symbol or string) indicating any problem that was found, otherwise falsey (nil)
@@ -76,6 +88,7 @@ def check_gem_versions(gemspecs)
 end
 
 def do_everything
+  check_jekyll_plugin_support
   check_and_execute { @commands }
 end
 
