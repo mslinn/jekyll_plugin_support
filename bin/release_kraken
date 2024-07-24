@@ -1,44 +1,91 @@
 #!/usr/bin/env ruby
 
+require 'colorator'
+require 'English'
 require 'find'
 
 def find_files(name_pattern = '*', pwd = Dir.pwd)
   files = []
   begin
     Find.find(pwd) do |path|
-      Find.prune if path.include?('/.git') || path.include?('/.bundle/')
+      Find.prune if path.include?('/.git') || path.include?('/.bundle/') || path.include?('/spec/')
       next unless File.file? path
       next unless /#{name_pattern}/.match?(path)
 
       files << path
     end
   rescue StandardError => e
-    puts e
+    puts e.red
     exit 1
   end
   files
 end
 
+def latest_gem_version(gem_name)
+  output = `gem list #{gem_name} 2>/dev/null`
+  x = output[/\((.*?)\)/m, 1]
+  x ? x.split(',').first : 0
+end
+
+def check_gem_versions(gemspecs)
+  gemspecs.each do |gemspec_file|
+    dir = File.dirname gemspec_file
+    gem_name = File.basename gemspec_file, '.*'
+    Dir.chdir(dir) do
+      puts "Checking #{gem_name} in #{dir}".green
+
+      latest_version = latest_gem_version(gem_name)
+      exit 2 unless $CHILD_STATUS.success?
+      # puts "The latest version of #{gem_name} is #{latest_version}"
+
+      `grep -lr 'VERSION = ' lib/**/*.rb`.chomp.split("\n").each do |file|
+        this_version = File.read(file)[/.*VERSION\s*=\s*(?:'|")(.*?)(?:'|")/m, 1]
+        if latest_version.to_s == '0'
+          puts "#{gem_name} has no releases".yellow
+        elsif this_version != latest_version
+          puts "#{gem_name} has this_version=#{this_version}, latest_version=#{latest_version}".red
+        end
+      end
+    rescue StandardError => e
+      puts "\n#{e.message}\n".red
+    end
+  end
+end
+
+def execute(command)
+  puts `#{command}`
+  return if $CHILD_STATUS.success?
+
+  puts "Error: '#{command}' returned #{$CHILD_STATUS}".red
+  exit 1
+end
+
 def execute_in_each_project(gemspecs, &block)
   gemspecs.each do |gemspec|
     dir = File.dirname gemspec
-    puts "Entering #{dir}"
+    # puts "Entering #{dir}".green
     Dir.chdir dir, &block
   end
 end
 
 search_root = ENV.fetch('my_plugins', nil)
 unless search_root
-  puts 'Error: Environment variable my_plugins is not defined'
+  puts 'Error: Environment variable my_plugins is not defined'.red
   exit 1
 end
 
+puts 'Finding all Jekyll plugin projects'.green
 gemspecs = find_files '.*.gemspec', search_root
+puts "#{gemspecs.count} Jekyll plugin projects found.".green
+
+puts "\nChecking for project versions that need to be updated".green
+check_gem_versions gemspecs
+exit
+
+puts "\nExecuting commands in each project".green
 execute_in_each_project gemspecs do
-  puts 'Compare released version to current version'
-end
-execute_in_each_project gemspecs do
-  puts 'commit and rake release'
-  # `commit`
-  # `rake release`
+  # puts 'commit and rake release'
+  execute 'pwd'
+  # execute 'commit'
+  # execute 'rake release'
 end
