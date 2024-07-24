@@ -40,7 +40,8 @@ end
 
 def check_jekyll_plugin_support
   gem_name = 'jekyll_plugin_support'
-  spec = load_gemspec gemspec_file ENV.fetch(gem_name, nil)
+  gemspec_file = "#{ENV.fetch(gem_name, nil)}/#{gem_name}.gemspec"
+  spec = load_gemspec gemspec_file
   this_version = spec.version.to_s
   latest_version = latest_gem_version gem_name
   return unless this_version != latest_version
