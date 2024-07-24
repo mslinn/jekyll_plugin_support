@@ -1,0 +1,25 @@
+.gem_banner {
+  background-color: ivory;
+  margin-bottom: 2em;
+  width: fit-content;
+}
+
+.gem_banner .one_column {
+  padding-left: 3pt;
+  padding-right: 3pt;
+  padding-top: 5px;
+}
+
+.gem_banner.right .imgImg {
+  margin-left: 0;
+}
+
+.one_column {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.one_column.center {
+  display: flex;
+}
