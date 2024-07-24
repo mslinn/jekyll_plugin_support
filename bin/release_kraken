@@ -21,6 +21,7 @@ def find_files(name_pattern = '*', pwd = Dir.pwd)
   files
 end
 
+# The VSCode ruby debugger does not work for the "gem list" command
 def latest_gem_version(gem_name)
   output = `gem list #{gem_name} 2>/dev/null`
   x = output[/\((.*?)\)/m, 1]
@@ -32,6 +33,8 @@ def check_gem_versions(gemspecs)
     dir = File.dirname gemspec_file
     gem_name = File.basename gemspec_file, '.*'
     Dir.chdir(dir) do
+      next unless /add_dependency ('|")jekyll_plugin_support('|")/.match?(File.read(gemspec_file))
+
       puts "Checking #{gem_name} in #{dir}".green
 
       latest_version = latest_gem_version(gem_name)
