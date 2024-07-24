@@ -63,6 +63,7 @@ plugin_loggers:
 permalink: "/blog/:year/:month/:day/:title:output_ext"
 plugins: # Use file name of the plugin entry point, not the gem name
   - jekyll_plugin_logger
+  - flexible_include
   # - html-proofer
   - jekyll
 qrcode:
