@@ -30,6 +30,72 @@ DEPENDANT_PLUGINS = %w[
 # website's plugins are refreshed if breaking changes are introduced.
 DEPENDANT_SITES = %w[msp scalaCourses2].freeze
 
+def check_and_execute(&commands)
+  return if prevent_unreleased_versions
+  return unless commands
+
+  puts "\nExecuting commands in each project".green
+  execute_in_each_project(gemspecs { commands })
+end
+
+# Warns user of any jekyll_plugin_support projects that need to be released
+# @param gemspecs[String] points to checked out git code for a jekyll_support_plugin
+# @return truthy (symbol or string) indicating any problem that was found, otherwise falsey (nil)
+def check_gem_versions(gemspecs)
+  problem = nil
+  gemspecs.each do |gemspec_file|
+    # puts "Processing #{gemspec_file}".yellow
+    spec = load_gemspec gemspec_file
+    # puts "spec=#{spec}".yellow
+    this_version = spec&.version.to_s || '0'
+    dir = File.dirname gemspec_file
+    gem_name = File.basename gemspec_file, '.*'
+    Dir.chdir(dir) do
+      next unless /add_dependency ('|")jekyll_plugin_support('|")/.match?(File.read(gemspec_file))
+
+      puts "Checking #{gem_name} in #{dir}".green
+
+      latest_version = latest_gem_version gem_name
+      exit 2 unless $CHILD_STATUS.success?
+      # puts "The latest version of #{gem_name} is #{latest_version}"
+
+      if latest_version.to_s == '0'
+        puts "#{gem_name} has no releases".yellow
+        problem = :no_releases
+      elsif this_version != latest_version
+        msg = ' -- Run rake release' if latest_version < this_version
+        puts "#{gem_name} has this_version=#{this_version}, latest_version=#{latest_version}#{msg}".red
+        problem = :mismatched_versions
+      end
+    rescue StandardError => e
+      puts "\n#{e.message}\n".red
+      problem = e.message
+    end
+  end
+  problem
+end
+
+def do_everything
+  check_and_execute { @commands }
+end
+
+def execute(command)
+  puts "Executing #{command}".yellow
+  puts `#{command}`
+  return if $CHILD_STATUS.success?
+
+  puts "Error: '#{command}' returned #{$CHILD_STATUS}".red
+  exit 1
+end
+
+def execute_in_each_project(gemspecs, &block)
+  gemspecs.each do |gemspec|
+    dir = File.dirname gemspec
+    # puts "Entering #{dir}".green
+    Dir.chdir dir, &block
+  end
+end
+
 # Searches pwd for files matching name_pattern.
 # Skips .git/, /.bundle/ and /spec/ directories
 # @return array of file path strings
@@ -70,12 +136,6 @@ def find_gemspec(file)
   end
 end
 
-def load_gemspec(file)
-  return nil unless File.exist? file
-
-  Gem::Specification.load file
-end
-
 # The VSCode ruby debugger does not work for the "gem list" command
 def latest_gem_version(gem_name)
   output = `gem list -r #{gem_name} 2>/dev/null`
@@ -83,58 +143,10 @@ def latest_gem_version(gem_name)
   x ? x.split(',').first : 0
 end
 
-# Warns user of any jekyll_plugin_support projects that need to be released
-# @param gemspecs[String] points to checked out git code for a jekyll_support_plugin
-# @return truthy (symbol or string) indicating any problem that was found, otherwise falsey (nil)
-def check_gem_versions(gemspecs)
-  problem = nil
-  gemspecs.each do |gemspec_file|
-    # puts "Processing #{gemspec_file}".yellow
-    spec = load_gemspec gemspec_file
-    # puts "spec=#{spec}".yellow
-    this_version = spec&.version.to_s || '0'
-    dir = File.dirname gemspec_file
-    gem_name = File.basename gemspec_file, '.*'
-    Dir.chdir(dir) do
-      next unless /add_dependency ('|")jekyll_plugin_support('|")/.match?(File.read(gemspec_file))
+def load_gemspec(file)
+  return nil unless File.exist? file
 
-      puts "Checking #{gem_name} in #{dir}".green
-
-      latest_version = latest_gem_version gem_name
-      exit 2 unless $CHILD_STATUS.success?
-      # puts "The latest version of #{gem_name} is #{latest_version}"
-
-      if latest_version.to_s == '0'
-        puts "#{gem_name} has no releases".yellow
-        problem = :no_releases
-      elsif this_version != latest_version
-        msg = ' -- Run rake release' if latest_version < this_version
-        puts "#{gem_name} has this_version=#{this_version}, latest_version=#{latest_version}#{msg}".red
-        problem = :mismatched_versions
-      end
-    rescue StandardError => e
-      puts "\n#{e.message}\n".red
-      problem = e.message
-    end
-  end
-  problem
-end
-
-def execute(command)
-  puts "Executing #{command}".yellow
-  puts `#{command}`
-  return if $CHILD_STATUS.success?
-
-  puts "Error: '#{command}' returned #{$CHILD_STATUS}".red
-  exit 1
-end
-
-def execute_in_each_project(gemspecs, &block)
-  gemspecs.each do |gemspec|
-    dir = File.dirname gemspec
-    # puts "Entering #{dir}".green
-    Dir.chdir dir, &block
-  end
+  Gem::Specification.load file
 end
 
 # @return truthy (symbol or string) indicating any problem that was found, otherwise falsey (nil)
@@ -151,18 +163,6 @@ def prevent_unreleased_versions
 
   puts "\nChecking for project versions that need to be updated".green
   check_gem_versions gemspecs
-end
-
-def check_and_execute(&commands)
-  return if prevent_unreleased_versions
-  return unless commands
-
-  puts "\nExecuting commands in each project".green
-  execute_in_each_project(gemspecs { commands })
-end
-
-def do_everything
-  check_and_execute { @commands }
 end
 
 ########
