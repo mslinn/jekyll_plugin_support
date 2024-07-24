@@ -30,24 +30,10 @@ DEPENDANT_PLUGINS = %w[
 # website's plugins are refreshed if breaking changes are introduced.
 DEPENDANT_SITES = %w[msp scalaCourses2].freeze
 
-# @param file must be a fully qualified directory name pointing to an installed gem, or within it,
-#             or a file name within an installed gem
-# @return Gem::Specification of gem that file points into,
-# or nil if no gem exists at the given file
-def current_spec(file)
-  return nil unless File.exist? file
-
-  searcher = if Gem::Specification.respond_to?(:find)
-               Gem::Specification
-             elsif Gem.respond_to?(:searcher)
-               Gem.searcher.init_gemspecs
-             end
-
-  searcher&.find do |spec|
-    spec.full_gem_path.start_with? file
-  end
-end
-
+# Searches pwd for files matching name_pattern.
+# Skips .git/, /.bundle/ and /spec/ directories
+# @return array of file path strings
+# Aborts if any error is thrown
 def find_files(name_pattern = '*', pwd = Dir.pwd)
   files = []
   begin
@@ -65,6 +51,25 @@ def find_files(name_pattern = '*', pwd = Dir.pwd)
   files
 end
 
+# See https://www.mslinn.com/ruby/6550-gem-navel.html#self_discovery
+# @param file must be a fully qualified directory name pointing to an installed gem, or within it,
+#             or a file name within an installed gem
+# @return Gem::Specification of gem that file points into,
+# or nil if no installed gem exists at the given file
+def find_gemspec(file)
+  return nil unless File.exist? file
+
+  searcher = if Gem::Specification.respond_to?(:find)
+               Gem::Specification
+             elsif Gem.respond_to?(:searcher)
+               Gem.searcher.init_gemspecs
+             end
+
+  searcher&.find do |spec|
+    spec.full_gem_path.start_with? file
+  end
+end
+
 # The VSCode ruby debugger does not work for the "gem list" command
 def latest_gem_version(gem_name)
   output = `gem list #{gem_name} 2>/dev/null`
@@ -72,12 +77,16 @@ def latest_gem_version(gem_name)
   x ? x.split(',').first : 0
 end
 
+# Warns user of any jekyll_plugin_support projects that need to be released
+# @param gemspecs[String] points to checked out git code for a jekyll_support_plugin
+# @return truthy (symbol or string) indicating any problem that was found, otherwise falsey (nil)
 def check_gem_versions(gemspecs)
+  problem = nil
   gemspecs.each do |gemspec_file|
-    puts gemspec_file.yellow
-    spec = current_spec gemspec_file
-    puts "spec=#{spec}"
-    this_version = spec.version
+    puts "Processing #{gemspec_file}".yellow
+    spec = find_gemspec gemspec_file
+    puts "spec=#{spec}".yellow
+    this_version = spec&.version.to_s || '0'
     dir = File.dirname gemspec_file
     gem_name = File.basename gemspec_file, '.*'
     Dir.chdir(dir) do
@@ -91,16 +100,21 @@ def check_gem_versions(gemspecs)
 
       if latest_version.to_s == '0'
         puts "#{gem_name} has no releases".yellow
+        problem = :no_releases
       elsif this_version != latest_version
         puts "#{gem_name} has this_version=#{this_version}, latest_version=#{latest_version}".red
+        problem = :mismatched_versions
       end
     rescue StandardError => e
       puts "\n#{e.message}\n".red
+      problem = e.message
     end
   end
+  problem
 end
 
 def execute(command)
+  puts "Executing #{command}".yellow
   puts `#{command}`
   return if $CHILD_STATUS.success?
 
@@ -116,24 +130,45 @@ def execute_in_each_project(gemspecs, &block)
   end
 end
 
-search_root = ENV.fetch('my_plugins', nil)
-unless search_root
-  puts 'Error: Environment variable my_plugins is not defined'.red
-  exit 1
+# @return truthy (symbol or string) indicating any problem that was found, otherwise falsey (nil)
+def prevent_unreleased_versions
+  search_root = ENV.fetch('my_plugins', nil)
+  unless search_root
+    puts 'Error: Environment variable my_plugins is not defined'.red
+    exit 1
+  end
+
+  puts 'Finding all Jekyll plugin projects'.green
+  gemspecs = find_files '.*.gemspec', search_root
+  puts "#{gemspecs.count} Jekyll plugin projects found.".green
+
+  puts "\nChecking for project versions that need to be updated".green
+  check_gem_versions gemspecs
 end
 
-puts 'Finding all Jekyll plugin projects'.green
-gemspecs = find_files '.*.gemspec', search_root
-puts "#{gemspecs.count} Jekyll plugin projects found.".green
+def check_and_execute(&commands)
+  return if prevent_unreleased_versions
+  return unless commands
 
-puts "\nChecking for project versions that need to be updated".green
-check_gem_versions gemspecs
-exit
+  puts "\nExecuting commands in each project".green
+  execute_in_each_project(gemspecs { commands })
+end
 
-puts "\nExecuting commands in each project".green
-execute_in_each_project gemspecs do
+def do_everything
+  check_and_execute { @commands }
+end
+
+########
+# Main #
+########
+
+# check # Only verify all modified jekyll_plugin_support gems have been released
+
+@commands = proc do
   # puts 'commit and rake release'
   execute 'pwd'
   # execute 'commit'
   # execute 'rake release'
 end
+
+do_everything
