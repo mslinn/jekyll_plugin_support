@@ -3,6 +3,44 @@
 require 'colorator'
 require 'English'
 require 'find'
+require 'rubygems'
+
+# The following plugins rely on jekyll_plugin_support and should be updated simultanously when breaking changes are introduced.
+DEPENDANT_PLUGINS = %w[
+  jekyll_all_collections
+  jekyll_badge
+  jekyll_draft
+  jekyll_emoji_tag
+  jekyll_flexible_include
+  jekyll_google_translate
+  jekyll_href
+  jekyll_img
+  jekyll_plugin_template
+  jekyll_outline
+  jekyll_pre
+  jekyll_qr_generator
+  jekyll_quote
+  jekyll_reading_time
+  jekyll_run
+  jekyll_video
+].freeze
+
+# @param file must be a fully qualified file name
+# @return Gem::Specification of gem that file points into,
+# or nil if not called from a gem
+def current_spec(file)
+  return nil unless File.file?(file)
+
+  searcher = if Gem::Specification.respond_to?(:find)
+               Gem::Specification
+             elsif Gem.respond_to?(:searcher)
+               Gem.searcher.init_gemspecs
+             end
+
+  searcher&.find do |spec|
+    file.start_with? spec.full_gem_path
+  end
+end
 
 def find_files(name_pattern = '*', pwd = Dir.pwd)
   files = []
@@ -30,6 +68,10 @@ end
 
 def check_gem_versions(gemspecs)
   gemspecs.each do |gemspec_file|
+    puts gemspec_file.yellow
+    spec = current_spec gemspec_file
+    puts "spec=#{spec}"
+    this_version = spec.version
     dir = File.dirname gemspec_file
     gem_name = File.basename gemspec_file, '.*'
     Dir.chdir(dir) do
@@ -41,13 +83,10 @@ def check_gem_versions(gemspecs)
       exit 2 unless $CHILD_STATUS.success?
       # puts "The latest version of #{gem_name} is #{latest_version}"
 
-      `grep -lr 'VERSION = ' lib/**/*.rb`.chomp.split("\n").each do |file|
-        this_version = File.read(file)[/.*VERSION\s*=\s*(?:'|")(.*?)(?:'|")/m, 1]
-        if latest_version.to_s == '0'
-          puts "#{gem_name} has no releases".yellow
-        elsif this_version != latest_version
-          puts "#{gem_name} has this_version=#{this_version}, latest_version=#{latest_version}".red
-        end
+      if latest_version.to_s == '0'
+        puts "#{gem_name} has no releases".yellow
+      elsif this_version != latest_version
+        puts "#{gem_name} has this_version=#{this_version}, latest_version=#{latest_version}".red
       end
     rescue StandardError => e
       puts "\n#{e.message}\n".red
