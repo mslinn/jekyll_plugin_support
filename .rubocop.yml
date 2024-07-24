@@ -53,10 +53,12 @@ Naming/FileName:
 RSpec/ExampleLength:
   Max: 30
 
-RSpec/FilePath:
+RSpec/SpecFilePathFormat:
   Enabled: false
   IgnoreMethods: true
-  SpecSuffixOnly: true
+
+RSpec/SpecFilePathSuffix:
+  Enabled: false
 
 RSpec/IndexedLet:
   Enabled: false

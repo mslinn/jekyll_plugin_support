@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+
+require 'find'
+
+def find_files(name_pattern = '*', pwd = Dir.pwd)
+  files = []
+  begin
+    Find.find(pwd) do |path|
+      Find.prune if path.include?('/.git') || path.include?('/.bundle/')
+      next unless File.file? path
+      next unless /#{name_pattern}/.match?(path)
+
+      files << path
+    end
+  rescue StandardError => e
+    puts e
+    exit 1
+  end
+  files
+end
+
+def execute_in_each_project(gemspecs, &block)
+  gemspecs.each do |gemspec|
+    dir = File.dirname gemspec
+    puts "Entering #{dir}"
+    Dir.chdir dir, &block
+  end
+end
+
+search_root = ENV.fetch('my_plugins', nil)
+unless search_root
+  puts 'Error: Environment variable my_plugins is not defined'
+  exit 1
+end
+
+gemspecs = find_files '.*.gemspec', search_root
+execute_in_each_project gemspecs do
+  puts 'Compare released version to current version'
+end
+execute_in_each_project gemspecs do
+  puts 'commit and rake release'
+  # `commit`
+  # `rake release`
+end
