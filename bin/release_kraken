@@ -5,7 +5,8 @@ require 'English'
 require 'find'
 require 'rubygems'
 
-# The following plugins rely on jekyll_plugin_support and should be updated simultanously when breaking changes are introduced.
+# The following plugins rely on jekyll_plugin_support and should be updated simultanously
+# when breaking changes are introduced.
 DEPENDANT_PLUGINS = %w[
   jekyll_all_collections
   jekyll_badge
@@ -25,11 +26,16 @@ DEPENDANT_PLUGINS = %w[
   jekyll_video
 ].freeze
 
-# @param file must be a fully qualified file name
+# The following websites have plugins that rely on jekyll_plugin_support and should be updated right after the
+# website's plugins are refreshed if breaking changes are introduced.
+DEPENDANT_SITES = %w[msp scalaCourses2].freeze
+
+# @param file must be a fully qualified directory name pointing to an installed gem, or within it,
+#             or a file name within an installed gem
 # @return Gem::Specification of gem that file points into,
-# or nil if not called from a gem
+# or nil if no gem exists at the given file
 def current_spec(file)
-  return nil unless File.file?(file)
+  return nil unless File.exist? file
 
   searcher = if Gem::Specification.respond_to?(:find)
                Gem::Specification
@@ -38,7 +44,7 @@ def current_spec(file)
              end
 
   searcher&.find do |spec|
-    file.start_with? spec.full_gem_path
+    spec.full_gem_path.start_with? file
   end
 end
 
