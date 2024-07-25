@@ -4,7 +4,7 @@ gem 'jekyll', '~> 4.3.3'
 
 group :jekyll_plugins do
   gem 'jekyll_all_collections'
-  gem 'jekyll-assets'
+  gem 'jekyll-assets', git: 'https://github.com/envygeeks/jekyll-assets'
   gem 'jekyll_badge'
   gem 'jekyll_draft'
   gem 'jekyll_emoji_tag'
@@ -24,6 +24,8 @@ group :jekyll_plugins do
   gem 'jekyll-tagging'
   gem 'kramdown'
 end
+
+gem 'rack', '>= 3.1.7', require: false
 
 group :test, :development do
   gem 'debug', '>= 1.0.0', require: false
