@@ -14,7 +14,7 @@ group :jekyll_plugins do
   gem 'jekyll_href', '>= 1.2.10'
   gem 'jekyll_img'
   gem 'jekyll_outline'
-  gem 'jekyll_plugin_support', '>= 0.8.7', path: '../'
+  gem 'jekyll_plugin_support', path: '../'
   gem 'jekyll_pre'
   gem 'jekyll_qr_generator'
   gem 'jekyll_quote'
