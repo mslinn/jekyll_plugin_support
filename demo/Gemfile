@@ -25,8 +25,6 @@ group :jekyll_plugins do
   gem 'kramdown'
 end
 
-gem 'rack', '>= 3.1.7', require: false
-
 group :test, :development do
   gem 'debug', '>= 1.0.0', require: false
   gem 'rake', require: false
