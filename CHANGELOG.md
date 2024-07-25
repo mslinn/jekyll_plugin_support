@@ -1,13 +1,9 @@
 # Change Log
 
-## 0.8.8 / 2024-07-23
+## 0.8.7 / 2024-07-23
 
 * Added the `redef_without_warning` method so tag and block plugins can be subclassed.
 * Put most of the functionality into the `JekyllSupport` module.
-
-
-## 0.8.7 / 2024-07-11
-
 * Made tag and block code more consistent
 
 
