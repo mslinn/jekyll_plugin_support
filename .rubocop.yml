@@ -49,6 +49,7 @@ Metrics/PerceivedComplexity:
 Naming/FileName:
   Exclude:
     - Rakefile
+    - "*.md"
 
 RSpec/ExampleLength:
   Max: 30

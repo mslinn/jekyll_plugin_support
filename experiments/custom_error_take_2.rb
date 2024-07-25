@@ -25,7 +25,7 @@ class CustomError < StandardError
 
   # Make copies of the class attributes as instance variables
   def initialize(msg)
-    super(msg)
+    super
     klass = self.class
     @argument_string = klass.argument_string
     @line_number = klass.line_number
