@@ -6,6 +6,7 @@
 * Moved `warn_short_trace`, `maybe_reraise_error`, `remove_ansi_color`,
 `format_error_message` and `exit_without_stack_trace` into `JekyllSupportError`.
 * Added missing `shared_include.css` and `clippy.svg` to `demo/`.
+* Fixed missing module name when invoking `format_error_message`.
 
 
 ## 1.0.0 / 2024-07-23
