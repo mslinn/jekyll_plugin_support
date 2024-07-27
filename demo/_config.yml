@@ -62,10 +62,9 @@ plugin_loggers:
   SiteHooks: warn
 permalink: "/blog/:year/:month/:day/:title:output_ext"
 plugins: # Use file name of the plugin entry point, not the gem name
-  - jekyll_plugin_logger
+  # - jekyll_plugin_logger
   - flexible_include
-  # - html-proofer
-  - jekyll
+  # - jekyll
 qrcode:
   bg_color: '#666'
   fg_color: black

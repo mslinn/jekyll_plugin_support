@@ -15,6 +15,7 @@
       "name": "Debug custom_error_take_2.rb",
       "request": "launch",
       "script": "experiments/custom_error_take_2.rb",
+      "useBundler": true,
     },
     {
       "args": [
@@ -30,18 +31,20 @@
         "--unpublished"
       ],
       "cwd": "${workspaceRoot}/demo",
-      "debugPort": "0",
+      "debugPort": "45373",
       "name": "Debug Demo",
       "request": "launch",
       "script": "${workspaceRoot}/binstub/jekyll",
       "type": "rdbg",
+      "useBundler": true,
     },
     {
       "debugPort": "0",
       "name": "Debug CallChain",
       "type": "rdbg",
       "request": "launch",
-      "script": "${workspaceRoot}/lib/call_chain.rb"
+      "script": "${workspaceRoot}/lib/call_chain.rb",
+      "useBundler": true,
     },
     {
       "debugPort": "45373",

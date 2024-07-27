@@ -21,7 +21,7 @@ module JekyllSupport
         @die_on_standard_error = @tag_config['die_on_standard_error'] == true
       end
 
-      raise DemoInlineTagError, 'Fall down, go boom.' if @demo_tag_error
+      raise DemoInlineTagError, 'This error is expected.' if @demo_tag_error
 
       _infinity = 1 / 0 if @standard_error
 

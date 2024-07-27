@@ -1,0 +1,35 @@
+.clearfix:after {
+  content:"";
+  display:block;
+  clear:both;
+ }
+
+.outer_posts { }
+
+.posts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  line-height: 170%;
+}
+
+.posts > *:nth-child(odd) {
+  font-family: $mono-font;
+  font-stretch: semi-condensed;
+  font-size: 10pt;
+  width: 120px;
+}
+
+.posts > *:nth-child(even) {
+  margin-bottom: 1em;
+  width: calc(100% - 120px);
+}
+
+.post_title {
+  margin-bottom: 0;
+}
+
+.outer_posts .jps_attribute {
+  display: flex;
+  margin-top: 1.5em;
+}

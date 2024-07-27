@@ -45,8 +45,7 @@ ol li .codeLabel {
   padding-left: 1.75em;
 }
 
-.codeLabel.unselectable,
-div.codeLabel.unselectable > code {
+.codeLabel.unselectable, div.codeLabel.unselectable > code {
   color: yellow;
 }
 
@@ -91,6 +90,12 @@ code.dark {
   background-color: #222;
   padding: 2px;
 }
+
+.dark .bg_yellow,
+.dark .bg_yellow_nopad {
+  color: black;
+}
+
 
 pre.dark .unselectable,
 pre.dark .unselectable > code {

@@ -1,5 +1,13 @@
 # Change Log
 
+
+## 1.0.1 / 2024-07-27
+
+* Moved `warn_short_trace`, `maybe_reraise_error`, `remove_ansi_color`,
+`format_error_message` and `exit_without_stack_trace` into `JekyllSupportError`.
+* Added missing `shared_include.css` and `clippy.svg` to `demo/`.
+
+
 ## 1.0.0 / 2024-07-23
 
 * Added the `redef_without_warning` method so tag and block plugins can be subclassed.

@@ -1,4 +1,4 @@
-module JekyllSupport
+module JekyllSupportError
   attr_reader :logger, :page
 
   # If a Jekyll plugin needs to crash exit, and stop Jekyll, call this method.
@@ -24,13 +24,11 @@ module JekyllSupport
     exec "echo ''"
   end
 
-  # TODO: Delete this
   def format_error_message(message)
     page = " of #{@page['path']}" if @page
     remove_ansi_color "on line #{line_number} (after front matter)#{page}.\n#{message}"
   end
 
-  # TODO: Delete this
   def remove_ansi_color(string)
     string.gsub(/\e\[([;\d]+)?m/, '')
   end

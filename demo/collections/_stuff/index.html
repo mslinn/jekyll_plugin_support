@@ -3,7 +3,7 @@ layout: default
 date: 2024-07-23
 last_modified_at: 2024-07-23
 order: 0
-title: 'All known <span class="code">Jekyll_plugin_support</span> implementations</a>'
+title: 'All known jekyll_plugin_support implementations'
 ---
 {% jekyll_badge align='right' name='jekyll_badge' %}
 
@@ -28,10 +28,12 @@ title: 'All known <span class="code">Jekyll_plugin_support</span> implementation
 
 {% emoji name='smiley' size='3em' %}
 
-{% flexible_include copyButton dark do_not_escape download file='Gemfile' label='Gemfile' highlight='[\w./\-_]*jekyll[\w.\-_]*' number pre %}
+{% flexible_include copyButton dark do_not_escape download number pre
+  file='Gemfile' label='Gemfile' highlight='[\w./\-_]*jekyll[\w.\-_]*'
+%}
 
 {% outline attribution stuff %}
-  0: Section Head 1
-  1000: Section Head 2
-  2000: Section Head 3
+0: Section Head 1
+1000: Section Head 2
+2000: Section Head 3
 {% endoutline %}

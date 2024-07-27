@@ -28,3 +28,21 @@ require_directory "#{__dir__}/generator"
 require_directory "#{__dir__}/helper"
 require_directory "#{__dir__}/jekyll_plugin_support"
 require_directory "#{__dir__}/tag"
+
+module JekyllSupport
+  class JekyllTag
+    include JekyllSupportError
+  end
+
+  class JekyllTagNoArgParsing
+    include JekyllSupportError
+  end
+
+  class JekyllBlock
+    include JekyllSupportError
+  end
+
+  class JekyllBlockNoArgParsing
+    include JekyllSupportError
+  end
+end
