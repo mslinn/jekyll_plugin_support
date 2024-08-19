@@ -34,7 +34,7 @@ module JekyllSupportError
   end
 
   def maybe_reraise_error(error, throw_error: true)
-    fmsg = JekyllSupport.format_error_message "#{error.class}: #{error.message.strip}"
+    fmsg = format_error_message "#{error.class}: #{error.message.strip}"
     @logger.error { fmsg }
     return "<span class='jekyll_plugin_support_error'>#{fmsg}</span>" unless throw_error
 
