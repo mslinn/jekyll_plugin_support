@@ -21,13 +21,13 @@ module JekyllSupport
         @die_on_standard_error = @tag_config['die_on_standard_error'] == true
       end
 
-      raise DemoInlineTagError, 'This error is expected.' if @demo_tag_error
+      raise DemoInlineTagError, 'This DemoInlineTagError error is expected.' if @demo_tag_error
+      raise StandardError, 'This StandardError error is expected.' if @standard_error
 
-      _infinity = 1 / 0 if @standard_error
+      # _infinity = 1 / 0 if @standard_error # Not required
 
       output
     rescue DemoInlineTagError => e # jekyll_plugin_support handles StandardError
-      e.shorten_backtrace
       @logger.error e.logger_message
       raise e if @die_on_demo_tag_error
 

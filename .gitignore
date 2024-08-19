@@ -18,6 +18,7 @@
 .yardoc
 .yardoc/
 /spec/reports/
+/demo/assets/images/qrcodes/
 Gemfile.lock
 Notepad++/
 RUNNING_PID

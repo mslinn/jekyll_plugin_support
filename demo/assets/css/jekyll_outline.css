@@ -14,7 +14,7 @@
 }
 
 .posts > *:nth-child(odd) {
-  font-family: $mono-font;
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
   font-stretch: semi-condensed;
   font-size: 10pt;
   width: 120px;

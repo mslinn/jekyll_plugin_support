@@ -7,23 +7,23 @@ module JekyllSupport
   class SubclassTag < JekyllSupport::DemoTag
     def render_impl
       @magic_word = @helper.parameter_specified? 'magic_word'
-      @demo_tag_error = @helper.parameter_specified? 'raise_subclass_demo_tag_error'
+      @subclass_tag_error = @helper.parameter_specified? 'raise_subclass_subclass_tag_error'
       @standard_error = @helper.parameter_specified? 'raise_standard_error'
 
       if @tag_config
-        @die_on_demo_tag_error = @tag_config['die_on_demo_tag_error'] == true
+        @die_on_subclass_subclass_tag_error = @tag_config['die_on_subclass_subclass_tag_error'] == true
         @die_on_standard_error = @tag_config['die_on_standard_error'] == true
       end
 
-      raise SubclassDemoInlineTagError, 'Fall down, go boom.' if @demo_tag_error
+      raise SubclassDemoInlineTagError, 'This SubclassDemoInlineTagError error is expected.' if @subclass_tag_error
+      raise StandardError, 'This StandardError error is expected.' if @standard_error
 
-      _infinity = 1 / 0 if @standard_error
+      # _infinity = 1 / 0 if @standard_error # Not required
 
       output
     rescue SubclassDemoInlineTagError => e
-      e.shorten_backtrace
       @logger.error e.logger_message
-      raise e if @die_on_subclass_demo_tag_error
+      raise e if @die_on_subclass_subclass_tag_error
 
       e.html_message
     end

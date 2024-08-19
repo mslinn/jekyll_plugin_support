@@ -12,10 +12,9 @@ default_layout_var: set_in_default_layout_front_matter
   {% capture description %}{{ page.description | default: page.title | default: page.subtitle }}{% endcapture %}
   {% capture page.title %}{{ page.title | default: page.subtitle }}{% endcapture %}
   {% assign nowMillis = site.time | date: '%s' %}
-  <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: nowMillis }}" type="text/css">
+  <link rel="stylesheet" href="{{ '/assets/css/jekyll_plugin_support.css?v=' | append: nowMillis }}" type="text/css">
   <link rel="stylesheet" href="{{ '/assets/css/jekyll_badge.css?v=' | append: nowMillis }}" type="text/css">
   <link rel="stylesheet" href="{{ '/assets/css/jekyll_draft.css?v=' | append: nowMillis }}" type="text/css">
-  <link rel="stylesheet" href="{{ '/assets/css/jekyll_plugin_support.css?v=' | append: nowMillis }}" type="text/css">
   <link rel="stylesheet" href="{{ '/assets/css/jekyll_flexible_include.css?v=' | append: nowMillis }}" type="text/css">
   <link rel="stylesheet" href="{{ '/assets/css/jekyll_google_translate.css?v=' | append: nowMillis }}" type="text/css">
   <link rel="stylesheet" href="{{ '/assets/css/jekyll_href.css?v=' | append: nowMillis }}" type="text/css">
@@ -25,6 +24,8 @@ default_layout_var: set_in_default_layout_front_matter
   <link rel="stylesheet" href="{{ '/assets/css/shared_include_pre.css?v=' | append: nowMillis }}" type="text/css">
   <link rel="stylesheet" href="{{ '/assets/css/jekyll_quote.css?v=' | append: nowMillis }}" type="text/css">
   <link rel="stylesheet" href="{{ '/assets/css/jekyll_qr_generator.css?v=' | append: nowMillis }}" type="text/css">
+  <link rel="stylesheet" href="{{ '/assets/css/demo.css?v=' | append: nowMillis }}" type="text/css">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: nowMillis }}" type="text/css">
   <link rel="icon" type="image/png" href="/assets/images/favicon.png">
   <!--[if lt IE 9]>
   <script defer src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>

@@ -23,8 +23,7 @@ module JekyllSupport
     # @return HTML <div> tag with class set to the snake_case version of the error class name.
     def html_message
       shorten_backtrace
-      line_number = self.class.class_variable_get :@@line_number
-      path = self.class.class_variable_get :@@path
+      path, line_number, _caller = backtrace[1].split(':')
       <<~END_MSG
         <div class='#{error_name.snakecase}'>
           #{self.class} raised in #{calling_file} while processing line #{line_number} (after front matter) of #{path}
@@ -36,8 +35,7 @@ module JekyllSupport
     def logger_message
       shorten_backtrace
       kaller = caller(1..1).first
-      line_number = self.class.class_variable_get :@@line_number
-      path = self.class.class_variable_get :@@path
+      path, line_number, _caller = backtrace[1].split(':')
       <<~END_MSG
         #{error_name} raised in #{kaller} while processing line #{line_number} (after front matter) of #{path}
           #{message}
