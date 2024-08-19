@@ -1,6 +1,22 @@
 # Change Log
 
 
+## 1.0.2 / 2024-08-19
+
+* Computes line_number and path properly
+* Refactored demo CSS
+* Improved custom plugin error handling and sample code.
+  The following seems to be optimal for custom plugins; it suppresses the ridiculously long stack trace that used to be generated:
+
+   ```ruby
+    rescue DemoInlineTagError => e # jekyll_plugin_support handles StandardError
+      @logger.error e.logger_message
+      exit! 1 if @die_on_demo_tag_error
+
+      e.html_message
+    ```
+
+
 ## 1.0.1 / 2024-07-27
 
 * Moved `warn_short_trace`, `maybe_reraise_error`, `remove_ansi_color`,

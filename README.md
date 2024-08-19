@@ -466,9 +466,8 @@ class DemoBlock < JekyllSupport::JekyllBlock
   def render_impl(text)
     raise DemoBlockTagError, 'Fall down, go boom.'
   rescue DemoBlockTagError => e
-    e.shorten_backtrace
     @logger.error e.logger_message
-    raise e if @die_on_demo_block_error
+    exit! 1 if @die_on_demo_block_error
 
     e.html_message
   end

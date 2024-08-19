@@ -29,7 +29,7 @@ module JekyllSupport
       output text
     rescue DemoBlockTagError => e # jekyll_plugin_support handles StandardError
       @logger.error e.logger_message
-      raise e if @die_on_demo_block_error
+      exit! 1 if @die_on_demo_block_error
 
       e.html_message
     end

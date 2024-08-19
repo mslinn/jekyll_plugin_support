@@ -2,7 +2,6 @@ author: Mike Slinn
 collections:
   stuff:
     output: true
-    relative_directory: _stuff
     sort_by: order
 collections_dir: collections
 compress_html:
