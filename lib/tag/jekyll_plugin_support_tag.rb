@@ -70,7 +70,7 @@ module JekyllSupport
 
       <<~END_MSG
         <div class='standard_error'>
-          #{e.class} on line #{@line_number} of #{e.backtrace[0].split(':').first} while processing #{tag_name}: #{e.message}
+          #{e.class} on line #{@line_number} #{of_page}while processing #{tag_name} #{in_file_name} - #{e.message}
         </div>
       END_MSG
     end
