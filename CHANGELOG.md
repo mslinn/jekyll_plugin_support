@@ -1,6 +1,11 @@
 # Change Log
 
 
+## 1.0.3 / 2024-08-19
+
+* Still fussing with error handling
+
+
 ## 1.0.2 / 2024-08-19
 
 * Computes line_number and path properly
