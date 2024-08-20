@@ -22,7 +22,7 @@ module JekyllSupport
 
       output
     rescue SubclassDemoInlineTagError => e
-      @logger.error e.logger_message
+      @logger.error { e.logger_message }
       exit! 1 if @die_on_subclass_subclass_tag_error
 
       e.html_message
