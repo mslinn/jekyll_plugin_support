@@ -34,6 +34,8 @@
 
 .jps_attribute {
   display: flex;
+  margin-bottom: 2em;
+  margin-top: 2em;
 }
 
 .jps_attribute div {
