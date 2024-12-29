@@ -444,6 +444,24 @@ Similarly, the letters `y` and `z` are pronounced {{y}} and {{z}}.
 ```
 
 
+### Evaluating Include Variables
+
+While Liquid handles regular variables, Jekyll has special handling for variables defined by include parameters.
+For example, the following defines a variable in the `include` scope called `var1`
+when processing the body of an included file:
+
+```html
+{% include myfile.html var1='value1' %}
+```
+
+You can obtain the value of this variable from the `render_impl` method of a
+`JekyllSupport::JekyllTag` or `JekyllSupport::JekyllBlock` subclass as follows:
+
+```ruby
+  @var1 = @scopes.first['include']&.[]('var1')
+```
+
+
 ### Automatically Created Error Classes
 
 `JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag` subclasses
