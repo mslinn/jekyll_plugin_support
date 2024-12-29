@@ -446,6 +446,8 @@ Similarly, the letters `y` and `z` are pronounced {{y}} and {{z}}.
 
 ### Evaluating Include Variables
 
+This information is only useful if a plugin might be executed from within an included file.
+
 While Liquid handles regular variables, Jekyll has special handling for variables defined by include parameters.
 For example, the following defines a variable in the `include` scope called `var1`
 when processing the body of an included file:
