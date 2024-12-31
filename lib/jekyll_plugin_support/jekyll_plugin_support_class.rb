@@ -109,9 +109,18 @@ module JekyllSupport
     # Process assigned, captured and injected variables
     liquid_context.scopes.each do |scope|
       scope&.each do |name, value|
-        markup.gsub!("{{#{name}}}", value.to_s)
+        markup.gsub!("{{#{name}}}", value&.to_s)
+        next unless scope.key?('include')
+
+        # Process include variables
+        scope['include'].each do |include_scope|
+          include_scope.each do |include_name, include_value|
+            markup.gsub!("{{#{include_name}}}", include_value&.include_value.to_s)
+          end
+        end
       end
     end
+
     markup
   end
 

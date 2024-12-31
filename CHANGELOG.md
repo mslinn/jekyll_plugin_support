@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.1.0 / 2024-12-31
+
+* Now replaces include variables with their values
+
 
 ## 1.0.3 / 2024-08-19
 
