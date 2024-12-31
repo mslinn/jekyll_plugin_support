@@ -87,7 +87,7 @@ module JekyllSupport
   # @return modified markup_original
   def self.lookup_liquid_variables(liquid_context, markup_original)
     markup = markup_original.clone
-    page = liquid_context.registers[:page]
+    page   = liquid_context.registers[:page]
     envs   = liquid_context.environments.first
     layout = envs[:layout]
 
@@ -112,10 +112,17 @@ module JekyllSupport
         markup.gsub!("{{#{name}}}", value&.to_s)
         next unless scope.key?('include')
 
+        # Process layout variables
+        scope['layout'].each do |layout_scope|
+          layout_scope.each do |layout_name, layout_value|
+            markup.gsub!("{{#{layout_name}}}", layout_value&.to_s)
+          end
+        end
+
         # Process include variables
         scope['include'].each do |include_scope|
           include_scope.each do |include_name, include_value|
-            markup.gsub!("{{#{include_name}}}", include_value&.include_value.to_s)
+            markup.gsub!("{{#{include_name}}}", include_value&.to_s)
           end
         end
       end
