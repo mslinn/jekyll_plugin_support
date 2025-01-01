@@ -39,7 +39,7 @@ module JekyllSupport
     END_MSG
   end
 
-  # Add variable definitions from _config.yml to liquid_context
+  # Inject variable definitions from _config.yml into liquid_context
   # Modifies liquid_context.scopes in the caller
   # (call by object reference, see https://stackoverflow.com/a/1872159/553865)
   # @return modified liquid_context
@@ -89,7 +89,7 @@ module JekyllSupport
     envs   = liquid_context.environments.first
     layout = envs[:layout]
 
-    # process layout variables
+    # Process layout variables
     layout&.each do |name, value|
       if value.nil?
         value = ''
@@ -98,13 +98,9 @@ module JekyllSupport
       markup.gsub!("{{layout.#{name}}}", value.to_s)
     end
 
-    # process page variables
-    # puts "\nStarting page variable processing of #{page['path']}; stack has #{caller.length} elements".green
-    keys = page.keys
-    %w[excerpt output].each { |key| keys.delete key }
-    # puts "  Filtered keys: #{keys.join ' '}"
-    # keys.each { |key| puts "  #{key}: #{page[key]}" }
-    keys&.each do |key|
+    # Process page variables
+    %w[excerpt output].each { |key| page.keys.delete key } # Eliminate problem attributes
+    page&.each_key do |key|
       markup.gsub!("{{page.#{key}}}", page[key].to_s)
     end
 

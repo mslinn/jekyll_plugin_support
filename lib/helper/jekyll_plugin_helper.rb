@@ -23,7 +23,7 @@ module JekyllSupport
       @tag_name = tag_name
       @logger = logger
       @no_arg_parsing = no_arg_parsing
-      @markup = markup
+      @argument_string = markup
     rescue StandardError => e
       e.shorten_backtrace
       @logger.error { e.message }
@@ -42,7 +42,7 @@ module JekyllSupport
 
     def reinitialize(markup)
       # @keys_values was a Hash[Symbol, String|Boolean] but now it is Hash[String, String|Boolean]
-      @markup = markup
+      @argument_string = markup
       if @no_arg_parsing
         define_singleton_method(:argv) { warn_fetch :argv }
         define_singleton_method(:keys_values) { warn_fetch :keys_values }

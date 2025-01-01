@@ -3,6 +3,7 @@
 ## 1.1.0 / 2024-12-31
 
 * Now replaces include and layout variables with their values
+* Renamed @helper.markup to @helper.argument_string
 
 
 ## 1.0.3 / 2024-08-19

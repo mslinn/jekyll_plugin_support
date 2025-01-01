@@ -9,18 +9,26 @@ module JekyllSupport
     # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
     # @param tag_name [String] the name of the tag, which we usually know.
     # @param argument_string [String] the arguments passed to the tag, as a single string.
-    # @param parse_context [Liquid::ParseContext] hash that stores Liquid options.
-    #        By default it has two keys: :locale and :line_numbers, the first is a Liquid::I18n object, and the second,
-    #        a boolean parameter that determines if error messages should display the line number the error occurred.
-    #        This argument is used mostly to display localized error messages on Liquid built-in Tags and Filters.
-    #        See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
+    # @param parse_context [Liquid::ParseContext] contains the following attributes:
+    #        @depth might have the value 0
+    #        @error_mode might have the value `:strict`
+    #        @line_number duplicates @ptions[:line_number]
+    #        @locale duplicates @ptions[:locale]
+    #        @options is a hash with the following two keys that holds Liquid options:
+    #          :locale is a Liquid::I18n object, used to display localized error messages on Liquid built-in tags and filters.
+    #          :line_number is the line number containing the plugin invocation.
+    #          See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
+    #        @partial Boolean, unclear what this indicates
+    #        @template_options Replicates @options
+    #        @trim_whitespace might have the value `false`
+    #        @warnings array
     # @return [void]
     def initialize(tag_name, markup, parse_context)
       super
       @tag_name = tag_name
       raise JekyllPluginSupportError, "markup is a #{markup.class} with value '#{markup}'." unless markup.instance_of? String
 
-      @argument_string = markup
+      @argument_string = markup # Lookup variable names with values in markup in render because site and config are not available here
       @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
       @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
       @helper = JekyllPluginHelper.new(tag_name, @argument_string, @logger, respond_to?(:no_arg_parsing))
@@ -33,7 +41,7 @@ module JekyllSupport
     def render(liquid_context)
       return if @helper.excerpt_caller
 
-      @helper.liquid_context = JekyllSupport.inject_config_vars liquid_context
+      @helper.liquid_context = JekyllSupport.inject_config_vars liquid_context # modifies liquid_context
 
       @envs      = liquid_context.environments.first
       @page      = liquid_context.registers[:page]
