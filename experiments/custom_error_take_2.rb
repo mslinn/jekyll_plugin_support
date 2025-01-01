@@ -70,11 +70,11 @@ begin
   raise CError, 'asdf'
 rescue CError => e
   puts "The class variables of #{e.class.name} are:"
-  e.class.instance_variables.each do |name|
+  e.class.instance_variables&.each do |name|
     puts "  #{name}=#{e.class.instance_variable_get name}"
   end
   puts "The instance variables of #{e.class.name} are:"
-  e.instance_variables.each do |name|
+  e.instance_variables&.each do |name|
     puts "  #{name}=#{e.instance_variable_get name}"
   end
   puts <<~END_MSG

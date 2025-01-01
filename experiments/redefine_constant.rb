@@ -11,7 +11,7 @@ module ModuleExploration
   puts
   puts "const_defined?(:PLUGIN_NAME) = #{const_defined?(:PLUGIN_NAME)}"
   puts "self.class.const_defined?(:PLUGIN_NAME) = #{self.class.const_defined?(:PLUGIN_NAME)}"
-  puts "Module.nesting.any? { |m| m.const_defined?(:PLUGIN_NAME) } = #{Module.nesting.any? { |m| m.const_defined?(:PLUGIN_NAME) }}"
+  puts "Module.nesting&.any? { |m| m.const_defined?(:PLUGIN_NAME) } = #{Module.nesting&.any? { |m| m.const_defined?(:PLUGIN_NAME) }}"
   puts "Object.const_defined?(:PLUGIN_NAME) = #{Object.const_defined?(:PLUGIN_NAME)}"
   puts
 

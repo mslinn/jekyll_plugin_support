@@ -40,22 +40,20 @@ module JekyllSupport
   end
 
   # Add variable definitions from _config.yml to liquid_context
-  # Modifies liquid_context in the caller
+  # Modifies liquid_context.scopes in the caller
   # (call by object reference, see https://stackoverflow.com/a/1872159/553865)
   # @return modified liquid_context
   # See README.md#configuration-variable-definitions
   # See demo/variables.html
-  def self.inject_vars(_logger, liquid_context)
-    # TODO: Modify a deep clone? Do I dare?
+  def self.inject_config_vars(liquid_context)
     site = liquid_context.registers[:site]
 
     plugin_variables = site.config['liquid_vars']
-    return liquid_context unless plugin_variables
 
     scope = liquid_context.scopes.last
 
     env = site.config['env']
-    mode = env&.key?('JEKYLL_ENV') ? env['JEKYLL_ENV'] : 'development'
+    @mode = env&.key?('JEKYLL_ENV') ? env['JEKYLL_ENV'] : 'development'
 
     # Set default values
     plugin_variables&.each do |name, value|
@@ -63,7 +61,7 @@ module JekyllSupport
     end
 
     # Override with environment-specific values
-    plugin_variables[mode]&.each do |name, value|
+    plugin_variables[@mode]&.each do |name, value|
       scope[name] = value if value.instance_of? String
     end
 
@@ -85,7 +83,7 @@ module JekyllSupport
   # Modifies a clone of markup_original so variable references are replaced by their values
   # @param markup_original to be cloned
   # @return modified markup_original
-  def self.lookup_liquid_variables(liquid_context, markup_original)
+  def self.lookup_liquid_variables(logger, liquid_context, markup_original)
     markup = markup_original.clone
     page   = liquid_context.registers[:page]
     envs   = liquid_context.environments.first
@@ -93,6 +91,10 @@ module JekyllSupport
 
     # process layout variables
     layout&.each do |name, value|
+      if value.nil?
+        value = ''
+        logger.warn { "layout.#{value} is undefined." }
+      end
       markup.gsub!("{{layout.#{name}}}", value.to_s)
     end
 
@@ -107,23 +109,18 @@ module JekyllSupport
     end
 
     # Process assigned, captured and injected variables
-    liquid_context.scopes.each do |scope|
+    liquid_context.scopes&.each do |scope|
       scope&.each do |name, value|
         markup.gsub!("{{#{name}}}", value&.to_s)
         next unless scope.key?('include')
 
-        # Process layout variables
-        scope['layout'].each do |layout_scope|
-          layout_scope.each do |layout_name, layout_value|
-            markup.gsub!("{{#{layout_name}}}", layout_value&.to_s)
-          end
-        end
-
         # Process include variables
-        scope['include'].each do |include_scope|
-          include_scope.each do |include_name, include_value|
-            markup.gsub!("{{#{include_name}}}", include_value&.to_s)
+        scope['include']&.each do |include_name, include_value|
+          if include_value.nil?
+            include_value = ''
+            logger.warn { "include.#{include_name} is undefined." }
           end
+          markup.gsub!("{{include.#{include_name}}}", include_value)
         end
       end
     end

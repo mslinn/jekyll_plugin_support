@@ -3,11 +3,12 @@ This is include a.html; page.param_1={{page.param_1}}; include.param_1={{include
 Unqualified param_1={{param_1}}
 
 Assigning param_1 a value.
-{% assign param_1 = 'param_1_set_in_include_a.html' %}Unqualified param_1={{param_1}}
+{% assign param_1 = 'param_1_set_in_include_a.html' %}
+Unqualified param_1={{param_1}}
 {% include_test_plugin %}
 
 Now include b.html while passing param_1 with another value.
-{% include b.html param_1 = 'param_1_passed_by_include_a.html' %}
+{% include b.html param_1='param_1_passed_by_include_a.html' %}
 Back in include a.html.
 Unqualified param_1={{param_1}}
 {% include_test_plugin %}

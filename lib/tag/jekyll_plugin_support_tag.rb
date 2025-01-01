@@ -33,7 +33,7 @@ module JekyllSupport
     def render(liquid_context)
       return if @helper.excerpt_caller
 
-      @helper.liquid_context = JekyllSupport.inject_vars @logger, liquid_context
+      @helper.liquid_context = JekyllSupport.inject_config_vars liquid_context
 
       @envs      = liquid_context.environments.first
       @page      = liquid_context.registers[:page]
@@ -55,8 +55,9 @@ module JekyllSupport
       env = @config['env']
       @mode = env&.key?('JEKYLL_ENV') ? env['JEKYLL_ENV'] : 'development'
 
-      markup = JekyllSupport.lookup_liquid_variables liquid_context, @argument_string
-      @helper.reinitialize markup.strip
+      @argument_string = JekyllSupport.lookup_liquid_variables @logger, @helper.liquid_context, @argument_string
+      @argument_string.strip!
+      @helper.reinitialize @argument_string
 
       render_impl
     rescue StandardError => e

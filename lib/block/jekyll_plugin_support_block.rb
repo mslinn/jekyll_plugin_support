@@ -36,7 +36,7 @@ module JekyllSupport
     # Defines @config, @envs, @mode, @page and @site
     # @return [String]
     def render(liquid_context)
-      @helper.liquid_context = JekyllSupport.inject_vars @logger, liquid_context
+      @helper.liquid_context = JekyllSupport.inject_config_vars liquid_context
       text = super # Liquid variable values in content are looked up and substituted
 
       @envs      = liquid_context.environments.first
@@ -58,13 +58,15 @@ module JekyllSupport
       env = @config['env']
       @mode = env&.key?('JEKYLL_ENV') ? env['JEKYLL_ENV'] : 'development'
 
+      @markup = JekyllSupport.lookup_liquid_variables @logger, liquid_context, @markup.strip
       @helper.reinitialize @markup.strip
 
       @attribution = @helper.parameter_specified?('attribution') || false unless @no_arg_parsing
       @logger.debug { "@keys_values='#{@keys_values}'" }
 
-      markup = JekyllSupport.lookup_liquid_variables liquid_context, @argument_string
-      @helper.reinitialize markup
+      @argument_string = JekyllSupport.lookup_liquid_variables @logger, liquid_context, @argument_string
+      @argument_string.strip!
+      @helper.reinitialize @argument_string
 
       render_impl(text)
     rescue StandardError => e

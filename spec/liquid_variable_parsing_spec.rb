@@ -8,12 +8,12 @@ class LiquidVariableParsing
   def variable_replace(str, scopes)
     result = str.clone
     match_data_list = str.to_enum(:scan, /{{[a-z_][a-zA-Z_0-9]*}}/).map { Regexp.last_match }.reverse
-    match_data_list.each do |md|
+    match_data_list&.each do |md|
       from = md.begin(0)
       to = md.end(0) - 1
       ref = str[from..to]
       name = ref[2..-3]
-      scopes.each do |scope|
+      scopes&.each do |scope|
         value = scope.key?(name) ? scope[name] : ref
         # puts "str=#{str}; from=#{from}; to=#{to}; name=#{name} value=#{value}"
         result[from..to] = value
