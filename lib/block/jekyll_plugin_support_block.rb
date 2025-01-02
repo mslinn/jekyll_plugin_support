@@ -50,7 +50,7 @@ module JekyllSupport
       text = super # Liquid variable values in content are looked up and substituted
 
       @envs      = liquid_context.environments.first
-      @page      = liquid_context.registers[:page] # hash
+      @page      = liquid_context.registers[:page]
       @scopes    = liquid_context.scopes
       @site      = liquid_context.registers[:site]
 
@@ -61,6 +61,7 @@ module JekyllSupport
 
       set_error_context
 
+      # @envs.keys are :content, :highlighter_prefix, :highlighter_suffix, :jekyll, :layout, :page, :paginator, :site, :theme
       @layout    = @envs[:layout]
       @paginator = @envs[:paginator]
       @theme     = @envs[:theme]
@@ -68,7 +69,7 @@ module JekyllSupport
       env = @config['env']
       @mode = env&.key?('JEKYLL_ENV') ? env['JEKYLL_ENV'] : 'development'
 
-      @argument_string = JekyllSupport.lookup_liquid_variables @logger, liquid_context, @argument_string.strip
+      @argument_string = JekyllSupport.lookup_liquid_variables @logger, liquid_context, @argument_string.to_s.strip
       @helper.reinitialize @argument_string.strip
 
       @attribution = @helper.parameter_specified?('attribution') || false unless @no_arg_parsing
