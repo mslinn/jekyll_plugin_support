@@ -64,7 +64,7 @@ module JekyllSupport
       @mode = env&.key?('JEKYLL_ENV') ? env['JEKYLL_ENV'] : 'development'
 
       @argument_string = JekyllSupport.lookup_liquid_variables @logger, @helper.liquid_context, @argument_string.to_s.strip
-      @helper.reinitialize @argument_string.strip
+      @helper.reinitialize @argument_string.to_s.strip
 
       # @argument_string = JekyllSupport.lookup_liquid_variables @logger, liquid_context, @argument_string # Is this redundant?
       # @argument_string.strip! # Is this redundant?

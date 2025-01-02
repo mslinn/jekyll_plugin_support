@@ -69,15 +69,15 @@ module JekyllSupport
       env = @config['env']
       @mode = env&.key?('JEKYLL_ENV') ? env['JEKYLL_ENV'] : 'development'
 
-      @argument_string = JekyllSupport.lookup_liquid_variables @logger, liquid_context, @argument_string.to_s.strip
-      @helper.reinitialize @argument_string.strip
+      @argument_string = JekyllSupport.lookup_liquid_variables @logger, @helper.liquid_context, @argument_string.to_s.strip
+      @helper.reinitialize @argument_string.to_s.strip
 
       @attribution = @helper.parameter_specified?('attribution') || false unless @no_arg_parsing
       @logger.debug { "@keys_values='#{@keys_values}'" }
 
-      @argument_string = JekyllSupport.lookup_liquid_variables @logger, liquid_context, @argument_string
-      @argument_string.strip!
-      @helper.reinitialize @argument_string
+      # @argument_string = JekyllSupport.lookup_liquid_variables @logger, liquid_context, @argument_string # Is this redundant?
+      # @argument_string.strip! # Is this redundant?
+      # @helper.reinitialize @argument_string # Is this redundant?
 
       render_impl(text)
     rescue StandardError => e
