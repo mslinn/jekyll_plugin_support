@@ -89,7 +89,31 @@ module JekyllSupport
     envs   = liquid_context.environments.first
     layout = envs[:layout]
 
-    # Process layout variables
+    markup = process_layout_variables logger, layout, markup
+    markup = process_page_variables logger, page, markup
+    liquid_context.scopes&.each do |scope|
+      markup = process_included_variables logger, scope, markup
+      markup = process_liquid_variables logger, scope, markup
+    end
+    markup
+  rescue StandardError => e
+    logger.error { e.full_message }
+  end
+
+  def self.process_included_variables(logger, scope, markup)
+    scope['include']&.each do |name, value|
+      if value.nil?
+        value = ''
+        logger.warn { "include.#{name} is undefined." }
+      end
+      markup.gsub!("{{include.#{name}}}", value)
+    end
+    markup
+  rescue StandardError => e
+    logger.error { e.full_message }
+  end
+
+  def self.process_layout_variables(logger, layout, markup)
     layout&.each do |name, value|
       if value.nil?
         value = ''
@@ -97,31 +121,33 @@ module JekyllSupport
       end
       markup.gsub!("{{layout.#{name}}}", value.to_s)
     end
+    markup
+  rescue StandardError => e
+    logger.error { e.full_message }
+  end
 
-    # Process page variables
-    %w[excerpt output].each { |key| page.keys.delete key } # Eliminate problem attributes
+  # Process assigned, captured and injected variables
+  def self.process_liquid_variables(logger, scope, markup)
+    scope&.each do |name, value|
+      next if name.nil?
+
+      markup.gsub!("{{#{name}}}", value&.to_s)
+      next unless scope.key?('include')
+    end
+    markup
+  rescue StandardError => e
+    logger.error { e.full_message }
+  end
+
+  def self.process_page_variables(logger, page, markup)
     page&.each_key do |key|
+      next if %w[content excerpt next previous output].include? key # Skip problem attributes
+
       markup.gsub!("{{page.#{key}}}", page[key].to_s)
     end
-
-    # Process assigned, captured and injected variables
-    liquid_context.scopes&.each do |scope|
-      scope&.each do |name, value|
-        markup.gsub!("{{#{name}}}", value&.to_s)
-        next unless scope.key?('include')
-
-        # Process include variables
-        scope['include']&.each do |include_name, include_value|
-          if include_value.nil?
-            include_value = ''
-            logger.warn { "include.#{include_name} is undefined." }
-          end
-          markup.gsub!("{{include.#{include_name}}}", include_value)
-        end
-      end
-    end
-
     markup
+  rescue StandardError => e
+    logger.error { e.full_message }
   end
 
   def self.warn_short_trace(logger, error)
