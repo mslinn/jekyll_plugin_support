@@ -132,9 +132,7 @@ module JekyllSupport
       next if name.nil?
 
       value = '' if value.nil?
-
       markup.gsub!("{{#{name}}}", value&.to_s)
-      next unless scope.key?('include')
     end
     markup
   rescue StandardError => e
