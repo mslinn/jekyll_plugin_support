@@ -1,13 +1,17 @@
 # `jekyll_plugin_support` [![Gem Version](https://badge.fury.io/rb/jekyll_plugin_support.svg)](https://badge.fury.io/rb/jekyll_plugin_support)
 
-`Jekyll_plugin_support` is a Ruby gem that provides a framework for writing and testing Jekyll plugins.
+After writing over two dozen Jekyll plugins, I distilled the common code into `Jekyll_plugin_support`.
+This F/OSS Ruby gem facilitates writing and testing Jekyll plugins and handles the standard housekeeping that every Jekyll
+inline and block tag plugin requires.
+Logging, parsing arguments, obtaining references to site and page objects, etc. are all handled.
+The result is faster Jekyll plugin writing with fewer bugs.
 
 `Jekyll_plugin_support` can be used to create simple Jekyll plugins in
 the `_plugins/` directory of your Jekyll project, or gem-based Jekyll plugins.
 
 At present, only Jekyll tags and blocks are supported.
 
-Plugins that use `jekyll_plugin_support` include:
+Public plugins that use `jekyll_plugin_support` include:
 
 <ul style="columns: 2">
   <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_all_collections'><code>jekyll_all_collections</code></a></li>
@@ -33,51 +37,70 @@ Jekyll plugin tags created from `jekyll_plugin_support` framework automatically 
 1. Boilerplate is removed, so you can focus on the required logic and output.
 2. Arguments are parsed for keywords and name/value parameters.
 3. Single or double quotes can be used for arguments and parameters.
-4. Important variables are defined.
+4. Important variables are predefined.
 5. Error handling is standardized, and includes an automatically defined error type
    and corresponding CSS tag for each Jekyll tag.
-6. Liquid variables can be passed as parameters to tags, and used in the body of block tags.
-7. Registration is automatic, and important configuration details are reported during registration.
+6. Jekyll and Liquid variables, including `layout`, `page` and `include` variables,
+   can be passed as parameters to tags, and used in the body of block tags.
+7. Plugin registration is integrated, and important configuration details are reported during registration.
 8. A custom logger is created for each tag, independent of the default Jekyll logger.
 9. Variables can be defined in `_config.yml`, and optionally have different values for debug mode,
    production mode and test mode.
 10. An attribution message is available.
 11. Draft pages are automatically detected.
-
-In addition, a demonstration website is provided for easy testing of your plugins.
+12. A demonstration website is provided for easy testing of every plugin.
+13. Visual Studio Code debugging is set up for the plugin code and the demo website.
+14. Plugins can be subclassed.
+15. [`Nugem`](https://mslinn.com/ruby/6800-nugem.html) can create working scaffolding for new plugins built
+    using `jekyll_plugin_support`.
 
 
 ## Installation
 
+### For A Jekyll Website
+
 `Jekyll_plugin_support` is packaged as a Ruby gem.
-If your project is a custom plugin that will reside in a Jekyll project’s `_plugins` directory,
+If you want to write a custom Jekyll plugin that will reside in a Jekyll project’s `_plugins` directory,
 add the following line to your Jekyll plugin’s `Gemfile`.
 
 ```ruby
 group :jekyll_plugins do
   # ...
-  gem 'jekyll_plugin_support', '>= 0.8.0'
+  gem 'jekyll_plugin_support', '>= 1.1.0'
   # ...
 end
 ```
 
-Otherwise, if your custom plugin will be packaged into a gem, add the following to your plugin’s `.gemspec`:
+Run the standard `jekyll_plugin_support` setup procedure:
+
+```shell
+$ bin/setup
+```
+
+
+### As a Gem Dependency
+
+If your custom plugin will be packaged into a gem, add the following to your plugin’s `.gemspec`:
 
 ```ruby
 Gem::Specification.new do |spec|
   # ...
-  spec.add_dependency 'jekyll_plugin_support', '>= 0.8.0'
+  spec.add_dependency 'jekyll_plugin_support', '>= 1.1.0'
   # ...
 end
 ```
 
-Install the `jekyll_plugin_support` Ruby gem and mark it as a dependency of your project by typing:
+Install the `jekyll_plugin_support` gem into your plugin project in the usual manner:
 
-  ```shell
-  $ bundle
-  ```
+```shell
+$ bundle
+```
 
-Copy the CSS classes from `demo/assets/css/jekyll_plugin_support.css` to your Jekyll project&rsquo;s CSS file.
+Copy the CSS classes from
+[`demo/assets/css/jekyll_plugin_support.css`](demo/assets/css/jekyll_plugin_support.css)
+to your Jekyll project&rsquo;s CSS file.
+
+
 
 
 ## About `jekyll_plugin_support`
@@ -104,13 +127,21 @@ Instead, define a method called `render_impl`.
 For inline tags, `render_impl` does not accept any parameters.
 For block tags, a single parameter is required, which contains text passed from your block in the page.
 
-Your implementation of render_impl can parse parameters passed to the tag / block tag, as described in
+Your implementation of render_impl can parse parameters passed to your tag, as described in
 [Tag Parameter Parsing](http://mslinn.com/jekyll/10100-jekyll-plugin-background.html#params).
+
+In addition, within <code>render_impl</code>,
+the arguments passed to the tag will have been tokenized and parsed,
+with Jekyll and Liquid variables substituted for their values,
+and all the public Jekyll variables will be available as instance variables.
+Error handling will also have been set up,
+and access to your tag's entry within <code>_config.yml</code> will have been set up.
+
 
 
 ## General Usage
 
-Please see the [`demo/`](demo/) project for a well-documented set of demonstration Jekyll plugins that are built from `jekyll_plugin_support`.
+Please see the [`demo/`](demo/) project for a well-documented set of demonstration Jekyll plugins built from `jekyll_plugin_support`.
 Additional information is available [here](https://mslinn.com/jekyll/10200-jekyll-plugin-background.html) and the
 [`jekyll_plugin_support`](https://www.mslinn.com/jekyll_plugins/jekyll_plugin_support.html) documentation.
 
@@ -141,7 +172,7 @@ because both `JekyllSupport` classes define this method.
 
 Instead, define a method called `render_impl`.
 For inline tags, `render_impl` does not accept any parameters.
-For block tags, a single parameter is required, which contains any text enclosed within your block.
+For block tags, a single parameter is required, which receives any text enclosed within your block by the website author.
 
 
 ## Predefined Plugin Variables
@@ -150,10 +181,12 @@ For block tags, a single parameter is required, which contains any text enclosed
 
 * `@argument_string` Unparsed markup passed as a parameter to your block tag and inline tag.
 
+* `@argv` returns any remaining tokens after `parameter_specified?` has been invoked.
+
 * [`@attribution`](#subclass-attribution) Attribution markup
 
 * [`@config`](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll#configuring-jekyll-in-your-github-pages-site)
-  [YAML](https://yaml.org/) Jekyll site configuration file
+  The [YAML](https://yaml.org/) Jekyll site configuration file
 
 * [`@helper`](https://github.com/mslinn/jekyll_plugin_support/blob/master/lib/jekyll_plugin_helper.rb)
   `JekyllPluginHelper` instance for your plugin.
@@ -165,7 +198,7 @@ For block tags, a single parameter is required, which contains any text enclosed
 * [`@mode`](https://jekyllrb.com/docs/configuration/environments/)
   Indicates `production`, `test` or `development` mode.
 
-* [`@page`](https://jekyllrb.com/docs/variables/#page-variables) Page variables
+* [`@page`](https://jekyllrb.com/docs/variables/#page-variables) `Jekyll::Page` variables
 
 * [`@paginator`](https://jekyllrb.com/docs/variables/#page-variables) Pagination variables
 
@@ -322,7 +355,7 @@ call `@helper.remaining_markup` to obtain the remaining markup that was passed t
 
 `jekyll_plugin_support` provides support for
 [Liquid variables](https://shopify.github.io/liquid/tags/variable/)
-to be defined in `_config.yml`, in a section called `liquid-vars`.
+to be defined in `_config.yml`, in a section called `liquid_vars`.
 These variables behave exactly like Liquid variables defined by `assign` and `capture` expressions,
 except they are global in scope; these variables are available in every Jekyll web page.
 
@@ -339,7 +372,7 @@ Liquid variables defined in this manner are intended to be embedded in a webpage
 They are can be used like any other Liquid variable.
 
 
-### Variable Expansion
+## Variable Expansion
 
 Jekyll expands Liquid variable references during the page rendering process.
 Jekyll does not expand Liquid variable references passes as parameters to tag and block plugins, however.
@@ -464,7 +497,7 @@ You can obtain the value of this variable from the `render_impl` method of a
 ```
 
 
-### Automatically Created Error Classes
+## Automatically Created Error Classes
 
 `JekyllSupport::JekyllBlock` and `JekyllSupport::JekyllTag` subclasses
 automatically create error classes, named after the subclass.
@@ -472,7 +505,8 @@ automatically create error classes, named after the subclass.
 For example, if you create a `JekyllSupport::JekyllBlock` subclass called `DemoBlockTag`,
 the automatically generated error class will be called `DemoBlockTagError`.
 
-Although you could use it as you would any other error class, `JekyllPluginSupport` provides some helper methods.
+Although you could use it as you would any other error class, `JekyllPluginSupport`
+provides additional helper methods.
 These methods fill in the page path and line number that caused the error, shorten the stack trace,
 log an error message, and can be used to return an HTML-friendly version of the message to the web page.
 
@@ -502,7 +536,7 @@ Error class methods have been provided for standardized and convenient error han
 * `html_message` - The same as `logger_message`, but constructed with HTML.
 
 
-### Self-Reporting Upon Registration
+## Self-Reporting Upon Registration
 
 When each tag is registered, it self-reports, for example:
 
@@ -534,6 +568,83 @@ If your tag or block plugin only needs access to the raw arguments passed from t
 without tokenization, and you expect that the plugin might be invoked with large amounts of text,
 derive your plugin from `JekyllBlockNoArgParsing` or `JekyllTagNoArgParsing`.
 
+## Writing Plugins
+
+The following minimal examples define `VERSION`,
+which is important because `JekyllPluginHelper.register` logs that value when registering the plugin.
+
+This is how you would define plugins in the `_plugins` directory
+
+**Boilerplate for an inline tag plugin**
+
+```ruby
+require 'jekyll_plugin_support'
+
+module Jekyll
+  class DemoTag < JekyllSupport::JekyllTag
+    VERSION = '0.1.0'.freeze
+
+    def render_impl
+      @helper.gem_file __FILE__ # Enables attribution; only works when plugin is a gem
+      # Your Jekyll plugin logic goes here
+    end
+
+    JekyllPluginHelper.register(self, 'demo_tag')
+  end
+end
+```
+
+**Boilerplate for a tag block plugin**
+
+```ruby
+require 'jekyll_plugin_support'
+
+module Jekyll
+  class DemoBlock < JekyllSupport::JekyllBlock
+    VERSION = '0.1.0'.freeze
+
+    def render_impl(text)
+      @helper.gem_file __FILE__ # Enables attribution; only works when plugin is a gem
+      # Your Jekyll plugin logic goes here
+    end
+
+    JekyllPluginHelper.register(self, 'demo_block')
+  end
+end
+```
+
+If your plugin is packaged as a gem, then you might need to include `version.rb` into the plugin class.
+For example, if your version module looks like this:
+
+**lib/my_plugin/version.rb**:
+
+```ruby
+module MyPluginVersion
+  VERSION = '0.5.0'.freeze
+end
+```
+
+Then your plugin can incorporate the VERSION constant into your plugin like this:
+
+**lib/my_plugin.rb**:
+
+```ruby
+require 'jekyll_plugin_support'
+require_relative 'my_plugin/version'
+
+module Jekyll
+  class MyBlock < JekyllSupport::JekyllBlock
+    include MyPluginVersion
+
+    def render_impl(text)
+      @helper.gem_file __FILE__ # Enables attribution; only works when plugin is a gem
+      # Your code here
+    end
+
+    JekyllPluginHelper.register(self, 'demo_block')
+  end
+end
+```
 
 ## Attribution
 
