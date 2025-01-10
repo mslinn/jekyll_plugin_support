@@ -1,9 +1,10 @@
 # Change Log
 
-## 1.1.0 / 2024-12-31
+## 1.1.0 / 2025-01-10
 
 * Now replaces include and layout variables with their values
 * Renamed @helper.markup to @helper.argument_string
+* `JekyllSupport::JekyllPluginHelper::register` now accepts a `quiet` option, to suppress the signon message
 
 
 ## 1.0.3 / 2024-08-19

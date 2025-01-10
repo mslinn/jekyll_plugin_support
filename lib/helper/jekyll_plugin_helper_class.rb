@@ -55,7 +55,10 @@ module JekyllSupport
       END_MSG
     end
 
-    def self.register(klass, tag_name)
+    # @param klass [Class] class instance to register
+    # @param tag_name [String] name of plugin defined by klass to register as
+    # @param quiet [Boolean] suppress registration message if truthy
+    def self.register(klass, tag_name, quiet: false)
       abort("Error: The #{tag_name} plugin does not define VERSION") \
         unless klass.const_defined?(:VERSION)
 
@@ -67,6 +70,8 @@ module JekyllSupport
                 klass.ancestors.include?(JekyllSupport::JekyllTag))
 
       Liquid::Template.register_tag(tag_name, klass)
+      return if quiet
+
       msg = generate_message(klass, tag_name, version)
       PluginMetaLogger.instance.info { msg }
     end
