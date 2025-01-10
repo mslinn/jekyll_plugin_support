@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "cleanDemo",
+      "type": "shell",
+      "command": "rm -rf demo/_sites/",
+      "problemMatcher": []
+    }
+  ]
+}

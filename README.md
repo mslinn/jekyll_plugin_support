@@ -993,7 +993,7 @@ end
 
  1. Set breakpoints in Visual Studio Code.
 
- 2. Run the **Debug Demo** lauch configuration.
+ 2. Run the **Debug Demo development** or **Debug Demo production** launch configuration.
 
 Alternatively, you can:
 

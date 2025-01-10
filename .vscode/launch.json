@@ -32,7 +32,33 @@
       ],
       "cwd": "${workspaceRoot}/demo",
       "debugPort": "45373",
-      "name": "Debug Demo",
+      "env": {
+        "JEKYLL_ENV": "development"
+      },
+      "name": "Debug Demo development",
+      "preLaunchTask": "cleanDemo",
+      "request": "launch",
+      "script": "${workspaceRoot}/binstub/jekyll",
+      "type": "rdbg",
+      "useBundler": true,
+    },
+    {
+      "args": [
+        "serve",
+        "--livereload_port", "35732",
+        "--force_polling",
+        "--host", "0.0.0.0",
+        "--port", "4444",
+        "--incremental",
+        "--livereload"
+      ],
+      "cwd": "${workspaceRoot}/demo",
+      "debugPort": "45373",
+      "env": {
+        "JEKYLL_ENV": "production"
+      },
+      "name": "Debug Demo production",
+      "preLaunchTask": "cleanDemo",
       "request": "launch",
       "script": "${workspaceRoot}/binstub/jekyll",
       "type": "rdbg",
