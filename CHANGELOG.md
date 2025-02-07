@@ -1,10 +1,20 @@
 # Change Log
 
-## 1.1.0 / 2025-01-10
+## 1.1.0 / 2025-02-07
 
 * Now replaces include and layout variables with their values
-* Renamed @helper.markup to @helper.argument_string
-* `JekyllSupport::JekyllPluginHelper::register` now accepts a `quiet` option, to suppress the signon message
+* Renamed `@helper.markup` to `@helper.argument_string`
+* Improved `nil` handling throughout
+* Added the **Debug Demo production** launch configuration to debug the demo website in production mode
+* Added the `bin/release_port` script that kills hung processes being debugged
+* Added the `cleanDemo` task for the **Debug Demo production** and **Debug Demo development** tasks
+* Many minor improvements to the demo.
+* `JekyllSupport::JekyllPluginHelper::register` now accepts a `quiet` option, to suppress the signon message.
+  Use it like this:
+
+  ```ruby
+  JekyllPluginHelper.register(self, 'tag_name', quiet: true)
+  ```
 
 
 ## 1.0.3 / 2024-08-19

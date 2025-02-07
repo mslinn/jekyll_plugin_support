@@ -28,7 +28,9 @@ module JekyllSupport
       @tag_name = tag_name
       raise JekyllPluginSupportError, "markup is a #{markup.class} with value '#{markup}'." unless markup.instance_of? String
 
-      @argument_string = markup # Lookup variable names with values in markup in render because site and config are not available here
+      # Vars in plugin parameters cannot be replaced yet
+      @argument_string = markup.to_s # Lookup variable names with values in markup in render because site and config are not available here
+
       @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
       @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
       @helper = JekyllPluginHelper.new(tag_name, @argument_string, @logger, respond_to?(:no_arg_parsing))
