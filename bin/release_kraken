@@ -8,7 +8,6 @@ require 'rubygems'
 # The following plugins rely on jekyll_plugin_support and should be updated simultanously
 # when breaking changes are introduced.
 DEPENDANT_PLUGINS = %w[
-  jekyll_all_collections
   jekyll_badge
   jekyll_draft
   jekyll_emoji_tag

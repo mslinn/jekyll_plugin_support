@@ -1,4 +1,4 @@
-require:
+plugins:
   # - rubocop-jekyll
   - rubocop-md
   - rubocop-performance
@@ -26,6 +26,14 @@ Layout/HashAlignment:
   EnforcedColonStyle: table
   EnforcedHashRocketStyle: table
 
+Layout/IndentationConsistency:
+  Exclude:
+    - "*.md"
+
+Layout/InitialIndentation:
+  Exclude:
+    - "*.md"
+
 Layout/LineLength:
   Max: 150
 
@@ -37,11 +45,19 @@ Metrics/BlockLength:
     - jekyll_plugin_support.gemspec
   Max: 30
 
+Metrics/ClassLength:
+  Exclude:
+    - "**/all_collections_tag.rb"
+
 Metrics/CyclomaticComplexity:
   Max: 25
 
 Metrics/MethodLength:
   Max: 50
+
+Metrics/ModuleLength:
+  Exclude:
+    - "**/jekyll_plugin_support_class.rb"
 
 Metrics/PerceivedComplexity:
   Max: 25

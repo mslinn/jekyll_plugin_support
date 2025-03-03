@@ -1,0 +1,17 @@
+.posts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  line-height: 170%;
+}
+
+.posts>*:nth-child(odd) {
+  width: 120px;
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  font-stretch: semi-condensed;
+  font-size: 10pt;
+}
+
+.posts>*:nth-child(even) {
+  width: calc(100% - 120px);
+}

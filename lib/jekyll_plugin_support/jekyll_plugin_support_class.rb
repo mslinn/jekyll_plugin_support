@@ -1,5 +1,3 @@
-require_relative '../error/jekyll_custom_error'
-
 # Monkey patch StandardError so a new method called shorten_backtrace is added.
 class StandardError
   def shorten_backtrace(backtrace_element_count = 3)
@@ -12,7 +10,7 @@ class StandardError
 end
 
 module JekyllSupport
-  DISPLAYED_CALLS = 8
+  DISPLAYED_CALLS = 8 unless defined?(DISPLAYED_CALLS)
 
   def self.error_short_trace(logger, error)
     error.set_backtrace error.backtrace[0..DISPLAYED_CALLS]
@@ -22,11 +20,11 @@ module JekyllSupport
 
   # @return a new StandardError subclass containing the shorten_backtrace method
   def define_error
-    Class.new JekyllSupport::CustomError
+    Class.new ::JekyllSupport::CustomError
   end
   module_function :define_error
 
-  JekyllPluginSupportError = define_error
+  JekyllPluginSupportError = define_error unless defined?(JekyllPluginSupportError)
 
   def self.dump_vars(_logger, liquid_context)
     page = liquid_context.registers[:page]

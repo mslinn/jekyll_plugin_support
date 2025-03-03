@@ -1,5 +1,13 @@
 # Change Log
 
+## 3.0.0 / 2025-02-09
+
+* Numbered as v3.0.0 because `jekyll_draft` was at v2.1.0 and the two projects should have similar version numbers.
+* `Jekyll_all_collections` was folded into this project.
+* Now requires [Jekyll 4.4.1](https://jekyllrb.com/news/2025/01/29/jekyll-4-4-1-released/) or later,
+  and Ruby 3.2.0 or later
+
+
 ## 1.1.0 / 2025-02-07
 
 * Now replaces include and layout variables with their values
@@ -30,12 +38,15 @@
   The following seems to be optimal for custom plugins; it suppresses the ridiculously long stack trace that used to be generated:
 
    ```ruby
-    rescue DemoInlineTagError => e # jekyll_plugin_support handles StandardError
-      @logger.error { e.logger_message }
-      exit! 1 if @die_on_demo_tag_error
+   begin
+     # ...
+   rescue DemoInlineTagError => e # jekyll_plugin_support handles StandardError
+     @logger.error { e.logger_message }
+     exit! 1 if @die_on_demo_tag_error
 
-      e.html_message
-    ```
+     e.html_message
+   end
+   ```
 
 
 ## 1.0.1 / 2024-07-27

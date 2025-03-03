@@ -46,7 +46,7 @@ default_layout_var: set_in_default_layout_front_matter
         <div class="bg_yellow draftPost">&mdash; Draft &mdash;</div>
       {% endif %}
       <a href="/index.html">
-        <div class="h1">Jekyll Plugin Support Demo</div>
+        <div class="h1">{{ site.title }}</div>
       </a>
       {% capture Title %}{{ page.title | default: layout.title }}{% endcapture %}
       {% capture Subtitle %}{{ page.subtitle | default: layout.subtitle }}{% endcapture %}
@@ -63,7 +63,13 @@ default_layout_var: set_in_default_layout_front_matter
           <li><a href="/subclass_demo_inline_tag.html">Subclassed inline tag plugin</a></li>
           <li><a href="/variables.html">Variables</a></li>
           <li><a href="/recurse.html">Recursion</a></li>
-          <li><a href="/stuff/index.html">All known <code>Jekyll_plugin_support</code> implementations</a></li>
+          <li><a href="/stuff/index.html">All known <code>jekyll_<wbr>plugin_<wbr>support</code> implementations</a></li>
+          <li><a href="/blog/blogsByDate.html">Blog by Date</a></li>
+          <li><a href="/blog/blogsByLastModified.html">Blog by Last Modified</a></li>
+          {%- comment -%}<li><a href="/blog/blogsByCategory.html">Blog by Category</a></li>{%- endcomment -%}
+          <li><a href="/av_studio/">A/V Studio</a></li>
+          <li><a href="/expertArticles/">Expert</a></li>
+          <li><a href="/jekyll/">Jekyll</a></li>
         </ul>
       </nav>
       <section id="main-content">

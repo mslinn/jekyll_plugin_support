@@ -1,5 +1,3 @@
-require_relative '../error/jekyll_plugin_error_handling'
-
 module JekyllSupport
   class JekyllTagNoArgParsing < JekyllTag
     attr_reader :argument_string, :helper, :line_number, :logger, :page, :site

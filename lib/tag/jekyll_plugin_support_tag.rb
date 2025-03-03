@@ -1,6 +1,3 @@
-require 'pry'
-require_relative '../error/jekyll_plugin_error_handling'
-
 module JekyllSupport
   # Base class for Jekyll tags
   class JekyllTag < Liquid::Tag
@@ -36,7 +33,7 @@ module JekyllSupport
       @helper = JekyllPluginHelper.new(tag_name, @argument_string, @logger, respond_to?(:no_arg_parsing))
 
       @error_name = "#{tag_name.camelcase(:upper)}Error"
-      JekyllSupport::CustomError.factory @error_name
+      ::JekyllSupport::CustomError.factory @error_name
     end
 
     # Method prescribed by the Jekyll plugin lifecycle.

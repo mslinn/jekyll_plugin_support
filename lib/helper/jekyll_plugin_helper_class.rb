@@ -66,8 +66,8 @@ module JekyllSupport
 
       abort("Error: The #{tag_name} plugin is not an instance of JekyllSupport::JekyllBlock or JekyllSupport::JekyllTag") \
         unless klass.instance_of?(Class) &&
-               (klass.ancestors.include?(JekyllSupport::JekyllBlock) ||
-                klass.ancestors.include?(JekyllSupport::JekyllTag))
+               (klass.ancestors.include?(::JekyllSupport::JekyllBlock) ||
+                klass.ancestors.include?(::JekyllSupport::JekyllTag))
 
       Liquid::Template.register_tag(tag_name, klass)
       return if quiet

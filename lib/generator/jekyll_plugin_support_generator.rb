@@ -1,6 +1,3 @@
-require 'jekyll'
-require_relative '../error/jekyll_plugin_error_handling'
-
 module JekyllSupport
   # Base class for Jekyll generators.
   # PluginMetaLogger.instance.config is populated with the contents of `_config.yml` before Jekyll::Generator instances run.
@@ -14,7 +11,6 @@ module JekyllSupport
       @logger ||= PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
 
       @error_name = "#{self.class.name}Error"
-      # JekyllSupport::CustomError.factory @error_name
 
       @site   = site
       @config = @site.config
@@ -22,8 +18,6 @@ module JekyllSupport
       @theme  = @site.theme
 
       @mode = ENV['JEKYLL_ENV'] || 'development'
-
-      # set_error_context(self.class)
 
       generate_impl
     rescue StandardError => e
@@ -62,7 +56,7 @@ module JekyllSupport
       PluginMetaLogger.instance.info { msg }
     end
 
-    def set_error_context(klass)
+    def set_error_context(klass) # rubocop:disable Naming/AccessorMethodName
       return unless Object.const_defined? @error_name
 
       error_class = Object.const_get @error_name

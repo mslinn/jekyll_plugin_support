@@ -1,5 +1,3 @@
-require_relative '../error/jekyll_plugin_error_handling'
-
 module JekyllSupport
   # Base class for Jekyll block tags
   class JekyllBlock < Liquid::Block
@@ -35,7 +33,7 @@ module JekyllSupport
       @helper = JekyllPluginHelper.new tag_name, markup, @logger, respond_to?(:no_arg_parsing)
 
       @error_name = "#{tag_name.camelcase(:upper)}Error"
-      JekyllSupport::CustomError.factory @error_name
+      ::JekyllSupport::CustomError.factory @error_name
     end
 
     # Liquid::Block subclasses do not render if there is no content within the tag
@@ -48,7 +46,7 @@ module JekyllSupport
     # Defines @config, @envs, @mode, @page and @site
     # @return [String]
     def render(liquid_context)
-      @helper.liquid_context = JekyllSupport.inject_config_vars liquid_context # modifies liquid_context
+      @helper.liquid_context = ::JekyllSupport.inject_config_vars liquid_context # modifies liquid_context
       text = super # Liquid variable values in content are looked up and substituted
 
       @envs      = liquid_context.environments.first

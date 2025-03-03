@@ -5,22 +5,9 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "ruby_lsp",
-      "request": "launch",
-      "name": "Debug release_kraken",
-      "program": "ruby bin/release_kraken"
-    },
-    {
-      "type": "rdbg",
-      "name": "Debug custom_error_take_2.rb",
-      "request": "launch",
-      "script": "experiments/custom_error_take_2.rb",
-      "useBundler": true,
-    },
-    {
       "args": [
         "serve",
-        "--livereload_port", "35732",
+        "--livereload_port", "25729",
         "--force_polling",
         "--host", "0.0.0.0",
         "--port", "4444",
@@ -36,7 +23,7 @@
         "JEKYLL_ENV": "development"
       },
       "name": "Debug Demo development",
-      "preLaunchTask": "cleanDemo",
+      // "preLaunchTask": "cleanDemo",
       "request": "launch",
       "script": "${workspaceRoot}/binstub/jekyll",
       "type": "rdbg",
@@ -58,10 +45,23 @@
         "JEKYLL_ENV": "production"
       },
       "name": "Debug Demo production",
-      "preLaunchTask": "cleanDemo",
+      // "preLaunchTask": "cleanDemo",
       "request": "launch",
       "script": "${workspaceRoot}/binstub/jekyll",
       "type": "rdbg",
+      "useBundler": true,
+    },
+    {
+      "type": "ruby_lsp",
+      "request": "launch",
+      "name": "Debug release_kraken",
+      "program": "ruby bin/release_kraken"
+    },
+    {
+      "type": "rdbg",
+      "name": "Debug custom_error_take_2.rb",
+      "request": "launch",
+      "script": "experiments/custom_error_take_2.rb",
       "useBundler": true,
     },
     {
@@ -81,8 +81,10 @@
     {
       "args": [
         "-I",
-        "${workspaceRoot}"
+        "../spec",
+        "-P", "../spec/*_spec.rb"
       ],
+      "cwd": "${workspaceRoot}/demo",
       "debugPort": "0",
       "name": "RSpec - all",
       "request": "launch",
@@ -96,6 +98,7 @@
         "${workspaceRoot}",
         "${file}"
       ],
+      "cwd": "${workspaceRoot}/demo",
       "debugPort": "0",
       "name": "RSpec - active spec file only",
       "request": "launch",

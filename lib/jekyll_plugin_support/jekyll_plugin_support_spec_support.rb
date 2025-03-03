@@ -1,6 +1,4 @@
-require 'jekyll'
-
-Registers = Struct.new(:page, :site)
+Registers = Struct.new(:page, :site) unless defined?(Registers)
 
 # Mock for Collections
 class Collections

@@ -1,8 +1,6 @@
 require 'facets/string/interpolate'
 require 'key_value_parser'
 require 'shellwords'
-require_relative 'jekyll_plugin_helper_class'
-require_relative 'jekyll_plugin_helper_attribution'
 
 module JekyllSupport
   class JekyllPluginHelper

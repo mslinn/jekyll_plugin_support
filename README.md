@@ -14,7 +14,6 @@ At present, only Jekyll tags and blocks are supported.
 Public plugins that use `jekyll_plugin_support` include:
 
 <ul style="columns: 2">
-  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_all_collections'><code>jekyll_all_collections</code></a></li>
   <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_badge'><code>jekyll_badge</code></a></li>
   <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_emoji'><code>jekyll_emoji</code></a></li>
   <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_flexible_include.html'><code>jekyll_flexible_include</code></a></li>
