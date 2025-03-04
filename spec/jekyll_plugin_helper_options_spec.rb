@@ -9,6 +9,7 @@ class JekyllPluginHelperOptionsTest
 
     it 'parses quoted string options' do
       helper = described_class.new('my_tag', "colors='blue or green' blah ick", logger, false)
+      helper.reinitialize helper.argument_string
       expect(helper.keys_values.keys).to eq(%w[colors blah ick])
 
       colors = helper.parameter_specified? 'colors'

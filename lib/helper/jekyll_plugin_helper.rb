@@ -5,8 +5,9 @@ require 'shellwords'
 module JekyllSupport
   class JekyllPluginHelper
     attr_accessor :liquid_context
-    attr_reader :argv, :attribution, :keys_values, :logger, :markup, :no_arg_parsing, :params, :tag_name,
-                :argv_original, :excerpt_caller, :keys_values_original, :params_original, :jpsh_subclass_caller
+    attr_reader :argument_string, :argv, :argv_original, :attribution, :excerpt_caller, :keys_values_original,
+                :keys_values, :jpsh_subclass_caller, :logger, :markup, :no_arg_parsing, :params, :params_original,
+                :tag_name
 
     # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
     # @param tag_name [String] the name of the tag, which we already know.
@@ -20,8 +21,9 @@ module JekyllSupport
     def initialize(tag_name, markup, logger, no_arg_parsing)
       @tag_name = tag_name
       @logger = logger
-      @no_arg_parsing = no_arg_parsing
+      @markup = markup
       @argument_string = markup
+      @no_arg_parsing = no_arg_parsing
     rescue StandardError => e
       e.shorten_backtrace
       @logger.error { e.message }
