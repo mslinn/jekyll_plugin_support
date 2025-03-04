@@ -9,7 +9,7 @@ class JekyllPluginHelperOptionsTest
 
     it 'parses quoted string options' do
       helper = described_class.new('my_tag', "colors='blue or green' blah ick", logger, false)
-      helper.reinitialize helper.argument_string
+      helper.reinitialize helper.markup
       expect(helper.keys_values.keys).to eq(%w[colors blah ick])
 
       colors = helper.parameter_specified? 'colors'
@@ -20,6 +20,7 @@ class JekyllPluginHelperOptionsTest
 
     it 'parses unquoted string options' do
       helper = described_class.new('my_tag', 'color=blue blah ick', logger, false)
+      helper.reinitialize helper.markup
       expect(helper.keys_values.keys).to eq(%w[color blah ick])
 
       color = helper.parameter_specified? 'color'
@@ -30,6 +31,7 @@ class JekyllPluginHelperOptionsTest
 
     it 'parses quoted booleans' do
       helper = described_class.new('my_tag', "bool1='true' bool2='false' blah ick", logger, false)
+      helper.reinitialize helper.markup
       expect(helper.keys_values.keys).to eq(%w[bool1 bool2 blah ick])
 
       bool1 = helper.parameter_specified? 'bool1'
@@ -45,6 +47,7 @@ class JekyllPluginHelperOptionsTest
 
     it 'parses unquoted booleans' do
       helper = described_class.new('my_tag', 'bool1=true bool2=false blah ick', logger, false)
+      helper.reinitialize helper.markup
       expect(helper.keys_values.keys).to eq(%w[bool1 bool2 blah ick])
 
       bool1 = helper.parameter_specified? 'bool1'

@@ -5,7 +5,7 @@ require_relative '../lib/jekyll_plugin_support/jekyll_plugin_support_spec_suppor
 
 class LiquidVariableParsing
   # @return copy of str with references to defined variables replaced by the values of the variables
-  def variable_replace(str, scopes)
+  def self.variable_replace(str, scopes)
     result = str.clone
     match_data_list = str.to_enum(:scan, /{{[a-z_][a-zA-Z_0-9]*}}/).map { Regexp.last_match }.reverse
     match_data_list&.each do |md|
@@ -26,9 +26,9 @@ class LiquidVariableParsing
     it 'substitutes variable references for values without recursion' do
       scopes = [{ 'a' => '{{', 'b' => 'asdf', 'c' => '}}' }]
       str = '{{a}}{{b}}{{c}} This should be unchanged: {{d}}'
-      new_str = variable_replace(str, scopes)
+      new_str = LiquidVariableParsing.variable_replace(str, scopes)
       expect(str).to start_with('{{a}}')
-      expect(new_str).to be('{{asdf}} This should be unchanged: {{d}}')
+      expect(new_str).to eq('{{asdf}} This should be unchanged: {{d}}')
     end
   end
 end
