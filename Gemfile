@@ -14,6 +14,6 @@ group :test, :development do
   gem 'rubocop-rspec', require: false
 end
 
-group :test do
+# group :test do
   gem 'rspec-match_ignoring_whitespace'
-end
+# end

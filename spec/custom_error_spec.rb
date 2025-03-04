@@ -1,5 +1,5 @@
-require_relative '../lib/jekyll_custom_error'
-require_relative '../lib/jekyll_plugin_support_class'
+require_relative '../lib/error/jekyll_custom_error'
+require_relative '../lib/jekyll_plugin_support/jekyll_plugin_support_class'
 
 class Dummy
   def just_for_testing; end
@@ -21,13 +21,13 @@ class CustomErrorSpec
     puts "Caught CustomError: #{e.message}"
   end
 
-  RSpec.describe JekyllPluginHelper do
+  RSpec.describe JekyllSupport::JekyllPluginHelper do
     it 'generates messages' do
       msg = described_class.generate_message(Dummy, tag_name, '0.1.0')
       puts msg
-      expect(msg).to include(match(/Error class. DummyError/))
-      expect(msg).to include(match(/CSS class for error messages. dummy_error/))
-      expect(msg).to include(match(/die_on_dummy_error. false/))
+      expect(msg).to include('Error class: DummyError')
+      expect(msg).to include('CSS class for error messages: dummy_error')
+      expect(msg).to include('die_on_dummy_error: false')
     end
   end
 

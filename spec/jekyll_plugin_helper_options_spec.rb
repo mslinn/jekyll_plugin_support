@@ -1,10 +1,10 @@
 require 'jekyll_plugin_logger'
-require 'rspec/match_ignoring_whitespace'
+# require 'rspec/match_ignoring_whitespace'
 require_relative '../lib/jekyll_plugin_support'
-require_relative '../lib/jekyll_plugin_support_spec_support'
+require_relative '../lib/jekyll_plugin_support/jekyll_plugin_support_spec_support'
 
 class JekyllPluginHelperOptionsTest
-  RSpec.describe JekyllPluginHelper do
+  RSpec.describe ::JekyllSupport::JekyllPluginHelper do
     logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
 
     it 'parses quoted string options' do

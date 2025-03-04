@@ -1,7 +1,7 @@
 require 'jekyll_plugin_logger'
-require 'rspec/match_ignoring_whitespace'
+# require 'rspec/match_ignoring_whitespace'
 require_relative '../lib/jekyll_plugin_support'
-require_relative '../lib/jekyll_plugin_support_spec_support'
+require_relative '../lib/jekyll_plugin_support/jekyll_plugin_support_spec_support'
 
 class LiquidVariableParsing
   # @return copy of str with references to defined variables replaced by the values of the variables
@@ -22,7 +22,7 @@ class LiquidVariableParsing
     result
   end
 
-  RSpec.describe JekyllPluginHelper do
+  RSpec.describe ::JekyllSupport::JekyllPluginHelper do
     it 'substitutes variable references for values without recursion' do
       scopes = [{ 'a' => '{{', 'b' => 'asdf', 'c' => '}}' }]
       str = '{{a}}{{b}}{{c}} This should be unchanged: {{d}}'
