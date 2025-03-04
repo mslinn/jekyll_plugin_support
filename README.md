@@ -15,11 +15,12 @@ Public plugins that use `jekyll_plugin_support` include:
 
 <ul style="columns: 2">
   <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_badge'><code>jekyll_badge</code></a></li>
+  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_draft'><code>jekyll_draft</code></a></li>
   <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_emoji'><code>jekyll_emoji</code></a></li>
   <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_flexible_include.html'><code>jekyll_flexible_include</code></a></li>
+  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_google_translate'><code>jekyll_google_translate</code></a></li>
   <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_href.html'><code>jekyll_href</code></a></li>
   <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_img.html'><code>jekyll_img</code></a></li>
-  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_plugin_template.html'><code>jekyll_plugin_template</code></a></li>
   <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_outline.html'><code>jekyll_outline</code></a></li>
   <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_pre.html'><code>jekyll_pre</code></a></li>
   <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_quote.html'><code>jekyll_quote</code></a></li>
