@@ -1,6 +1,8 @@
 require 'jekyll'
 require_relative '../lib/jekyll_plugin_support'
 
+Jekyll.logger.log_level = :info
+
 RSpec.configure do |config|
   config.filter_run_when_matching focus: true
   # config.order = 'random'
