@@ -24,6 +24,10 @@ module AllCollectionsHooks
       # JekyllSupport.warn_short_trace(@logger, e)
     end
 
+    def order
+      data.key?('order') ? data['order'] || FIXNUM_MAX : FIXNUM_MAX
+    end
+
     def to_s
       @label || @date.to_s
     end

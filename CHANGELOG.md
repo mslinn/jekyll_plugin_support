@@ -1,5 +1,13 @@
 # Change Log
 
+## 3.1.0 / 2025-05-25
+
+* Added attribute `order` and method `field` to support `jekyll_outline`.
+* Added another constructor for `AllCollectionsHooks::APage`, called `apage_from`.
+* Added new method `new_attribute` to module `JekyllSupport`.
+* Modified specs tests.
+
+
 ## 3.0.0 / 2025-02-09
 
 * Numbered as v3.0.0 because `jekyll_draft` was at v2.1.0 and the two projects should have similar version numbers.
