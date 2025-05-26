@@ -1,3 +1,5 @@
+require 'jekyll_draft'
+
 module AllCollectionsHooks
   class APage
     attr_reader :content, :data, :date, :description, :destination, :draft, :excerpt, :ext, :extname, :href,
@@ -22,6 +24,48 @@ module AllCollectionsHooks
     rescue StandardError => e
       JekyllSupport.error_short_trace(@logger, e)
       # JekyllSupport.warn_short_trace(@logger, e)
+    end
+
+    def self.apage_from(
+      date: nil,
+      last_modified: nil,
+      order: nil,
+      title: nil,
+      url: nil,
+      draft: false,
+      label: nil
+    )
+      obj = {
+        data: {
+          collection:    { label: label },
+          date:          Date.parse(date),
+          draft:         draft,
+          last_modified: Date.parse(last_modified || date),
+          order:         order,
+          title:         title,
+        },
+        url:  url,
+      }
+
+      APage.new_attribute obj, :extname, '.html'
+      # obj.class.module_eval { attr_accessor :extname }
+      # obj.extname = '.html'
+
+      APage.new_attribute obj, :logger, PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
+      # obj.class.module_eval { attr_accessor :logger }
+      # obj.logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
+
+      APage.new_attribute obj, :url, url
+      # obj.class.module_eval { attr_accessor :url }
+      # obj.url = url
+
+      APage.new obj, nil
+    end
+
+    # Defines a new attribute called `prop_name` in object `obj` and sets it to `prop_value`
+    def self.new_attribute(obj, prop_name, prop_value)
+      obj.class.module_eval { attr_accessor prop_name }
+      obj.instance_variable_set "@#{prop_name}", prop_value
     end
 
     def order
@@ -67,7 +111,11 @@ module AllCollectionsHooks
       @relative_path = obj.relative_path if obj.respond_to? :relative_path
       @type = obj.type if obj.respond_to? :type
       @url = obj.url
-      @url = "#{@url}index.html" if @url.end_with? '/'
+      @url = if @url
+               "#{@url}index.html" if @url.end_with? '/'
+             else
+               '/'
+             end
     end
   end
 end

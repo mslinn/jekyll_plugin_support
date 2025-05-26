@@ -1,17 +1,30 @@
-require 'spec_helper'
-require_relative '../../lib/jekyll_all_collections'
+require_relative '../spec_helper'
+require_relative '../../lib/hooks/a_page'
 
-class APageStub
-  attr_reader :date, :last_modified, :label
+module AllCollectionsHooks
+  # Override class definition for easiler testing
+  class APage
+    attr_reader :label
 
-  def initialize(date, last_modified, label = '')
-    @date = Date.parse date
-    @last_modified = Date.parse last_modified
-    @label = label
+    def to_s
+      @label
+    end
   end
+end
 
-  def to_s
-    @label
+class NullBinding < BasicObject
+  include ::Kernel
+
+  # Avoid error message "warning: undefining `object_id' may cause serious problems"
+  # https://stackoverflow.com/a/17791631/553865
+  (
+    ::Kernel.instance_methods(false) +
+    ::Kernel.private_instance_methods(false) -
+    [:binding]
+  ).each { |x| undef_method(x) unless x == :object_id }
+
+  def min_binding
+    binding
   end
 end
 
@@ -21,11 +34,35 @@ def show(lambda_string, result, expected)
 end
 
 # See https://stackoverflow.com/a/75388137/553865
-RSpec.describe(AllCollectionsTag::AllCollectionsTag) do
-  let(:o1) { APageStub.new('2020-01-01', '2020-01-01', 'a_A') }
-  let(:o2) { APageStub.new('2021-01-01', '2020-01-01', 'b_A') }
-  let(:o3) { APageStub.new('2021-01-01', '2023-01-01', 'b_B') }
-  let(:o4) { APageStub.new('2022-01-01', '2023-01-01', 'c_B') }
+RSpec.describe(AllCollectionsHooks::APage) do
+  let(:o1) do
+    described_class.apage_from(
+      date:          '2020-01-01',
+      last_modified: '2020-01-01',
+      label:         'a_A'
+    )
+  end
+  let(:o2) do
+    described_class.apage_from(
+      date:          '2020-01-01',
+      last_modified: '2020-01-01',
+      label:         'b_A'
+    )
+  end
+  let(:o3) do
+    described_class.apage_from(
+      date:          '2020-01-01',
+      last_modified: '2023-01-01',
+      label:         'b_B'
+    )
+  end
+  let(:o4) do
+    described_class.apage_from(
+      date:          '2020-01-01',
+      last_modified: '2023-01-01',
+      label:         'c_B'
+    )
+  end
   let(:objs) { [o1, o2, o3, o4] }
 
   it 'defines sort_by lambda with last_modified' do
