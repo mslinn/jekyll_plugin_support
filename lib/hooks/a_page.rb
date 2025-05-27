@@ -5,10 +5,13 @@ module AllCollectionsHooks
     attr_reader :content, :data, :date, :description, :destination, :draft, :excerpt, :ext, :extname, :href,
                 :label, :last_modified, :layout, :origin, :path, :relative_path, :tags, :title, :type, :url
 
+    # @param obj can be a `Jekyll::Document` or similar
+    # @param origin values: 'collection', 'individual_page', and 'static_file'
+    #               (See method AllCollectionsHooks.apages_from_objects)
     def initialize(obj, origin)
       @origin = origin
-      data_field_init obj
       obj_field_init obj
+      data_field_init obj
       @draft = Jekyll::Draft.draft? obj
       @href = @url if @href.nil?
       # @href = "/#{@href}" if @origin == 'individual_page'
@@ -26,6 +29,7 @@ module AllCollectionsHooks
       # JekyllSupport.warn_short_trace(@logger, e)
     end
 
+    # Contructor for testing and jekyll_outline
     def self.apage_from( # rubocop:disable Metrics/ParameterLists
       date: nil,
       draft: false,
@@ -57,7 +61,7 @@ module AllCollectionsHooks
     # Defines a new attribute called `prop_name` in object `obj` and sets it to `prop_value`
     def self.new_attribute(obj, prop_name, prop_value)
       obj.class.module_eval { attr_accessor prop_name }
-      obj.instance_variable_set "@#{prop_name}", prop_value
+      obj.instance_variable_set :"@#{prop_name}", prop_value
     end
 
     def order
@@ -70,6 +74,9 @@ module AllCollectionsHooks
 
     private
 
+    # Sets instance attributes in APage from selected key/value pairs in  `obj.data`:
+    # `categories`, `date`, `description`, `excerpt`, `ext`, `last_modified` or `last_modified_at`,
+    # `layout`, and `tags`.
     def data_field_init(obj)
       return unless obj.respond_to? :data
 
@@ -91,6 +98,9 @@ module AllCollectionsHooks
       @tags = @data['tags'] if @data.key? 'tags'
     end
 
+    # Sets instance attributes in APage from selected attributes in `obj` (when present):
+    # `content`, `destination`, `ext` and `extname`, `label` from `collection.label`,
+    # `path`, `relative_path`, `type`, and `url`.
     def obj_field_init(obj)
       @content = obj.content if obj.respond_to? :content
 
