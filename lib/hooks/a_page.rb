@@ -26,38 +26,30 @@ module AllCollectionsHooks
       # JekyllSupport.warn_short_trace(@logger, e)
     end
 
-    def self.apage_from(
+    def self.apage_from( # rubocop:disable Metrics/ParameterLists
       date: nil,
+      draft: false,
       last_modified: nil,
+      collection_name: nil,
       order: nil,
       title: nil,
-      url: nil,
-      draft: false,
-      label: nil
+      url: nil
     )
-      obj = {
-        data: {
-          collection:    { label: label },
-          date:          Date.parse(date),
-          draft:         draft,
-          last_modified: Date.parse(last_modified || date),
-          order:         order,
-          title:         title,
-        },
-        url:  url,
+      data = {
+        collection:    { label: collection_name },
+        date:          Date.parse(date),
+        draft:         draft,
+        last_modified: Date.parse(last_modified || date),
+        order:         order,
+        title:         title,
       }
 
+      APage.new_attribute obj, :data, data
+      APage.new_attribute obj, :draft, draft
       APage.new_attribute obj, :extname, '.html'
-      # obj.class.module_eval { attr_accessor :extname }
-      # obj.extname = '.html'
-
       APage.new_attribute obj, :logger, PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
-      # obj.class.module_eval { attr_accessor :logger }
-      # obj.logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
-
+      APage.new_attribute obj, :title, title
       APage.new_attribute obj, :url, url
-      # obj.class.module_eval { attr_accessor :url }
-      # obj.url = url
 
       APage.new obj, nil
     end

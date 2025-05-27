@@ -28,6 +28,7 @@ _yardoc/
 coverage/
 doc/
 binstub/
+demo/spec/status_persistence.txt
 jekyll/doc/
 node_modules/
 out/
