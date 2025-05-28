@@ -10,20 +10,14 @@ module AllCollectionsHooks
     #               (See method AllCollectionsHooks.apages_from_objects)
     def initialize(obj, origin)
       @origin = origin
-      obj_field_init obj
-      data_field_init obj
-      @draft = Jekyll::Draft.draft? obj
-      @href = @url if @href.nil?
-      # @href = "/#{@href}" if @origin == 'individual_page'
-      @href = "#{@href}index.html" if @href.end_with? '/'
-      @name = File.basename(@href)
-      @title = if @data&.key?('title')
-                 @data['title']
-               elsif obj.respond_to?(:title)
-                 obj.title
-               else
-                 "<code>#{@href}</code>"
-               end
+      obj_field_init obj # object attributes have 1st priority
+      data_field_init obj # data attributes have 2nd priority
+      @draft   = Jekyll::Draft.draft? obj
+      @href  ||= @url
+      # @href  = "/#{@href}" if @origin == 'individual_page'
+      @href    = "#{@href}index.html" if @href.end_with? '/'
+      @name  ||= File.basename(@href)
+      @title ||= "<code>#{@href}</code>"
     rescue StandardError => e
       JekyllSupport.error_short_trace(@logger, e)
       # JekyllSupport.warn_short_trace(@logger, e)
@@ -74,7 +68,7 @@ module AllCollectionsHooks
 
     private
 
-    # Sets instance attributes in APage from selected key/value pairs in  `obj.data`:
+    # Sets the following uninitialized instance attributes in APage from selected key/value pairs in `obj.data`:
     # `categories`, `date`, `description`, `excerpt`, `ext`, `last_modified` or `last_modified_at`,
     # `layout`, and `tags`.
     def data_field_init(obj)
@@ -82,23 +76,24 @@ module AllCollectionsHooks
 
       @data = obj.data
 
-      @categories = @data['categories'] if @data.key? 'categories'
-      @date = (@data['date'].to_date if @data&.key?('date')) || Date.today
-      @description = @data['description'] if @data.key? 'description'
-      @excerpt = @data['excerpt'] if @data.key? 'excerpt'
+      @categories ||= @data['categories'] if @data.key? 'categories'
+      @date ||= (@data['date'].to_date if @data&.key?('date')) || Date.today
+      @description ||= @data['description'] if @data.key? 'description'
+      @excerpt ||= @data['excerpt'] if @data.key? 'excerpt'
       @ext ||= @data['ext'] if @data.key? 'ext'
-      @last_modified = @data['last_modified'] || @data['last_modified_at'] || @date
-      @last_modified_field = case @data
-                             when @data.key?('last_modified')
-                               'last_modified'
-                             when @data.key?('last_modified_at')
-                               'last_modified_at'
-                             end
-      @layout = @data['layout'] if @data.key? 'layout'
-      @tags = @data['tags'] if @data.key? 'tags'
+      @last_modified ||= @data['last_modified'] || @data['last_modified_at'] || @date
+      @last_modified_field ||= case @data
+                               when @data.key?('last_modified')
+                                 'last_modified'
+                               when @data.key?('last_modified_at')
+                                 'last_modified_at'
+                               end
+      @layout ||= @data['layout'] if @data.key? 'layout'
+      @tags ||= @data['tags'] if @data.key? 'tags'
+      @title ||= @data['title'] if @data&.key?('title')
     end
 
-    # Sets instance attributes in APage from selected attributes in `obj` (when present):
+    # Sets the following instance attributes in APage from selected attributes in `obj` (when present):
     # `content`, `destination`, `ext` and `extname`, `label` from `collection.label`,
     # `path`, `relative_path`, `type`, and `url`.
     def obj_field_init(obj)
@@ -111,6 +106,7 @@ module AllCollectionsHooks
       @label = obj.collection.label if obj.respond_to?(:collection) && obj.collection.respond_to?(:label)
       @path = obj.path if obj.respond_to? :path
       @relative_path = obj.relative_path if obj.respond_to? :relative_path
+      @title = obj.title if obj.respond_to?(:title)
       @type = obj.type if obj.respond_to? :type
       @url = obj.url
       @url = if @url

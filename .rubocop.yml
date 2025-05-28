@@ -50,7 +50,7 @@ Metrics/ClassLength:
     - "**/all_collections_tag.rb"
 
 Metrics/CyclomaticComplexity:
-  Max: 25
+  Max: 35
 
 Metrics/MethodLength:
   Max: 50
@@ -60,7 +60,7 @@ Metrics/ModuleLength:
     - "**/jekyll_plugin_support_class.rb"
 
 Metrics/PerceivedComplexity:
-  Max: 25
+  Max: 35
 
 Naming/FileName:
   Exclude:
