@@ -41,7 +41,7 @@ module AllCollectionsHooks
         order:         order,
         title:         title,
       }
-
+      obj = {}
       APage.new_attribute obj, :data, data
       APage.new_attribute obj, :draft, draft
       APage.new_attribute obj, :extname, '.html'
@@ -62,9 +62,9 @@ module AllCollectionsHooks
       data.key?('order') ? data['order'] || FIXNUM_MAX : FIXNUM_MAX
     end
 
-    def to_s
-      @label || @date.to_s
-    end
+    # def to_s
+    #   @label || @date.to_s
+    # end
 
     private
 
@@ -76,21 +76,31 @@ module AllCollectionsHooks
 
       @data = obj.data
 
-      @categories ||= @data['categories'] if @data.key? 'categories'
-      @date ||= (@data['date'].to_date if @data&.key?('date')) || Date.today
-      @description ||= @data['description'] if @data.key? 'description'
-      @excerpt ||= @data['excerpt'] if @data.key? 'excerpt'
-      @ext ||= @data['ext'] if @data.key? 'ext'
-      @last_modified ||= @data['last_modified'] || @data['last_modified_at'] || @date
+      @categories    ||= field(@data, :categories)
+      @date          ||= field(@data, :date)&.to_date
+      @description   ||= field(@data, :description)
+      @excerpt       ||= field(@data, :excerpt)
+      @ext           ||= field(@data, :ext)
+      @last_modified ||= field(@data, :last_modified) || field(@data, :last_modified_at) || @date
       @last_modified_field ||= case @data
-                               when @data.key?('last_modified')
-                                 'last_modified'
-                               when @data.key?('last_modified_at')
-                                 'last_modified_at'
+                               when @data.key?('last_modified') || @data.key?(:last_modified)
+                                 :last_modified
+                               when @data.key?('last_modified_at') || @data.key?(:last_modified_at)
+                                 :last_modified_at
                                end
-      @layout ||= @data['layout'] if @data.key? 'layout'
-      @tags ||= @data['tags'] if @data.key? 'tags'
-      @title ||= @data['title'] if @data&.key?('title')
+      @layout ||= field(@data, :layout)
+      @tags   ||= field(@data, :tags)
+      @title  ||= field(@data, :title) # rubocop:disable Naming/MemoizedInstanceVariableName
+    end
+
+    # @param field must be a symbol
+    # @return value of data[key] if key exists as a string or a symbol, else nil
+    def field(data, key)
+      if data&.key
+        data[key]
+      elsif data.call(key.to_s)
+        data[key.to_s]
+      end
     end
 
     # Sets the following instance attributes in APage from selected attributes in `obj` (when present):

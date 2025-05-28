@@ -5,7 +5,7 @@ module AllCollectionsHooks
   # Override class definition for easiler testing
   class APage
     def to_s
-      @href
+      @title
     end
   end
 end
@@ -44,7 +44,7 @@ RSpec.describe(AllCollectionsHooks::APage) do
   let(:o2) do
     described_class.apage_from(
       collection_name: '_posts',
-      date:            '2020-01-01',
+      date:            '2021-01-01',
       last_modified:   '2020-01-01',
       title:           'b_A'
     )
@@ -52,7 +52,7 @@ RSpec.describe(AllCollectionsHooks::APage) do
   let(:o3) do
     described_class.apage_from(
       collection_name: '_posts',
-      date:            '2020-01-01',
+      date:            '2021-01-01',
       last_modified:   '2023-01-01',
       title:           'b_B'
     )
@@ -60,7 +60,7 @@ RSpec.describe(AllCollectionsHooks::APage) do
   let(:o4) do
     described_class.apage_from(
       collection_name: '_posts',
-      date:            '2020-01-01',
+      date:            '2022-01-01',
       last_modified:   '2023-01-01',
       title:           'c_B'
     )
@@ -92,6 +92,9 @@ RSpec.describe(AllCollectionsHooks::APage) do
                        NullBinding.new.min_binding, __FILE__, __LINE__ - 1
     actual = objs.sort(&sort_lambda)
     expected = [o3, o4, o1, o2]
+    x1 = o1.last_modified < o2.last_modified
+    x2 = o1.last_modified < o3.last_modified
+    x3 = o1.last_modified < o4.last_modified
     puts '  actual: ' + actual.map(&:to_s).join(', ')
     puts 'expected: ' + expected.map(&:to_s).join(', ')
     expect(actual).to eq(expected)
