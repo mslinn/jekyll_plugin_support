@@ -77,7 +77,7 @@ module AllCollectionsHooks
       @data = obj.data
 
       @categories    ||= field(@data, :categories)
-      @date          ||= field(@data, :date)&.to_date
+      @date          ||= field(@data, :date)
       @description   ||= field(@data, :description)
       @excerpt       ||= field(@data, :excerpt)
       @ext           ||= field(@data, :ext)
@@ -96,9 +96,9 @@ module AllCollectionsHooks
     # @param field must be a symbol
     # @return value of data[key] if key exists as a string or a symbol, else nil
     def field(data, key)
-      if data&.key
+      if data.key? key
         data[key]
-      elsif data.call(key.to_s)
+      elsif data.key? key.to_s
         data[key.to_s]
       end
     end

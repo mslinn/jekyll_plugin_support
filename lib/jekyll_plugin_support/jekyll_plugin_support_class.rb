@@ -14,7 +14,7 @@ module JekyllSupport
 
   def self.error_short_trace(logger, error)
     error.set_backtrace error.backtrace[0..DISPLAYED_CALLS]
-    logger.error { error }
+    logger.error { error } # Are error and logger.error defined?
     error
   end
 

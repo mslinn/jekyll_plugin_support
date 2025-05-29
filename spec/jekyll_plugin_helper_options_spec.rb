@@ -1,3 +1,4 @@
+require 'jekyll'
 require 'jekyll_plugin_logger'
 # require 'rspec/match_ignoring_whitespace'
 require_relative '../lib/jekyll_plugin_support'
