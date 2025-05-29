@@ -70,6 +70,7 @@ RSpec.describe(AllCollectionsHooks::APage) do
   it 'defines sort_by lambda with last_modified' do
     sort_lambda = ->(a, b) { [a.last_modified] <=> [b.last_modified] }
     actual = objs.sort(&sort_lambda)
+    # show(lambda_string, result, expected)
     expect(actual).to eq([o1, o2, o3, o4])
   end
 
@@ -77,6 +78,7 @@ RSpec.describe(AllCollectionsHooks::APage) do
     sort_lambda = eval '->(a, b) { a.last_modified <=> b.last_modified }',
                        NullBinding.new.min_binding, __FILE__, __LINE__ - 1
     actual = objs.sort(&sort_lambda)
+    # show(lambda_string, result, expected)
     expect(actual).to eq([o1, o2, o3, o4])
   end
 
@@ -84,6 +86,7 @@ RSpec.describe(AllCollectionsHooks::APage) do
     sort_lambda = eval '->(a, b) { [a.last_modified] <=> [b.last_modified] }',
                        NullBinding.new.min_binding, __FILE__, __LINE__ - 1
     actual = objs.sort(&sort_lambda)
+    # show(lambda_string, result, expected)
     expect(actual).to eq([o1, o2, o3, o4])
   end
 
@@ -92,62 +95,58 @@ RSpec.describe(AllCollectionsHooks::APage) do
                        NullBinding.new.min_binding, __FILE__, __LINE__ - 1
     actual = objs.sort(&sort_lambda)
     expected = [o3, o4, o1, o2]
-    x1 = o1.last_modified < o2.last_modified
-    x2 = o1.last_modified < o3.last_modified
-    x3 = o1.last_modified < o4.last_modified
-    puts '  actual: ' + actual.map(&:to_s).join(', ')
-    puts 'expected: ' + expected.map(&:to_s).join(', ')
+    # show(lambda_string, result, expected)
     expect(actual).to eq(expected)
   end
 
-  xit 'create_lambda with 1 date key, descending' do
-    lambda_string = described_class.create_lambda_string('-last_modified')
-    sort_lambda = described_class.evaluate(lambda_string)
+  it 'create_lambda with 1 date key, descending' do
+    lambda_string = JekyllAllCollections::AllCollectionsTag.create_lambda_string('-last_modified')
+    sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o3, o4, o1, o2]
     # show(lambda_string, result, expected)
     expect(actual).to eq(expected)
   end
 
-  xit 'create_lambda with 1 date key, ascending' do
-    lambda_string = described_class.create_lambda_string('date')
-    sort_lambda = described_class.evaluate(lambda_string)
+  it 'create_lambda with 1 date key, ascending' do
+    lambda_string = JekyllAllCollections::AllCollectionsTag.create_lambda_string('date')
+    sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o1, o2, o3, o4]
     # show(lambda_string, result, expected)
     expect(actual).to eq(expected)
   end
 
-  xit 'create_lambda with 2 date keys, both ascending' do
-    lambda_string = described_class.create_lambda_string(%w[date last_modified])
-    sort_lambda = described_class.evaluate(lambda_string)
+  it 'create_lambda with 2 date keys, both ascending' do
+    lambda_string = JekyllAllCollections::AllCollectionsTag.create_lambda_string(%w[date last_modified])
+    sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o1, o2, o3, o4]
     # show(lambda_string, result, expected)
     expect(actual).to eq(expected)
   end
 
-  xit 'create_lambda with 2 date keys, both descending' do
-    lambda_string = described_class.create_lambda_string(['-date', '-last_modified'])
-    sort_lambda = described_class.evaluate(lambda_string)
+  it 'create_lambda with 2 date keys, both descending' do
+    lambda_string = JekyllAllCollections::AllCollectionsTag.create_lambda_string(['-date', '-last_modified'])
+    sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o4, o3, o2, o1]
     # show(lambda_string, result, expected)
     expect(actual).to eq(expected)
   end
 
-  xit 'create_lambda with 2 date keys, first descending and second ascending' do
-    lambda_string = described_class.create_lambda_string(['-date', 'last_modified'])
-    sort_lambda = described_class.evaluate(lambda_string)
+  it 'create_lambda with 2 date keys, first descending and second ascending' do
+    lambda_string = JekyllAllCollections::AllCollectionsTag.create_lambda_string(['-date', 'last_modified'])
+    sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o4, o2, o3, o1]
     # show(lambda_string, result, expected)
     expect(actual).to eq(expected)
   end
 
-  xit 'create_lambda with 2 date keys, first ascending and second descending' do
-    lambda_string = described_class.create_lambda_string(['date', '-last_modified'])
-    sort_lambda = described_class.evaluate(lambda_string)
+  it 'create_lambda with 2 date keys, first ascending and second descending' do
+    lambda_string = JekyllAllCollections::AllCollectionsTag.create_lambda_string(['date', '-last_modified'])
+    sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o1, o3, o2, o4]
     # show(lambda_string, result, expected)
