@@ -10,12 +10,15 @@ module AllCollectionsHooks
     #               (See method AllCollectionsHooks.apages_from_objects)
     def initialize(obj, origin)
       @origin = origin
-      obj_field_init obj # object attributes have 1st priority
-      data_field_init obj # data attributes have 2nd priority
+      data_field_init obj # data attributes have 1st priority
+      obj_field_init obj # object attributes have 2nd priority
       @draft   = Jekyll::Draft.draft? obj
-      @href  ||= @url
+      @url   ||= obj.url
+
       # @href  = "/#{@href}" if @origin == 'individual_page'
-      @href    = "#{@href}index.html" if @href.end_with? '/'
+      @href  ||= obj.url
+      @href    = "#{@href}index.html" if @href&.end_with? '/'
+
       @name  ||= File.basename(@href)
       @title ||= "<code>#{@href}</code>"
     rescue StandardError => e
@@ -107,17 +110,19 @@ module AllCollectionsHooks
     # `content`, `destination`, `ext` and `extname`, `label` from `collection.label`,
     # `path`, `relative_path`, `type`, and `url`.
     def obj_field_init(obj)
-      @content = obj.content if obj.respond_to? :content
+      @content ||= obj.content if obj.respond_to? :content
 
       # TODO: What _config.yml setting should be passed to destination()?
-      @destination = obj.destination('') if obj.respond_to? :destination
-      @ext = obj.extname
-      @extname = @ext # For compatibility with previous versions of all_collections
-      @label = obj.collection.label if obj.respond_to?(:collection) && obj.collection.respond_to?(:label)
-      @path = obj.path if obj.respond_to? :path
-      @relative_path = obj.relative_path if obj.respond_to? :relative_path
-      @title = obj.title if obj.respond_to?(:title)
-      @type = obj.type if obj.respond_to? :type
+      @destination ||= obj.destination('') if obj.respond_to? :destination
+      @ext ||= obj.extname if obj.respond_to? :extname
+      @extname ||= @ext # For compatibility with previous versions of all_collections
+      @label ||= obj.collection.label if obj.respond_to?(:collection) && obj.collection.respond_to?(:label)
+      @path ||= obj.path if obj.respond_to? :path
+      @relative_path ||= obj.relative_path if obj.respond_to? :relative_path
+      @title ||= obj.title if obj.respond_to?(:title)
+      @type ||= obj.type if obj.respond_to? :type
+      return if @url
+
       @url = obj.url
       @url = if @url
                "#{@url}index.html" if @url.end_with? '/'
