@@ -64,6 +64,16 @@ module AllCollectionsHooks
       JekyllSupport.error_short_trace(@logger, e)
     end
 
+    # @param field must be a symbol
+    # @return value of data[key] if key exists as a string or a symbol, else nil
+    def field(key)
+      if @data.key? key
+        @data[key]
+      elsif data.key? key.to_s
+        @data[key.to_s]
+      end
+    end
+
     def order
       data.key?('order') ? data['order'] || FIXNUM_MAX : FIXNUM_MAX
     end
@@ -82,31 +92,21 @@ module AllCollectionsHooks
 
       @data = obj.data
 
-      @categories    ||= field(@data, :categories)
-      @date          ||= field(@data, :date)
-      @description   ||= field(@data, :description)
-      @excerpt       ||= field(@data, :excerpt)
-      @ext           ||= field(@data, :ext)
-      @last_modified ||= field(@data, :last_modified) || field(@data, :last_modified_at) || @date
+      @categories    ||= field(:categories)
+      @date          ||= field(:date)
+      @description   ||= field(:description)
+      @excerpt       ||= field(:excerpt)
+      @ext           ||= field(:ext)
+      @last_modified ||= field(:last_modified) || field(:last_modified_at) || @date
       @last_modified_field ||= case @data
                                when @data.key?('last_modified') || @data.key?(:last_modified)
                                  :last_modified
                                when @data.key?('last_modified_at') || @data.key?(:last_modified_at)
                                  :last_modified_at
                                end
-      @layout ||= field(@data, :layout)
-      @tags   ||= field(@data, :tags)
-      @title  ||= field(@data, :title) # rubocop:disable Naming/MemoizedInstanceVariableName
-    end
-
-    # @param field must be a symbol
-    # @return value of data[key] if key exists as a string or a symbol, else nil
-    def field(data, key)
-      if data.key? key
-        data[key]
-      elsif data.key? key.to_s
-        data[key.to_s]
-      end
+      @layout ||= field(:layout)
+      @tags   ||= field(:tags)
+      @title  ||= field(:title) # rubocop:disable Naming/MemoizedInstanceVariableName
     end
 
     # Sets the following instance attributes in APage from selected attributes in `obj` (when present):
