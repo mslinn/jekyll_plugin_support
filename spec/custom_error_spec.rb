@@ -1,3 +1,4 @@
+require 'spec_helper'
 require_relative '../lib/error/jekyll_custom_error'
 require_relative '../lib/jekyll_plugin_support/jekyll_plugin_support_class'
 require_relative '../lib/helper/jekyll_plugin_helper'

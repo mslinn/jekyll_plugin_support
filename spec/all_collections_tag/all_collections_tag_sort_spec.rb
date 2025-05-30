@@ -27,8 +27,8 @@ class NullBinding < BasicObject
 end
 
 def show(lambda_string, result, expected)
-  p "For lambda_string: #{lambda_string}"
-  p "  result: #{result.map(&:label).join(', ')}  <==>  expected: #{expected.map(&:label).join(', ')}"
+  puts "For lambda_string: #{lambda_string}"
+  puts "  result: #{result.map(&:to_s).join(', ')}  <==>  expected: #{expected.map(&:to_s).join(', ')}"
 end
 
 # See https://stackoverflow.com/a/75388137/553865
@@ -70,16 +70,18 @@ RSpec.describe(AllCollectionsHooks::APage) do
   it 'defines sort_by lambda with last_modified' do
     sort_lambda = ->(a, b) { [a.last_modified] <=> [b.last_modified] }
     actual = objs.sort(&sort_lambda)
-    # show(lambda_string, result, expected)
-    expect(actual).to eq([o1, o2, o3, o4])
+    expected = [o1, o2, o3, o4]
+    show('[a.last_modified] <=> [b.last_modified]', actual, expected)
+    expect(actual).to eq(expected)
   end
 
   it 'makes sort_by lambdas from stringified date' do
     sort_lambda = eval '->(a, b) { a.last_modified <=> b.last_modified }',
                        NullBinding.new.min_binding, __FILE__, __LINE__ - 1
     actual = objs.sort(&sort_lambda)
-    # show(lambda_string, result, expected)
-    expect(actual).to eq([o1, o2, o3, o4])
+    expected = [o1, o2, o3, o4]
+    show('->(a, b) { a.last_modified <=> b.last_modified }', actual, expected)
+    expect(actual).to eq(expected)
   end
 
   it 'makes sort_by lambdas from stringified array of last_modified' do

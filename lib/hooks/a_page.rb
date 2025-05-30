@@ -16,14 +16,13 @@ module AllCollectionsHooks
       @url   ||= obj.url
 
       # @href  = "/#{@href}" if @origin == 'individual_page'
-      @href  ||= obj.url
+      @href  ||= obj.url || @url
       @href    = "#{@href}index.html" if @href&.end_with? '/'
 
       @name  ||= File.basename(@href)
       @title ||= "<code>#{@href}</code>"
     rescue StandardError => e
       JekyllSupport.error_short_trace(@logger, e)
-      # JekyllSupport.warn_short_trace(@logger, e)
     end
 
     # Contructor for testing and jekyll_outline
