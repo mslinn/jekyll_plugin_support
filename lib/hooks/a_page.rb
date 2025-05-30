@@ -1,6 +1,6 @@
 require 'jekyll_draft'
 
-module JekyllPluginSupport
+module JekyllSupport
   # Contructor for testing and jekyll_outline
   def self.apage_from( # rubocop:disable Metrics/ParameterLists
     date: nil,
@@ -20,12 +20,12 @@ module JekyllPluginSupport
       title:         title,
     }
     obj = {}
-    JekyllPluginSupport.new_attribute obj, :data, data
-    JekyllPluginSupport.new_attribute obj, :draft, draft
-    JekyllPluginSupport.new_attribute obj, :extname, '.html'
-    JekyllPluginSupport.new_attribute obj, :logger, PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
-    JekyllPluginSupport.new_attribute obj, :title, title
-    JekyllPluginSupport.new_attribute obj, :url, url
+    JekyllSupport.new_attribute obj, :data, data
+    JekyllSupport.new_attribute obj, :draft, draft
+    JekyllSupport.new_attribute obj, :extname, '.html'
+    JekyllSupport.new_attribute obj, :logger, PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
+    JekyllSupport.new_attribute obj, :title, title
+    JekyllSupport.new_attribute obj, :url, url
 
     AllCollectionsHooks::APage.new obj, nil
   end
