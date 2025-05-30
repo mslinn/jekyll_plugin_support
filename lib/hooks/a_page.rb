@@ -1,5 +1,42 @@
 require 'jekyll_draft'
 
+module JekyllPluginSupport
+    # Contructor for testing and jekyll_outline
+  def self.apage_from( # rubocop:disable Metrics/ParameterLists
+    date: nil,
+    draft: false,
+    last_modified: nil,
+    collection_name: nil,
+    order: nil,
+    title: nil,
+    url: nil
+  )
+    data = {
+      collection:    { label: collection_name },
+      date:          Date.parse(date),
+      draft:         draft,
+      last_modified: Date.parse(last_modified || date),
+      order:         order,
+      title:         title,
+    }
+    obj = {}
+    JekyllPluginSupport.new_attribute obj, :data, data
+    JekyllPluginSupport.new_attribute obj, :draft, draft
+    JekyllPluginSupport.new_attribute obj, :extname, '.html'
+    JekyllPluginSupport.new_attribute obj, :logger, PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
+    JekyllPluginSupport.new_attribute obj, :title, title
+    JekyllPluginSupport.new_attribute obj, :url, url
+
+    AllCollectionsHooks::APage.new obj, nil
+  end
+
+  # Defines a new attribute called `prop_name` in object `obj` and sets it to `prop_value`
+  def self.new_attribute(obj, prop_name, prop_value)
+    obj.class.module_eval { attr_accessor prop_name }
+    obj.instance_variable_set :"@#{prop_name}", prop_value
+  end
+end
+
 module AllCollectionsHooks
   class APage
     attr_reader :content, :data, :date, :description, :destination, :draft, :excerpt, :ext, :extname, :href,
@@ -24,41 +61,6 @@ module AllCollectionsHooks
     rescue StandardError => e
       JekyllSupport.error_short_trace(@logger, e)
       # JekyllSupport.warn_short_trace(@logger, e)
-    end
-
-    # Contructor for testing and jekyll_outline
-    def self.apage_from( # rubocop:disable Metrics/ParameterLists
-      date: nil,
-      draft: false,
-      last_modified: nil,
-      collection_name: nil,
-      order: nil,
-      title: nil,
-      url: nil
-    )
-      data = {
-        collection:    { label: collection_name },
-        date:          Date.parse(date),
-        draft:         draft,
-        last_modified: Date.parse(last_modified || date),
-        order:         order,
-        title:         title,
-      }
-      obj = {}
-      APage.new_attribute obj, :data, data
-      APage.new_attribute obj, :draft, draft
-      APage.new_attribute obj, :extname, '.html'
-      APage.new_attribute obj, :logger, PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
-      APage.new_attribute obj, :title, title
-      APage.new_attribute obj, :url, url
-
-      APage.new obj, nil
-    end
-
-    # Defines a new attribute called `prop_name` in object `obj` and sets it to `prop_value`
-    def self.new_attribute(obj, prop_name, prop_value)
-      obj.class.module_eval { attr_accessor prop_name }
-      obj.instance_variable_set :"@#{prop_name}", prop_value
     end
 
     def order
