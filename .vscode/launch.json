@@ -100,7 +100,7 @@
       ],
       "cwd": "${workspaceRoot}/demo",
       "debugPort": "0",
-      "name": "RSpec - active spec file only",
+      "name": "RSpec - active spec only",
       "request": "launch",
       "script": "${workspaceRoot}/binstub/rspec",
       "type": "rdbg",
