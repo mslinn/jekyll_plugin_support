@@ -80,9 +80,9 @@
     },
     {
       "args": [
-        "-I",
-        "../spec",
-        "-P", "../spec/**/*_spec.rb"
+        "-I", "${workspaceRoot}/lib",
+        "-I", "${workspaceRoot}/spec",
+        "-P", "${workspaceRoot}/spec/**/*_spec.rb"
       ],
       "cwd": "${workspaceRoot}/demo",
       "debugPort": "0",
@@ -94,8 +94,8 @@
     },
     {
       "args": [
-        "-I",
-        "${workspaceRoot}",
+        "-I", "${workspaceRoot}/lib",
+        "-I", "${workspaceRoot}/spec",
         "${file}"
       ],
       "cwd": "${workspaceRoot}/demo",
