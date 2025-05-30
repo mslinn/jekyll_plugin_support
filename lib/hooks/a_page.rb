@@ -38,6 +38,8 @@ module JekyllSupport
 end
 
 module AllCollectionsHooks
+  FIXNUM_MAX = (2**((0.size * 8) - 2)) - 1
+
   class APage
     attr_reader :content, :data, :date, :description, :destination, :draft, :excerpt, :ext, :extname, :href,
                 :label, :last_modified, :layout, :origin, :path, :relative_path, :tags, :title, :type, :url
