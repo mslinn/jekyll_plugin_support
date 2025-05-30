@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.test_files            = spec.files.grep %r{^(test|spec|features)/}
   spec.version               = JekyllPluginSupportVersion::VERSION
 
+  spec.add_dependency 'bigdecimal'
   spec.add_dependency 'facets'
   spec.add_dependency 'jekyll', '>= 4.4.1'
   spec.add_dependency 'jekyll_plugin_logger'

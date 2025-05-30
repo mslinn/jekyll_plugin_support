@@ -32,7 +32,7 @@ def show(lambda_string, result, expected)
 end
 
 # See https://stackoverflow.com/a/75388137/553865
-RSpec.describe(AllCollectionsHooks::APage) do
+RSpec.describe(JekyllPluginSupport) do
   let(:o1) do
     described_class.apage_from(
       collection_name: '_posts',
