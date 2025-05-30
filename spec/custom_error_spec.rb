@@ -1,5 +1,6 @@
 require_relative '../lib/error/jekyll_custom_error'
 require_relative '../lib/jekyll_plugin_support/jekyll_plugin_support_class'
+require_relative '../lib/helper/jekyll_plugin_helper'
 
 class Dummy
   def just_for_testing; end
@@ -14,14 +15,14 @@ class CustomErrorSpec
 
   puts "AnError is a #{AnError.class}; StandardError is a #{StandardError.class}"
   begin
-    raise AnError, 'Oops'
+    raise AnError, 'This error is expected'
   rescue AnError => e
     puts "Caught AnError: #{e.message}"
   rescue ::JekyllSupport::CustomError => e
     puts "Caught CustomError: #{e.message}"
   end
 
-  RSpec.describe JekyllSupport::JekyllPluginHelper do
+  RSpec.describe ::JekyllSupport::JekyllPluginHelper do
     it 'generates messages' do
       msg = described_class.generate_message(Dummy, tag_name, '0.1.0')
       puts msg
