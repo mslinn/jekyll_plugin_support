@@ -71,7 +71,7 @@ RSpec.describe(JekyllPluginSupport) do
     sort_lambda = ->(a, b) { [a.last_modified] <=> [b.last_modified] }
     actual = objs.sort(&sort_lambda)
     expected = [o1, o2, o3, o4]
-    show('[a.last_modified] <=> [b.last_modified]', actual, expected)
+    # show('[a.last_modified] <=> [b.last_modified]', actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -80,7 +80,7 @@ RSpec.describe(JekyllPluginSupport) do
                        NullBinding.new.min_binding, __FILE__, __LINE__ - 1
     actual = objs.sort(&sort_lambda)
     expected = [o1, o2, o3, o4]
-    show('->(a, b) { a.last_modified <=> b.last_modified }', actual, expected)
+    # show('->(a, b) { a.last_modified <=> b.last_modified }', actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -88,7 +88,7 @@ RSpec.describe(JekyllPluginSupport) do
     sort_lambda = eval '->(a, b) { [a.last_modified] <=> [b.last_modified] }',
                        NullBinding.new.min_binding, __FILE__, __LINE__ - 1
     actual = objs.sort(&sort_lambda)
-    # show(lambda_string, result, expected)
+    # show('->(a, b) { [a.last_modified] <=> [b.last_modified] }', actual, expected)
     expect(actual).to eq([o1, o2, o3, o4])
   end
 
@@ -97,7 +97,7 @@ RSpec.describe(JekyllPluginSupport) do
                        NullBinding.new.min_binding, __FILE__, __LINE__ - 1
     actual = objs.sort(&sort_lambda)
     expected = [o3, o4, o1, o2]
-    # show(lambda_string, result, expected)
+    # show('->(a, b) { [b.last_modified] <=> [a.last_modified] }', actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -106,7 +106,7 @@ RSpec.describe(JekyllPluginSupport) do
     sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o3, o4, o1, o2]
-    # show(lambda_string, result, expected)
+    # show(lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -115,7 +115,7 @@ RSpec.describe(JekyllPluginSupport) do
     sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o1, o2, o3, o4]
-    # show(lambda_string, result, expected)
+    # show(lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -124,7 +124,7 @@ RSpec.describe(JekyllPluginSupport) do
     sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o1, o2, o3, o4]
-    # show(lambda_string, result, expected)
+    # show(lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -133,7 +133,7 @@ RSpec.describe(JekyllPluginSupport) do
     sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o4, o3, o2, o1]
-    # show(lambda_string, result, expected)
+    # show(lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -142,7 +142,7 @@ RSpec.describe(JekyllPluginSupport) do
     sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o4, o2, o3, o1]
-    # show(lambda_string, result, expected)
+    # show(lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -151,7 +151,7 @@ RSpec.describe(JekyllPluginSupport) do
     sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o1, o3, o2, o4]
-    # show(lambda_string, result, expected)
+    # show(lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 end
