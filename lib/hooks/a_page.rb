@@ -1,7 +1,7 @@
 require 'jekyll_draft'
 
 module JekyllPluginSupport
-    # Contructor for testing and jekyll_outline
+  # Contructor for testing and jekyll_outline
   def self.apage_from( # rubocop:disable Metrics/ParameterLists
     date: nil,
     draft: false,
