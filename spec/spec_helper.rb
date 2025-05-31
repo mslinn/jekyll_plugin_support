@@ -8,6 +8,7 @@ RSpec.configure do |config|
   config.example_status_persistence_file_path = 'spec/status_persistence.txt'
 
   # See https://rspec.info/features/3-12/rspec-core/filtering/filter-run-when-matching/
+  # and https://github.com/rspec/rspec/issues/221
   config.filter_run_when_matching :focus
 
   # Other values: :progress, :html, :json, CustomFormatterClass
