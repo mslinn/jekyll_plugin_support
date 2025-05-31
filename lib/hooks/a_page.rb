@@ -37,6 +37,7 @@ module JekyllSupport
   end
 end
 
+# TODO: move APage to module JekyllSupport
 module AllCollectionsHooks
   FIXNUM_MAX = (2**((0.size * 8) - 2)) - 1
 
@@ -78,9 +79,9 @@ module AllCollectionsHooks
       data.key?('order') ? data['order'] || FIXNUM_MAX : FIXNUM_MAX
     end
 
-    # def to_s
-    #   @label || @date.to_s
-    # end
+    def to_s
+      @label || @date.to_s
+    end
 
     private
 
