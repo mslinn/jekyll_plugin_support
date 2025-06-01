@@ -28,6 +28,12 @@ module JekyllSupport
   end
 end
 
+module ToString
+  def to_s
+    "#{self}.class.name"
+  end
+end
+
 module NoArgParsing
   attr_accessor :no_arg_parsing
 
@@ -37,17 +43,21 @@ end
 module JekyllSupport
   class JekyllTag
     include JekyllSupportError
+    include ToString
   end
 
   class JekyllTagNoArgParsing
     include JekyllSupportError
+    include ToString
   end
 
   class JekyllBlock
     include JekyllSupportError
+    include ToString
   end
 
   class JekyllBlockNoArgParsing
     include JekyllSupportError
+    include ToString
   end
 end

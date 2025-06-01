@@ -86,7 +86,11 @@ module AllCollectionsHooks
     end
 
     def order
-      data.key?('order') ? data['order'] || FIXNUM_MAX : FIXNUM_MAX
+      if data.key?('order') || data.key?(:order)
+        data['order'] || data[:order]
+      else
+        FIXNUM_MAX
+      end
     end
 
     def to_s
