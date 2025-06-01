@@ -48,6 +48,8 @@ end
 # TODO: move APage to module JekyllSupport
 module AllCollectionsHooks
   FIXNUM_MAX = (2**((0.size * 8) - 2)) - 1
+  END_OF_TIME = 1_000_000_000_000 # One trillion years in the future
+  # Date.new is -4712-01-01
 
   class APage
     attr_reader :content, :data, :date, :description, :destination, :draft, :excerpt, :ext, :extname, :href,
