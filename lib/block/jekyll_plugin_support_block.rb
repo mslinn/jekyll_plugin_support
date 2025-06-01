@@ -82,10 +82,11 @@ module JekyllSupport
       render_impl(text)
     rescue StandardError => e
       e.shorten_backtrace
+      @logger.error e.full_message
       file_name = e.backtrace[0]&.split(':')&.first
       in_file_name = "in '#{file_name}' " if file_name
       of_page = "of '#{@page['path']}'" if @page
-      @logger.error { "#{e.class} on line #{@line_number} #{of_page} while processing #{tag_name} #{in_file_name}- #{e.message}" }
+      @logger.error { "While processing line #{@line_number} #{of_page} for #{tag_name} #{in_file_name}- #{e.message}" }
       binding.pry if @pry_on_standard_error # rubocop:disable Lint/Debugger
       raise e if @die_on_standard_error
 

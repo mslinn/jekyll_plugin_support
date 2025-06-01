@@ -42,11 +42,12 @@ module JekyllSupport
       END_MSG
     end
 
-    def shorten_backtrace(backtrace_element_count = 3)
-      b = backtrace[0..backtrace_element_count - 1].map do |x|
-        x.gsub(Dir.pwd + '/', './')
-      end
-      set_backtrace b
+    def shorten_backtrace(backtrace_element_count = 6)
+      set_backtrace backtrace[0..backtrace_element_count]
+      # b = backtrace[0..backtrace_element_count - 1].map do |x|
+      #   x.gsub(Dir.pwd + '/', './')
+      # end
+      # set_backtrace b
     end
   end
 end

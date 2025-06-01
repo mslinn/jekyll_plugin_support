@@ -15,7 +15,7 @@ module JekyllAllCollections
     # @return [String]
     def render_impl
       parse_arguments # Defines instance variables like @sort_by
-      puts "@sort_by=#{@sort_by}, @sort_by_param=#{@sort_by_param}".yellow
+      # puts "@sort_by=#{@sort_by}, @sort_by_param=#{@sort_by_param}".yellow
       sort_lambda = init_sort_by @sort_by, @sort_by_param
       @heading = @helper.parameter_specified?('heading') || default_head(@sort_by)
       generate_output sort_lambda
@@ -95,7 +95,7 @@ module JekyllAllCollections
     end
 
     def generate_output(sort_lambda)
-      puts 'generate_output start'.yellow
+      # puts 'generate_output start'.yellow
       id = @id.to_s.strip.empty? ? '' : " id='#{@id}'"
       heading = @heading.strip.to_s.empty? ? '' : "<h2#{id}>#{@heading}</h2>"
       data = case @data_selector
@@ -108,7 +108,7 @@ module JekyllAllCollections
              else
                raise AllCollectionsError, "Invalid value for @data_selector (#{data_selector})"
              end
-      puts "generate_output: @data_selector=#{@data_selector}".yellow
+      # puts "generate_output: @data_selector=#{@data_selector}".yellow
       # @site.all_collections.each { |x| puts x.url.yellow }
       collection = data.sort(&sort_lambda)
       posts = collection.map do |x|
@@ -125,6 +125,8 @@ module JekyllAllCollections
           #{posts.join "\n"}
         </div>
       END_TEXT
+    rescue NoMethodError => e
+      error_short_trace e
     rescue ArgumentError => e
       warn_short_trace e
     end

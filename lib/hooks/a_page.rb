@@ -11,11 +11,17 @@ module JekyllSupport
     title: nil,
     url: nil
   )
+    date = Date.parse(date) if date.instance_of?(String)
+    last_modified = if last_modified.nil? || last_modified == ''
+                      date
+                    elsif last_modified.instance_of?(String)
+                      Date.parse(last_modified)
+                    end
     data = {
       collection:    { label: collection_name },
-      date:          Date.parse(date),
+      date:          date,
       draft:         draft,
-      last_modified: Date.parse(last_modified || date),
+      last_modified: last_modified,
       order:         order,
       title:         title,
     }
@@ -28,6 +34,8 @@ module JekyllSupport
     JekyllSupport.new_attribute obj, :url, url
 
     AllCollectionsHooks::APage.new obj, nil
+  rescue StandardError => e
+    puts e.full_message
   end
 
   # Defines a new attribute called `prop_name` in object `obj` and sets it to `prop_value`
