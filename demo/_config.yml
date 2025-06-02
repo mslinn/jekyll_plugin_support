@@ -73,5 +73,5 @@ qrcode:
   fg_color: black
 sass:
   style: compressed
-title: Jekyll Plugin Support Demo
+title: <span class="code">jekyll_plugin_support</span> Demo
 url: https://bogus.jekylldemo.com
