@@ -20,8 +20,8 @@ module JekyllAllCollections
       @heading = @helper.parameter_specified?('heading') || default_head(@sort_by)
       generate_output sort_lambda
     rescue StandardError => e
-      JekyllSupport.error_short_trace @logger, e
-      # JekyllSupport.warn_short_trace @logger, e
+      ::JekyllSupport.error_short_trace @logger, e
+      # ::JekyllSupport.warn_short_trace @logger, e
     end
 
     # Descending sort keys reverse the order of comparison
@@ -126,7 +126,7 @@ module JekyllAllCollections
         </div>
       END_TEXT
     rescue NoMethodError => e
-      error_short_trace e
+      ::JekyllSupport.error_short_trace e
     rescue ArgumentError => e
       warn_short_trace e
     end

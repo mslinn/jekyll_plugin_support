@@ -22,8 +22,8 @@ module JekyllAllCollections
         ::AllCollectionsHooks.compute(site) if !@site.class.method_defined?(:all_documents) || @site.all_documents.nil?
       end
     rescue StandardError => e
-      JekyllSupport.error_short_trace(@logger, e)
-      # JekyllSupport.warn_short_trace(@logger, e)
+      ::JekyllSupport.error_short_trace(@logger, e)
+      # ::JekyllSupport.warn_short_trace(@logger, e)
     end
 
     # Yes, all_collections is defined for this hook
@@ -31,8 +31,8 @@ module JekyllAllCollections
     #   defined_msg = ::AllCollectionsHooks.all_collections_defined?(site)
     #   @logger.debug { "Jekyll::Hooks.register(:site, :post_read, :low: #{defined_msg}" }
     # rescue StandardError => e
-    #   JekyllSupport.error_short_trace(@logger, e)
-    #   # JekyllSupport.warn_short_trace(@logger, e)
+    #   ::JekyllSupport.error_short_trace(@logger, e)
+    #   # ::JekyllSupport.warn_short_trace(@logger, e)
     # end
 
     # Yes, all_collections is defined for this hook
@@ -40,8 +40,8 @@ module JekyllAllCollections
     #   defined_msg = ::AllCollectionsHooks.all_collections_defined?(site)
     #   @logger.debug { "Jekyll::Hooks.register(:site, :post_read, :normal: #{defined_msg}" }
     # rescue StandardError => e
-    #   JekyllSupport.error_short_trace(@logger, e)
-    #   # JekyllSupport.warn_short_trace(@logger, e)
+    #   ::JekyllSupport.error_short_trace(@logger, e)
+    #   # ::JekyllSupport.warn_short_trace(@logger, e)
     # end
 
     # Yes, all_collections is defined for this hook
@@ -49,8 +49,8 @@ module JekyllAllCollections
     #   defined_msg = ::AllCollectionsHooks.all_collections_defined?(site)
     #   @logger.debug { "Jekyll::Hooks.register(:site, :pre_render: #{defined_msg}" }
     # rescue StandardError => e
-    #   JekyllSupport.error_short_trace(@logger, e)
-    #   # JekyllSupport.warn_short_trace(@logger, e)
+    #   ::JekyllSupport.error_short_trace(@logger, e)
+    #   # ::JekyllSupport.warn_short_trace(@logger, e)
     # end
   end
 end

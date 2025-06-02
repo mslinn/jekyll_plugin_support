@@ -12,7 +12,7 @@ module JekyllSupport
     rescue StandardError => e
       e.shorten_backtrace
       @logger.error { e.full_message }
-      JekyllSupport.error_short_trace(@logger, e)
+      ::JekyllSupport.error_short_trace(@logger, e)
     end
 
     # Liquid::Block subclasses do not render if there is no content within the tag

@@ -72,7 +72,7 @@ module AllCollectionsHooks
       @name  ||= File.basename(@href)
       @title ||= "<code>#{@href}</code>"
     rescue StandardError => e
-      JekyllSupport.error_short_trace(@logger, e)
+      ::JekyllSupport.error_short_trace(@logger, e)
     end
 
     # @param field must be a symbol

@@ -44,7 +44,7 @@ module AllCollectionsHooks
     site.everything       = @everything
     site.sorted_lru_files = @sorted_lru_files
   rescue StandardError => e
-    JekyllSupport.error_short_trace(::JekyllAllCollections::AllCollectionsHooks.logger, e)
-    # JekyllSupport.warn_short_trace(::JekyllAllCollections::AllCollectionsHooks.logger, e)
+    ::JekyllSupport.error_short_trace(::JekyllAllCollections::AllCollectionsHooks.logger, e)
+    # ::JekyllSupport.warn_short_trace(::JekyllAllCollections::AllCollectionsHooks.logger, e)
   end
 end
