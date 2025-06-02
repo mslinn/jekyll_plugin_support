@@ -1,21 +1,5 @@
 author: Mike Slinn
 collections:
-  av_studio:
-    output: true
-    relative_directory: _av_studio
-    sort_by: order
-  django:
-    output: true
-    relative_directory: _django
-    sort_by: order
-  expertArticles:
-    output: true
-    relative_directory: _expertArticles
-    sort_by: order
-  jekyll:
-    output: true
-    relative_directory: _jekyll
-    sort_by: order
   stuff:
     output: true
     sort_by: order
@@ -83,9 +67,7 @@ plugin-vars:
   django-github: 'https://github.com/django/django/blob/3.1.7'
   django-oscar-github: 'https://github.com/django-oscar/django-oscar/blob/3.0.2'
 plugins: # Use file name of the plugin entry point, not the gem name
-  # - jekyll_plugin_logger
   - flexible_include
-  # - jekyll
 qrcode:
   bg_color: '#666'
   fg_color: black

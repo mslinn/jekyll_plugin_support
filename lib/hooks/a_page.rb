@@ -62,6 +62,7 @@ module AllCollectionsHooks
       @origin = origin
       data_field_init obj # data attributes have 1st priority
       obj_field_init obj # object attributes have 2nd priority
+      @data = obj.respond_to?(:data) ? obj.data : {}
       @draft   = Jekyll::Draft.draft? obj
       @url   ||= obj.url
 
@@ -75,13 +76,22 @@ module AllCollectionsHooks
       ::JekyllSupport.error_short_trace(@logger, e)
     end
 
-    # @param field must be a symbol
+    # Look within @data (if the property exists), then self for the given key as a symbol or a string
+    # @param key must be a symbol
     # @return value of data[key] if key exists as a string or a symbol, else nil
-    def field(key)
-      if @data.key? key
-        @data[key]
-      elsif data.key? key.to_s
-        @data[key.to_s]
+    def field(obj, key)
+      if obj.respond_to? :data
+        return obj.data[key] if obj.data.key? key
+
+        obj.data[key.to_s] if obj.data.key? key.to_s
+      else
+        return obj.key if obj.respond_to? key
+
+        return obj.call(key.to_s) if obj.respond_to? key.to_s
+
+        return obj[key] if obj.key? key
+
+        obj[key.to_s] if obj.key? key.to_s
       end
     end
 
@@ -105,45 +115,43 @@ module AllCollectionsHooks
     def data_field_init(obj)
       return unless obj.respond_to? :data
 
-      @data = obj.data
-
-      @categories    ||= field(:categories)
-      @description   ||= field(:description)
-      @excerpt       ||= field(:excerpt)
-      @ext           ||= field(:ext)
-      @layout ||= field(:layout)
-      @tags   ||= field(:tags)
-      @title  ||= field(:title) # rubocop:disable Naming/MemoizedInstanceVariableName
+      @categories    ||= field(obj, :categories)
+      @description   ||= field(obj, :description)
+      @excerpt       ||= field(obj, :excerpt)
+      @ext           ||= field(obj, :ext)
+      @layout        ||= field(obj, :layout)
+      @tags          ||= field(obj, :tags)
+      @title         ||= field(obj, :title) # rubocop:disable Naming/MemoizedInstanceVariableName
     end
 
     # Sets the following instance attributes in APage from selected attributes in `obj` (when present):
     # `content`, `destination`, `ext` and `extname`, `label` from `collection.label`,
     # `path`, `relative_path`, `type`, and `url`.
-    def obj_field_init(obj) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def obj_field_init(obj)
       @content ||= obj.content if obj.respond_to? :content
 
       # TODO: What _config.yml setting should be passed to destination()?
       @destination ||= obj.destination('') if obj.respond_to? :destination
 
-      @date ||= (obj.date if obj.respond_to? :date) || Time.now
-      @last_modified ||= (obj.data.last_modified if obj.data.respond_to?(:last_modified)) ||
-                         (obj.last_modified if obj.respond_to?(:last_modified)) ||
-                         (obj.data.last_modified_at if obj.data.respond_to?(:last_modified_at)) ||
-                         (obj.last_modified_at if obj.respond_to?(:last_modified_at)) ||
+      @date ||= field(obj, :date) || Time.now
+
+      @last_modified ||= field(obj, :last_modified) ||
+                         field(obj, :last_modified_at) ||
                          @date
-      @last_modified_field ||= if obj.respond_to?(:last_modified)
+
+      @last_modified_field ||= if field(obj, :last_modified)
                                  :last_modified
-                               elsif obj.respond_to?(:last_modified_at)
+                               elsif field(obj, :last_modified_at)
                                  :last_modified_at
                                end
 
-      @ext ||= obj.extname if obj.respond_to? :extname
-      @extname ||= @ext # For compatibility with previous versions of all_collections
-      @label ||= obj.collection.label if obj.respond_to?(:collection) && obj.collection.respond_to?(:label)
-      @path ||= obj.path if obj.respond_to? :path
-      @relative_path ||= obj.relative_path if obj.respond_to? :relative_path
-      @title ||= obj.title if obj.respond_to?(:title)
-      @type ||= obj.type if obj.respond_to? :type
+      @ext           ||= field(obj, :extname)
+      @extname       ||= @ext # For compatibility with previous versions of all_collections
+      @label         ||= obj.collection.label if obj.respond_to?(:collection) && obj.collection.respond_to?(:label)
+      @path          ||= field(obj, :path)
+      @relative_path ||= field(obj, :relative_path)
+      @title         ||= field(obj, :title)
+      @type          ||= field(obj, :type)
       return if @url
 
       @url = obj.url

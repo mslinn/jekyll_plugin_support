@@ -23,7 +23,7 @@ default_layout_var: set_in_default_layout_front_matter
   <link rel="stylesheet" href="{{ '/assets/css/jekyll_pre.css?v=' | append: nowMillis }}" type="text/css">
   <link rel="stylesheet" href="{{ '/assets/css/shared_include_pre.css?v=' | append: nowMillis }}" type="text/css">
   <link rel="stylesheet" href="{{ '/assets/css/jekyll_quote.css?v=' | append: nowMillis }}" type="text/css">
-  <link rel="stylesheet" href="{{ '/assets/css/jekyll_qr_generator.css?v=' | append: nowMillis }}" type="text/css">
+  <!-- <link rel="stylesheet" href="{{ '/assets/css/jekyll_qr_generator.css?v=' | append: nowMillis }}" type="text/css"> -->
   <link rel="stylesheet" href="{{ '/assets/css/demo.css?v=' | append: nowMillis }}" type="text/css">
   <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: nowMillis }}" type="text/css">
   <link rel="icon" type="image/png" href="/assets/images/favicon.png">
@@ -35,12 +35,12 @@ default_layout_var: set_in_default_layout_front_matter
 </head>
 <body id="body">
   <header>
-    <img
+    <!-- <img
       alt="Share this page by using this QR code"
       class="qrcode"
       src="{{page['qrcode']}}"
       title="Share this page by using this QR code"
-    >
+    > -->
     <div class="inner">
       {% if isDraft %}
         <div class="bg_yellow draftPost">&mdash; Draft &mdash;</div>
@@ -67,9 +67,6 @@ default_layout_var: set_in_default_layout_front_matter
           <li><a href="/blog/blogsByDate.html">Blog by Date</a></li>
           <li><a href="/blog/blogsByLastModified.html">Blog by Last Modified</a></li>
           {%- comment -%}<li><a href="/blog/blogsByCategory.html">Blog by Category</a></li>{%- endcomment -%}
-          <li><a href="/av_studio/">A/V Studio</a></li>
-          <li><a href="/expertArticles/">Expert</a></li>
-          <li><a href="/jekyll/">Jekyll</a></li>
         </ul>
       </nav>
       <section id="main-content">

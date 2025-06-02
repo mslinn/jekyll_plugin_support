@@ -15,7 +15,7 @@ group :jekyll_plugins do
   gem 'jekyll_outline'
   gem 'jekyll_plugin_support', path: '../'
   gem 'jekyll_pre', '>= 3.0.0'
-  gem 'jekyll_qr_generator'
+  # gem 'jekyll_qr_generator'
   gem 'jekyll_quote'
   gem 'jekyll_reading_time'
   gem 'jekyll_run'

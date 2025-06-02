@@ -5,8 +5,11 @@ last_modified_at: 2024-07-23
 order: 0
 title: 'All known jekyll_plugin_support implementations'
 ---
+<h2 id="badge"><span class="code">jekyll_badge</span></h2>
 {% jekyll_badge align='right' name='jekyll_badge' %}
 
+
+<h2 id="draft"><span class="code">jekyll_draft</span></h2>
 {% if_draft %}
   <p>This is a draft document!</p>
 {% else_if_not_draft %}
@@ -26,12 +29,16 @@ title: 'All known jekyll_plugin_support implementations'
   published_output="<p>Not a draft</p>"
 %}
 
+<h2 id="emoji"><span class="code">jekyll_emoji</span></h2>
 {% emoji name='smiley' size='3em' %}
 
+
+<h2 id="flexible_include"><span class="code">jekyll_flexible_include</span></h2>
 {% flexible_include copyButton dark do_not_escape download number pre
   file='Gemfile' label='Gemfile' highlight='[\w./\-_]*jekyll[\w.\-_]*'
 %}
 
+<h2 id="outline"><span class="code">jekyll_outline</span></h2>
 {% outline attribution stuff %}
 0: Section Head 1
 1000: Section Head 2

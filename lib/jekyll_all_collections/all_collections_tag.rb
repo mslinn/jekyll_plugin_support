@@ -85,10 +85,10 @@ module JekyllAllCollections
       # end
       if apage.data.respond_to?(:last_modified)
         apage.data.last_modified
-      elsif apage.respond_to?(:last_modified)
-        apage.last_modified
       elsif apage.data.respond_to? :last_modified_at
         apage.data.last_modified_at
+      elsif apage.respond_to?(:last_modified)
+        apage.last_modified
       elsif apage.respond_to? :last_modified_at
         apage.last_modified_at
       else
