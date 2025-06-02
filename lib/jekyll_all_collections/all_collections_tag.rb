@@ -78,20 +78,22 @@ module JekyllAllCollections
     end
 
     def last_modified_value(apage)
-      @logger.debug do
-        "  apage.last_modified='#{apage.last_modified}'; " \
-          "apage.last_modified_at='#{apage.last_modified_at}'; " \
-          "@date_column='#{@date_column}'"
+      # @logger.debug do
+      #   "  apage.last_modified='#{apage.last_modified}'; " \
+      #     "apage.last_modified_at='#{apage.last_modified_at}'; " \
+      #     "@date_column='#{@date_column}'"
+      # end
+      if apage.data.respond_to?(:last_modified)
+        apage.data.last_modified
+      elsif apage.respond_to?(:last_modified)
+        apage.last_modified
+      elsif apage.data.respond_to? :last_modified_at
+        apage.data.last_modified_at
+      elsif apage.respond_to? :last_modified_at
+        apage.last_modified_at
+      else
+        apage.date || Time.now
       end
-      last_modified = if @date_column == 'last_modified' && apage.respond_to?(:last_modified)
-                        apage.last_modified
-                      elsif apage.respond_to? :last_modified_at
-                        apage.last_modified_at
-                      else
-                        apage.date
-                      end
-      last_modified ||= apage.date || Date.today
-      last_modified
     end
 
     def generate_output(sort_lambda)
@@ -110,7 +112,7 @@ module JekyllAllCollections
                end
       # puts "generate_output: @data_selector=#{@data_selector}".yellow
       # @site.all_collections.each { |x| puts x.url.yellow }
-      apages = apages[13..15] # Binary search for problem
+      # apages = apages[13..15] # Binary search for problem
       sorted_apages = apages.sort(&sort_lambda)
       posts = sorted_apages.map do |x|
         last_modified = last_modified_value x

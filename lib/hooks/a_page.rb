@@ -119,14 +119,16 @@ module AllCollectionsHooks
     # Sets the following instance attributes in APage from selected attributes in `obj` (when present):
     # `content`, `destination`, `ext` and `extname`, `label` from `collection.label`,
     # `path`, `relative_path`, `type`, and `url`.
-    def obj_field_init(obj)
+    def obj_field_init(obj) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       @content ||= obj.content if obj.respond_to? :content
 
       # TODO: What _config.yml setting should be passed to destination()?
       @destination ||= obj.destination('') if obj.respond_to? :destination
 
-      @date ||= (obj.date if obj.respond_to? :date) || Date.today
-      @last_modified ||= (obj.last_modified if obj.respond_to?(:last_modified)) ||
+      @date ||= (obj.date if obj.respond_to? :date) || Time.now
+      @last_modified ||= (obj.data.last_modified if obj.data.respond_to?(:last_modified)) ||
+                         (obj.last_modified if obj.respond_to?(:last_modified)) ||
+                         (obj.data.last_modified_at if obj.data.respond_to?(:last_modified_at)) ||
                          (obj.last_modified_at if obj.respond_to?(:last_modified_at)) ||
                          @date
       @last_modified_field ||= if obj.respond_to?(:last_modified)
