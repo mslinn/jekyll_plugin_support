@@ -1,15 +1,23 @@
 ---
 layout: default
 date: 2024-07-23
-last_modified_at: 2024-07-23
+last_modified_at: 2025-06-02
 order: 0
 title: 'All Known Implementations'
 ---
-<h2 id="badge"><span class="code">jekyll_badge</span></h2>
+<style>
+  h2:not(:first-of-type) {
+    margin-top: 3em;
+  }
+</style>
+<!-- #region jekyll_badge -->
+<h2 id="badge">{% href label='<span class="code">jekyll_badge</span>' url='https://www.mslinn.com/jekyll_plugins/jekyll_badge.html' %}</h2>
 {% jekyll_badge align='right' name='jekyll_badge' %}
+<!-- endregion -->
 
 
-<h2 id="draft"><span class="code">jekyll_draft</span></h2>
+<!-- #region jekyll_draft -->
+<h2 id="draft">{% href label='<span class="code">jekyll_draft</span>' url='https://www.mslinn.com/jekyll_plugins/jekyll_draft.html' %}</h2>
 {% if_draft %}
   <p>This is a draft document!</p>
 {% else_if_not_draft %}
@@ -28,19 +36,28 @@ title: 'All Known Implementations'
   draft_style="font-size: 24pt;"
   published_output="<p>Not a draft</p>"
 %}
+<!-- endregion -->
 
-<h2 id="emoji"><span class="code">jekyll_emoji</span></h2>
+
+<!-- #region jekyll_emoji -->
+<h2 id="emoji">{% href label='<span class="code">jekyll_emoji</span>' url='https://www.mslinn.com/jekyll_plugins/jekyll_emoji.html' %}</h2>
 {% emoji name='smiley' size='3em' %}
+<!-- endregion -->
 
 
-<h2 id="flexible_include"><span class="code">jekyll_flexible_include</span></h2>
+<!-- #region flexible_include -->
+<h2 id="flexible_include">{% href label='<span class="code">jekyll_flexible_include</span>' url='https://www.mslinn.com/jekyll_plugins/jekyll_flexible_include.html' %}</h2>
 {% flexible_include copyButton dark do_not_escape download number pre
   file='Gemfile' label='Gemfile' highlight='[\w./\-_]*jekyll[\w.\-_]*'
 %}
+<!-- endregion -->
 
-<h2 id="outline"><span class="code">jekyll_outline</span></h2>
+
+<!-- #region jekyll_outline -->
+<h2 id="outline">{% href label='<span class="code">jekyll_outline</span>' url='https://www.mslinn.com/jekyll_plugins/jekyll_outline.html' %}</h2>
 {% outline attribution stuff %}
 0: Section Head 1
 1000: Section Head 2
 2000: Section Head 3
 {% endoutline %}
+<!-- endregion -->
