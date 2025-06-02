@@ -98,20 +98,21 @@ module JekyllAllCollections
       # puts 'generate_output start'.yellow
       id = @id.to_s.strip.empty? ? '' : " id='#{@id}'"
       heading = @heading.strip.to_s.empty? ? '' : "<h2#{id}>#{@heading}</h2>"
-      data = case @data_selector
-             when 'all_collections'
-               @site.all_collections
-             when 'all_documents'
-               @site.all_documents
-             when 'everything'
-               @site.everything
-             else
-               raise AllCollectionsError, "Invalid value for @data_selector (#{data_selector})"
-             end
+      apages = case @data_selector
+               when 'all_collections'
+                 @site.all_collections
+               when 'all_documents'
+                 @site.all_documents
+               when 'everything'
+                 @site.everything
+               else
+                 raise AllCollectionsError, "Invalid value for @data_selector (#{data_selector})"
+               end
       # puts "generate_output: @data_selector=#{@data_selector}".yellow
       # @site.all_collections.each { |x| puts x.url.yellow }
-      collection = data.sort(&sort_lambda)
-      posts = collection.map do |x|
+      apages = apages[13..15] # Binary search for problem
+      sorted_apages = apages.sort(&sort_lambda)
+      posts = sorted_apages.map do |x|
         last_modified = last_modified_value x
         date = last_modified.strftime '%Y-%m-%d'
         draft = x.draft ? DRAFT_HTML : ''
@@ -125,10 +126,8 @@ module JekyllAllCollections
           #{posts.join "\n"}
         </div>
       END_TEXT
-    rescue NoMethodError => e
-      ::JekyllSupport.error_short_trace e
-    rescue ArgumentError => e
-      warn_short_trace e
+    rescue NoMethodError || ArgumentError => e
+      error_short_trace e
     end
 
     # See https://stackoverflow.com/a/75377832/553865

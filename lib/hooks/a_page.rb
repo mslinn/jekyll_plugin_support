@@ -48,7 +48,7 @@ end
 # TODO: move APage to module JekyllSupport
 module AllCollectionsHooks
   FIXNUM_MAX = (2**((0.size * 8) - 2)) - 1
-  END_OF_TIME = 1_000_000_000_000 # One trillion years in the future
+  END_OF_DAYS = 1_000_000_000_000 # One trillion years in the future
   # Date.new is -4712-01-01
 
   class APage
@@ -108,17 +108,9 @@ module AllCollectionsHooks
       @data = obj.data
 
       @categories    ||= field(:categories)
-      @date          ||= field(:date)
       @description   ||= field(:description)
       @excerpt       ||= field(:excerpt)
       @ext           ||= field(:ext)
-      @last_modified ||= field(:last_modified) || field(:last_modified_at) || @date
-      @last_modified_field ||= case @data
-                               when @data.key?('last_modified') || @data.key?(:last_modified)
-                                 :last_modified
-                               when @data.key?('last_modified_at') || @data.key?(:last_modified_at)
-                                 :last_modified_at
-                               end
       @layout ||= field(:layout)
       @tags   ||= field(:tags)
       @title  ||= field(:title) # rubocop:disable Naming/MemoizedInstanceVariableName
@@ -132,6 +124,17 @@ module AllCollectionsHooks
 
       # TODO: What _config.yml setting should be passed to destination()?
       @destination ||= obj.destination('') if obj.respond_to? :destination
+
+      @date ||= (obj.date if obj.respond_to? :date) || Date.today
+      @last_modified ||= (obj.last_modified if obj.respond_to?(:last_modified)) ||
+                         (obj.last_modified_at if obj.respond_to?(:last_modified_at)) ||
+                         @date
+      @last_modified_field ||= if obj.respond_to?(:last_modified)
+                                 :last_modified
+                               elsif obj.respond_to?(:last_modified_at)
+                                 :last_modified_at
+                               end
+
       @ext ||= obj.extname if obj.respond_to? :extname
       @extname ||= @ext # For compatibility with previous versions of all_collections
       @label ||= obj.collection.label if obj.respond_to?(:collection) && obj.collection.respond_to?(:label)
