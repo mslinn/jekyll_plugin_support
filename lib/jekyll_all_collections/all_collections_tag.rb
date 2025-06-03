@@ -98,7 +98,7 @@ module JekyllAllCollections
 
     def generate_output(sort_lambda)
       # puts 'generate_output start'.yellow
-      id = @id.to_s.strip.empty? ? '' : " id='#{@id}'"
+      id = @id.to_s.strip.empty? ? '' : " id=\"#{@id}\""
       heading = @heading.strip.to_s.empty? ? '' : "<h2#{id}>#{@heading}</h2>"
       apages = case @data_selector
                when 'all_collections'

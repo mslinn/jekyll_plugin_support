@@ -1,0 +1,3 @@
+<nav id="{{ include.id }}">
+  {% include toc html=content id=toc item_class=tocItem skipNoIDs=true sanitize=true h_min=2 %}
+</nav>

@@ -57,6 +57,9 @@ default_layout_var: set_in_default_layout_front_matter
   <div id="content-wrapper">
     <div class="inner clearfix">
       <nav id="sidebar">
+        {% unless hideToc %}
+          {% include tocId id="tocSide" %}
+        {% endunless %}
         <ul>
           <li><a href="/">Front page</a></li>
           <li><a href="/demo_block_tag.html">Block Tag Plugin</a></li>
