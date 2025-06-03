@@ -48,6 +48,7 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Exclude:
     - "**/all_collections_tag.rb"
+  Max: 150
 
 Metrics/CyclomaticComplexity:
   Max: 35
