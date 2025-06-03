@@ -55,23 +55,12 @@ module AllCollectionsHooks
     attr_reader :content, :data, :date, :description, :destination, :draft, :excerpt, :ext, :extname, :href,
                 :label, :last_modified, :layout, :origin, :path, :relative_path, :tags, :title, :type, :url
 
-    # @param obj can be a `Jekyll::Document` or similar
+    # @param obj can be a `Jekyll::Document` or a Hash with properties
     # @param origin values: 'collection', 'individual_page', and 'static_file'
     #               (See method AllCollectionsHooks.apages_from_objects)
     def initialize(obj, origin)
       @origin = origin
-      data_field_init obj # data attributes have 1st priority
-      obj_field_init obj # object attributes have 2nd priority
-      @data = obj.respond_to?(:data) ? obj.data : {}
-      @draft   = Jekyll::Draft.draft? obj
-      @url   ||= obj.url
-
-      # @href  = "/#{@href}" if @origin == 'individual_page'
-      @href  ||= obj.url || @url
-      @href    = "#{@href}index.html" if @href&.end_with? '/'
-
-      @name  ||= File.basename(@href)
-      @title ||= "<code>#{@href}</code>"
+      build obj
     rescue StandardError => e
       ::JekyllSupport.error_short_trace(@logger, e)
     end
@@ -112,28 +101,24 @@ module AllCollectionsHooks
     # Sets the following uninitialized instance attributes in APage from selected key/value pairs in `obj.data`:
     # `categories`, `date`, `description`, `excerpt`, `ext`, `last_modified` or `last_modified_at`,
     # `layout`, and `tags`.
-    def data_field_init(obj)
-      return unless obj.respond_to? :data
-
-      @categories    ||= field(obj, :categories)
-      @description   ||= field(obj, :description)
-      @excerpt       ||= field(obj, :excerpt)
-      @ext           ||= field(obj, :ext)
-      @layout        ||= field(obj, :layout)
-      @tags          ||= field(obj, :tags)
-      @title         ||= field(obj, :title) # rubocop:disable Naming/MemoizedInstanceVariableName
-    end
-
     # Sets the following instance attributes in APage from selected attributes in `obj` (when present):
     # `content`, `destination`, `ext` and `extname`, `label` from `collection.label`,
     # `path`, `relative_path`, `type`, and `url`.
-    def obj_field_init(obj)
-      @content ||= obj.content if obj.respond_to? :content
+    def build(obj) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      return unless obj.respond_to? :data
 
+      @categories    ||= field(obj, :categories)
+      @content       ||= obj.content if obj.respond_to? :content
+      @data          ||= obj.respond_to?(:data) ? obj.data : {}
+      @date          ||= field(obj, :date) || Time.now
+      @description   ||= field(obj, :description)
       # TODO: What _config.yml setting should be passed to destination()?
-      @destination ||= obj.destination('') if obj.respond_to? :destination
-
-      @date ||= field(obj, :date) || Time.now
+      @destination   ||= obj.destination('') if obj.respond_to? :destination
+      @draft         ||= Jekyll::Draft.draft? obj
+      @excerpt       ||= field(obj, :excerpt)
+      @ext           ||= field(obj, :ext) || field(obj, :extname)
+      @extname       ||= @ext # For compatibility with previous versions of all_collections
+      @label         ||= obj.collection.label if obj.respond_to?(:collection) && obj.collection.respond_to?(:label)
 
       @last_modified ||= field(obj, :last_modified) ||
                          field(obj, :last_modified_at) ||
@@ -145,21 +130,23 @@ module AllCollectionsHooks
                                  :last_modified_at
                                end
 
-      @ext           ||= field(obj, :extname)
-      @extname       ||= @ext # For compatibility with previous versions of all_collections
-      @label         ||= obj.collection.label if obj.respond_to?(:collection) && obj.collection.respond_to?(:label)
+      @layout        ||= field(obj, :layout)
       @path          ||= field(obj, :path)
       @relative_path ||= field(obj, :relative_path)
-      @title         ||= field(obj, :title)
+      @tags          ||= field(obj, :tags)
+      @title         ||= field(obj, :title) || "<code>#{@href}</code>"
       @type          ||= field(obj, :type)
-      return if @url
 
-      @url = obj.url
-      @url = if @url
-               "#{@url}index.html" if @url.end_with? '/'
-             else
-               '/'
-             end
+      @url           ||= obj.url
+      if @url
+        @url = "#{@url}index.html" if @url&.end_with? '/'
+      else
+        @url = '/index.html'
+      end
+
+      # @href  = "/#{@href}" if @origin == 'individual_page'
+      @href  ||= @url
+      @name  ||= File.basename(@href) # rubocop:disable Naming/MemoizedInstanceVariableName
     end
   end
 end
