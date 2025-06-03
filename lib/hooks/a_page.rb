@@ -107,22 +107,22 @@ module AllCollectionsHooks
     def build(obj) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       return unless obj.respond_to? :data
 
-      @categories    ||= field(obj, :categories)
-      @content       ||= obj.content if obj.respond_to? :content
-      @data          ||= obj.respond_to?(:data) ? obj.data : {}
-      @date          ||= field(obj, :date) || Time.now
-      @description   ||= field(obj, :description)
+      @categories          ||= field(obj, :categories)
+      @content             ||= obj.content if obj.respond_to? :content
+      @data                ||= obj.respond_to?(:data) ? obj.data : {}
+      @date                ||= field(obj, :date) || Time.now
+      @description         ||= field(obj, :description)
       # TODO: What _config.yml setting should be passed to destination()?
-      @destination   ||= obj.destination('') if obj.respond_to? :destination
-      @draft         ||= Jekyll::Draft.draft? obj
-      @excerpt       ||= field(obj, :excerpt)
-      @ext           ||= field(obj, :ext) || field(obj, :extname)
-      @extname       ||= @ext # For compatibility with previous versions of all_collections
-      @label         ||= obj.collection.label if obj.respond_to?(:collection) && obj.collection.respond_to?(:label)
+      @destination         ||= obj.destination('') if obj.respond_to? :destination
+      @draft               ||= Jekyll::Draft.draft? obj
+      @excerpt             ||= field(obj, :excerpt)
+      @ext                 ||= field(obj, :ext) || field(obj, :extname)
+      @extname             ||= @ext # For compatibility with previous versions of all_collections
+      @label               ||= obj.collection.label if obj.respond_to?(:collection) && obj.collection.respond_to?(:label)
 
-      @last_modified ||= field(obj, :last_modified) ||
-                         field(obj, :last_modified_at) ||
-                         @date
+      @last_modified       ||= field(obj, :last_modified) ||
+                               field(obj, :last_modified_at) ||
+                               @date
 
       @last_modified_field ||= if field(obj, :last_modified)
                                  :last_modified
@@ -130,14 +130,14 @@ module AllCollectionsHooks
                                  :last_modified_at
                                end
 
-      @layout        ||= field(obj, :layout)
-      @path          ||= field(obj, :path)
-      @relative_path ||= field(obj, :relative_path)
-      @tags          ||= field(obj, :tags)
-      @title         ||= field(obj, :title) || "<code>#{@href}</code>"
-      @type          ||= field(obj, :type)
+      @layout              ||= field(obj, :layout)
+      @path                ||= field(obj, :path)
+      @relative_path       ||= field(obj, :relative_path)
+      @tags                ||= field(obj, :tags)
+      @title               ||= field(obj, :title) || "<code>#{@href}</code>"
+      @type                ||= field(obj, :type)
 
-      @url           ||= obj.url
+      @url                 ||= obj.url
       if @url
         @url = "#{@url}index.html" if @url&.end_with? '/'
       else
