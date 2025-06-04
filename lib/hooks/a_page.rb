@@ -50,8 +50,8 @@ end
 
 # TODO: move APage to module JekyllSupport
 module AllCollectionsHooks
-  FIXNUM_MAX = (2**((0.size * 8) - 2)) - 1
-  END_OF_DAYS = 1_000_000_000_000 # One trillion years in the future
+  FIXNUM_MAX = (2**((0.size * 8) - 2)) - 1 unless defined? FIXNUM_MAX
+  END_OF_DAYS = 1_000_000_000_000 unless defined? END_OF_DAYS # One trillion years in the future
   # Date.new is -4712-01-01
 
   class APage
@@ -76,16 +76,13 @@ module AllCollectionsHooks
       if obj.respond_to? :data
         return obj.data[key] if obj.data.key? key
 
-        obj.data[key.to_s] if obj.data.key? key.to_s
-      else
-        return obj.key if obj.respond_to? key
-
-        return obj.call(key.to_s) if obj.respond_to? key.to_s
-
-        return obj[key] if obj.key? key
-
-        obj[key.to_s] if obj.key? key.to_s
+        return obj.data[key.to_s] if obj.data.key? key.to_s
       end
+      return obj.send(key) if obj.respond_to?(key)
+
+      return obj[key] if obj.key?(key)
+
+      obj[key.to_s] if obj.key?(key.to_s)
     end
 
     def order

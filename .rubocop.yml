@@ -87,6 +87,10 @@ RSpec/MultipleExpectations:
 RSpec/MultipleDescribes:
   Enabled: false
 
+Security/Eval:
+  Exclude:
+   - spec/all_collections_tag/all_collections_tag_sort_spec.rb
+
 Style/ClassVars:
   Enabled: false
 
@@ -102,6 +106,10 @@ Style/GlobalVars:
 
 Style/StringConcatenation:
   Enabled: false
+
+Style/StringLiterals:
+  Exclude:
+    - spec/all_collections_tag/all_collections_tag_sort_spec.rb
 
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma

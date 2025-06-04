@@ -24,7 +24,7 @@ module JekyllAllCollections
       # ::JekyllSupport.warn_short_trace @logger, e
     end
 
-    # Descending sort keys reverse the order of comparison
+    # Descending sort keys are preceded by a minus sign, and reverse the order of comparison
     # @param criteria String Examples: 'date', '-date', 'last_modified', '-last_modified',
     #        ['date', 'last_modified], ['-date', '-last_modified'], ['date', '-last_modified']
     # @return values:
