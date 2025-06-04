@@ -59,6 +59,7 @@ module AllCollectionsHooks
     # @param origin values: 'collection', 'individual_page', and 'static_file'
     #               (See method AllCollectionsHooks.apages_from_objects)
     def initialize(obj, origin)
+      @logger = obj.logger
       @origin = origin
       build obj
     rescue StandardError => e
@@ -68,7 +69,7 @@ module AllCollectionsHooks
     # Look within @data (if the property exists), then self for the given key as a symbol or a string
     # @param key must be a symbol
     # @return value of data[key] if key exists as a string or a symbol, else nil
-    def field(obj, key)
+    def obj_field(obj, key)
       if obj.respond_to? :data
         return obj.data[key] if obj.data.key? key
 
@@ -107,35 +108,35 @@ module AllCollectionsHooks
     def build(obj) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       return unless obj.respond_to? :data # TODO: halt with error instead?
 
-      @categories          ||= field(obj, :categories)
+      @categories          ||= obj_field(obj, :categories)
       @content             ||= obj.content if obj.respond_to? :content
       @data                ||= obj.respond_to?(:data) ? obj.data : {}
-      @date                ||= field(obj, :date) || Time.now
-      @description         ||= field(obj, :description)
+      @date                ||= obj_field(obj, :date) || Time.now
+      @description         ||= obj_field(obj, :description)
       # TODO: What _config.yml setting should be passed to destination()?
       @destination         ||= obj.destination('') if obj.respond_to? :destination
       @draft               ||= Jekyll::Draft.draft? obj
-      @excerpt             ||= field(obj, :excerpt)
-      @ext                 ||= field(obj, :ext) || field(obj, :extname)
+      @excerpt             ||= obj_field(obj, :excerpt)
+      @ext                 ||= obj_field(obj, :ext) || obj_field(obj, :extname)
       @extname             ||= @ext # For compatibility with previous versions of all_collections
       @label               ||= obj.collection.label if obj.respond_to?(:collection) && obj.collection.respond_to?(:label)
 
-      @last_modified       ||= field(obj, :last_modified) ||
-                               field(obj, :last_modified_at) ||
+      @last_modified       ||= obj_field(obj, :last_modified) ||
+                               obj_field(obj, :last_modified_at) ||
                                @date
 
-      @last_modified_field ||= if field(obj, :last_modified)
+      @last_modified_field ||= if obj_field(obj, :last_modified)
                                  :last_modified
-                               elsif field(obj, :last_modified_at)
+                               elsif obj_field(obj, :last_modified_at)
                                  :last_modified_at
                                end
 
-      @layout              ||= field(obj, :layout)
-      @path                ||= field(obj, :path)
-      @relative_path       ||= field(obj, :relative_path)
-      @tags                ||= field(obj, :tags)
-      @title               ||= field(obj, :title) || "<code>#{@href}</code>"
-      @type                ||= field(obj, :type)
+      @layout              ||= obj_field(obj, :layout)
+      @path                ||= obj_field(obj, :path)
+      @relative_path       ||= obj_field(obj, :relative_path)
+      @tags                ||= obj_field(obj, :tags)
+      @title               ||= obj_field(obj, :title) || "<code>#{@href}</code>"
+      @type                ||= obj_field(obj, :type)
 
       @url                 ||= obj.url
       if @url
