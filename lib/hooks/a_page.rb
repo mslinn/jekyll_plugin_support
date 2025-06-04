@@ -55,8 +55,9 @@ module AllCollectionsHooks
   # Date.new is -4712-01-01
 
   class APage
-    attr_reader :content, :data, :date, :description, :destination, :draft, :excerpt, :ext, :extname, :href,
-                :label, :last_modified, :layout, :origin, :path, :relative_path, :tags, :title, :type, :url
+    attr_reader :categories, :content, :data, :date, :description, :destination, :draft, :excerpt, :ext, :extname, :href,
+                :label, :last_modified, :last_modified_field, :logger, :layout, :name, :origin, :path, :relative_path,
+                :tags, :title, :type, :url
 
     # @param obj can be a `Jekyll::Document` or a Hash with properties
     # @param origin values: 'collection', 'individual_page', and 'static_file'

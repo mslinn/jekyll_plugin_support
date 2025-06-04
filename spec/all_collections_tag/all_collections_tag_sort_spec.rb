@@ -25,10 +25,10 @@ def show(lambda_string, actual, expected)
   puts "For lambda_string: #{lambda_string}"
   puts "  actual: #{actual.map(&:title).join(', ')}"
   puts "expected: #{expected.map(&:title).join(', ')}"
-  actual_array   = actual.map   { |x| [(x.date.strftime '%Y-%m-%d'), (x.last_modified.strftime '%Y-%m-%d')].join("/") }
-  expected_array = expected.map { |x| [(x.date.strftime '%Y-%m-%d'), (x.last_modified.strftime '%Y-%m-%d')].join("/") }
-  puts "  actual date/last_modified: " + actual_array.join(', ')
-  puts "expected date/last_modified: " + expected_array.join(', ')
+  actual_array   = actual.map   { |x| [(x.date.strftime '%Y-%m-%d'), (x.last_modified.strftime '%Y-%m-%d')].join('/') }
+  expected_array = expected.map { |x| [(x.date.strftime '%Y-%m-%d'), (x.last_modified.strftime '%Y-%m-%d')].join('/') }
+  puts '  actual date/last_modified: ' + actual_array.join(', ')
+  puts 'expected date/last_modified: ' + expected_array.join(', ')
 end
 
 # See https://stackoverflow.com/a/75388137/553865
