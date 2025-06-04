@@ -25,8 +25,10 @@ module JekyllAllCollections
     end
 
     # Descending sort keys reverse the order of comparison
-    # Example return values:
-    #   "->(a, b) { [a.last_modified] <=> [b.last_modified] }"
+    # @param criteria String Examples: 'date', '-date', 'last_modified', '-last_modified',
+    #        ['date', 'last_modified], ['-date', '-last_modified'], ['date', '-last_modified']
+    # @return values:
+    #   "->(a, b) { [a.last_modified] <=> [b.last_modified] }" (ascending)
     #   "->(a, b) { [b.last_modified] <=> [a.last_modified] }" (descending)
     #   "->(a, b) { [a.last_modified, a.date] <=> [b.last_modified, b.date] }" (descending last_modified, ascending date)
     #   "->(a, b) { [a.last_modified, b.date] <=> [b.last_modified, a.date] }" (ascending last_modified, descending date)
