@@ -4,6 +4,7 @@ module JekyllSupport
   # Contructor for testing and jekyll_outline
   def self.apage_from( # rubocop:disable Metrics/ParameterLists
     date: nil,
+    description: nil,
     draft: false,
     last_modified: nil,
     collection_name: nil,
@@ -20,6 +21,7 @@ module JekyllSupport
     data = {
       collection:    { label: collection_name },
       date:          date,
+      description:   description,
       draft:         draft,
       last_modified: last_modified,
       order:         order,
@@ -27,6 +29,7 @@ module JekyllSupport
     }
     obj = {}
     JekyllSupport.new_attribute obj, :data, data
+    JekyllSupport.new_attribute obj, :description, data[:description]
     JekyllSupport.new_attribute obj, :draft, draft
     JekyllSupport.new_attribute obj, :extname, '.html'
     JekyllSupport.new_attribute obj, :logger, PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
