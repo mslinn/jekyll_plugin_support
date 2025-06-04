@@ -9,6 +9,15 @@ module TestModule
   end
 end
 
+RSpec.describe(TestModule) do
+  extend described_class
+
+  it 'Invokes a_method from module' do
+    result = self.class.a_method
+    expect(result).to eq('a_method says Hi!')
+  end
+end
+
 class TestClass
   extend TestModule # Defines class methods
 
@@ -16,15 +25,6 @@ class TestClass
     super()
     @param1 = param1
     @param2 = param2
-  end
-end
-
-RSpec.describe(TestModule) do
-  extend described_class
-
-  it 'Invokes a_method from module' do
-    result = self.class.a_method
-    expect(result).to eq('a_method says Hi!')
   end
 end
 

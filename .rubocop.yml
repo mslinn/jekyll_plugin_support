@@ -84,6 +84,9 @@ RSpec/IndexedLet:
 RSpec/MultipleExpectations:
   Max: 15
 
+RSpec/MultipleDescribes:
+  Enabled: false
+
 Style/ClassVars:
   Enabled: false
 
@@ -92,6 +95,10 @@ Style/Documentation:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+Style/GlobalVars:
+  Exclude:
+    - spec/mslinn_binary_search_spec.rb
 
 Style/StringConcatenation:
   Enabled: false

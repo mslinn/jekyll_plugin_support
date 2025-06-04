@@ -45,7 +45,7 @@ module JekyllSupport
     # Method prescribed by the Jekyll plugin lifecycle.
     # Defines @config, @envs, @mode, @page and @site
     # @return [String]
-    def render(liquid_context)
+    def render(liquid_context) # rubocop: disable Metrics/AbcSize
       @helper.liquid_context = ::JekyllSupport.inject_config_vars liquid_context # modifies liquid_context
       text = super # Liquid variable values in content are looked up and substituted
 
