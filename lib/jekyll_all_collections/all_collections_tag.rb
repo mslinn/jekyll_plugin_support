@@ -116,12 +116,13 @@ module JekyllAllCollections
       # @site.all_collections.each { |x| puts x.url.yellow }
       # apages = apages[13..15] # Binary search for problem
       sorted_apages = apages.sort(&sort_lambda)
-      posts = sorted_apages.map do |x|
-        last_modified = last_modified_value x
-        date = last_modified.strftime '%Y-%m-%d'
-        draft = x.draft ? DRAFT_HTML : ''
-        href = "<a href='#{x.href}'>#{x.title}</a>"
-        @logger.debug { "  date='#{date}' #{x.title}\n" }
+      posts = sorted_apages.map do |apage| # TODO: use date or last_modified
+        last_modified = last_modified_value apage
+        date          = last_modified.strftime '%Y-%m-%d'
+        draft         = apage.draft ? DRAFT_HTML : ''
+        title         = apage.title || apage.href
+        href          = "<a href='#{apage.href}'>#{title}</a>"
+        @logger.debug { "  date='#{date}' #{title}\n" }
         "  <span>#{date}</span><span>#{href}#{draft}</span>"
       end
       <<~END_TEXT

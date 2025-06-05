@@ -137,7 +137,6 @@ module AllCollectionsHooks
       @path                ||= obj_field(obj, :path)
       @relative_path       ||= obj_field(obj, :relative_path)
       @tags                ||= obj_field(obj, :tags)
-      @title               ||= obj_field(obj, :title) || "<code>#{@href}</code>"
       @type                ||= obj_field(obj, :type)
 
       @url                 ||= obj.url
@@ -149,7 +148,8 @@ module AllCollectionsHooks
 
       # @href  = "/#{@href}" if @origin == 'individual_page'
       @href  ||= @url
-      @name  ||= File.basename(@href) # rubocop:disable Naming/MemoizedInstanceVariableName
+      @name  ||= File.basename(@href)
+      @title ||= obj_field(obj, :title) || "<code>#{@href}</code>"
     end
   end
 end
