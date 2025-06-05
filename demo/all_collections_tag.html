@@ -36,7 +36,7 @@ title: All Collections Tag
 <!-- endregion -->
 
 
-<!-- #region Default heading, sort_by, and id: -->
+<!-- #region Default -->
 <fieldset class="notice rounded">
   <legend>
     Default values for all parameters
@@ -46,30 +46,30 @@ title: All Collections Tag
 <!-- endregion -->
 
 
-<!-- #region Default heading and sort_by, suppressed id: -->
+<!-- #region Suppressed id: -->
 <fieldset class="notice rounded">
   <legend>
-    Default values for all parameters, except <code>id</code> is suppressed
+    Suppressed <code>id</code>
   </legend>
   {% all_collections id="" %}
 </fieldset>
 <!-- endregion -->
 
 
-<!-- #region Default sort_by and id: -->
+<!-- #region Given heading -->
 <fieldset class="notice rounded">
   <legend>
-    Default values for all parameters, except the given <code>heading</code>
+    Given <code>heading</code>
   </legend>
   {% all_collections heading="No ID, Sorted by Date, Descending (Default)" %}
 </fieldset>
 <!-- endregion -->
 
 
-<!-- #region Default sort_by and id: -->
+<!-- #region Given heading and id -->
 <fieldset class="notice rounded">
   <legend>
-    Default values for all parameters, exception the given <code>id</code> and <code>heading</code>
+    Given <code>heading</code> and <code>id</code>
   </legend>
   {% all_collections
     id="i_am_the_id"
@@ -79,67 +79,82 @@ title: All Collections Tag
 <!-- endregion -->
 
 
-<!-- #region Default sort_by and id: -->
+<!-- #region Given heading and sort_by date -->
 <fieldset class="notice rounded">
   <legend>
-    Default values for all parameters, except the given <code>heading</code> and <code>sort_by</code> date (descending)
+    Given <code>heading</code> and <code>sort_by</code> date (descending)
   </legend>
   {% all_collections heading="Sorted by Date, Descending (Explicit)" sort_by="-date" %}
 </fieldset>
 <!-- endregion -->
 
 
-<!-- #region Default sort_by and id: -->
+<!-- #region Given heading and sort_by -->
 <fieldset class="notice rounded">
   <legend>
-    Default values for all parameters, except the given <code>heading</code> and <code>sort_by</code> date (ascending)
+    Given <code>heading</code> and <code>sort_by</code> date (ascending)
   </legend>
-{% all_collections heading="Sorted by Date, Ascending (Explicit)" sort_by="date" %}
+  {% all_collections
+    heading="Sorted by Date, Ascending (Explicit)"
+    sort_by="date"
+  %}
+</fieldset>
 <!-- endregion -->
 
 
-<!-- #region Default sort_by and id: -->
+<!-- #region Given date_column, heading and sort_by -->
 <fieldset class="notice rounded">
   <legend>
-    Default values for all parameters, except the given <code>heading</code>, <code>sort_by</code> and <code>last_modified</code> (descending)
+    Given <code>date_column</code>, <code>heading</code>, <code>sort_by</code> <code>last_modified</code> (descending)
   </legend>
-{% all_collections
-  date_column="last_modified"
-  heading="Sorted by Last Modified Date, Descending (Explicit)"
-  sort_by="-last_modified"
-%}
+  <p>
+    Sort_by <code>last_modified</code> is possible while only displaying <code>date</code>,
+    and vice-versa.
+  </p>
+  {% all_collections
+    date_column="date"
+    heading="Sorted by Date, Descending (Explicit)"
+    sort_by="-date"
+  %}
+</fieldset>
 <!-- endregion -->
 
 
-<!-- #region Default sort_by and id: -->
+<!-- #region Given heading and sort_by -->
 <fieldset class="notice rounded">
   <legend>
-    Default values for all parameters, except the given <code>heading</code>, <code>sort_by</code> <code>title</code> (ascending)
+    Given <code>heading</code>, <code>sort_by title</code> (ascending)
   </legend>
   {% all_collections
     heading="Sorted by Title, Ascending (Explicit)"
     sort_by="title"
   %}
+</fieldset>
 <!-- endregion -->
 
+
+<!-- #region Given heading, sort_by and title -->
+<fieldset class="notice rounded">
+  <legend>
+    Given <code>heading</code>, <code>sort_by date</code> and <code>title</code> (ascending)
+  </legend>
+  {% all_collections
+    heading="Sorted by Date, then Title (Explicit)"
+    sort_by="date, title"
+  %}
+</fieldset>
+<!-- endregion -->
 
 <!-- #region Default sort_by and id: -->
 <fieldset class="notice rounded">
   <legend>
-    Default values for all parameters, except the given <code>heading</code>, <code>sort_by</code> <code>date</code> and <code>title</code> (ascending)
+    Given <code>heading</code>, <code>sort_by</code> <code>date</code> and <code>title</code> (descending)
   </legend>
-{% all_collections
-  heading="Sorted by Date, then Title (Explicit)"
-  sort_by="date, title"
-%}
-<!-- endregion -->
-
-<!-- #region Default sort_by and id: -->
-<fieldset class="notice rounded">
-  <legend>
-    Default values for all parameters, except the given <code>heading</code>, <code>sort_by</code> <code>date</code> and <code>title</code> (descending)
-  </legend>
-  {% all_collections heading="Sorted by Date, then Title, Descending (Explicit)" sort_by="date, -title" %}
+  {% all_collections
+    heading="Sorted by Date, then Title, Descending (Explicit)"
+    sort_by="date, -title"
+  %}
+</fieldset>
 <!-- endregion -->
 
 

@@ -79,27 +79,25 @@ module JekyllAllCollections
       warn_short_trace e.red
     end
 
-    def last_modified_value(apage)
-      # @logger.debug do
-      #   "  apage.last_modified='#{apage.last_modified}'; " \
-      #     "apage.last_modified_at='#{apage.last_modified_at}'; " \
-      #     "@date_column='#{@date_column}'"
-      # end
-      if apage.data.respond_to?(:last_modified)
-        apage.data.last_modified
-      elsif apage.data.respond_to? :last_modified_at
-        apage.data.last_modified_at
-      elsif apage.respond_to?(:last_modified)
-        apage.last_modified
-      elsif apage.respond_to? :last_modified_at
-        apage.last_modified_at
+    def date_value(apage, field_name)
+      if field_name == :last_modified
+        if apage.data.respond_to?(:last_modified)
+          apage.data.last_modified
+        elsif apage.data.respond_to? :last_modified_at
+          apage.data.last_modified_at
+        elsif apage.respond_to?(:last_modified)
+          apage.last_modified
+        elsif apage.respond_to? :last_modified_at
+          apage.last_modified_at
+        else
+          apage.date || Time.now
+        end
       else
         apage.date || Time.now
       end
     end
 
     def generate_output(sort_lambda)
-      # puts 'generate_output start'.yellow
       id = @id.to_s.strip.empty? ? '' : " id=\"#{@id}\""
       heading = @heading.strip.to_s.empty? ? '' : "<h2#{id}>#{@heading}</h2>"
       apages = case @data_selector
@@ -112,13 +110,9 @@ module JekyllAllCollections
                else
                  raise AllCollectionsError, "Invalid value for @data_selector (#{data_selector})"
                end
-      # puts "generate_output: @data_selector=#{@data_selector}".yellow
-      # @site.all_collections.each { |x| puts x.url.yellow }
-      # apages = apages[13..15] # Binary search for problem
       sorted_apages = apages.sort(&sort_lambda)
-      posts = sorted_apages.map do |apage| # TODO: use date or last_modified
-        last_modified = last_modified_value apage
-        date          = last_modified.strftime '%Y-%m-%d'
+      posts = sorted_apages.map do |apage|
+        date          = date_value(apage, @date_column == 'date' ? :date : :last_modified).strftime '%Y-%m-%d'
         draft         = apage.draft ? DRAFT_HTML : ''
         title         = apage.title || apage.href
         href          = "<a href='#{apage.href}'>#{title}</a>"
