@@ -16,6 +16,11 @@ module AllCollectionsHooks
   def self.apages_from_objects(objects, origin)
     pages = []
     objects.each do |object|
+      unless object.respond_to?(:logger)
+        JekyllSupport.new_attribute(object,
+                                    :logger,
+                                    PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config))
+      end
       page = APage.new(object, origin)
       pages << page unless page.data['exclude_from_all'] || page.path == 'redirect.html'
     end

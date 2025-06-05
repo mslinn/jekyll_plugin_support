@@ -81,6 +81,7 @@ module AllCollectionsHooks
       end
       return obj.send(key) if obj.respond_to?(key)
 
+      return unless obj.respond_to?(:key?)
       return obj[key] if obj.key?(key)
 
       obj[key.to_s] if obj.key?(key.to_s)
