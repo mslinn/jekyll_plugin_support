@@ -59,7 +59,7 @@ h4 .code {
   font-size: 12pt;
 }
 
-header, h1, h2, h3, h4, h5, h6, nav#sidebar {
+fieldset, header, h1, h2, h3, h4, h5, h6, nav#sidebar {
   font-family: "Helvetica Neue", Helvetica, Arial, serif;
 }
 

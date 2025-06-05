@@ -1,0 +1,146 @@
+---
+all_collection_exclusion: true
+layout: default
+order: 0
+title: All Collections Tag
+---
+<!-- #region Exercise SortedLruFiles -->
+<fieldset class="notice rounded">
+  <h2 id="SortedLruFiles">Exercise <span class="code">SortedLruFiles</span></h2>
+  <ol>
+    <li>
+      {% href match url='/blog/index.html' %}
+    </li>
+    <li>
+      {% href match url='/stuff/010-published.html' %}
+    </li>
+    <li>
+      {% href match url='/stuff/index.html' %}
+    </li>
+  </ol>
+</fieldset>
+<!-- endregion -->
+
+
+<!-- #region Everything -->
+<fieldset class="notice rounded">
+  <legend>
+    Default <code>pattern</code>
+  </legend>
+  {% all_collections
+    data_selector='everything'
+    heading="Everything"
+    id='everything'
+  %}
+</fieldset>
+<!-- endregion -->
+
+
+<!-- #region Default heading, sort_by, and id: -->
+<fieldset class="notice rounded">
+  <legend>
+    Default values for all parameters
+  </legend>
+  {% all_collections %}
+</fieldset>
+<!-- endregion -->
+
+
+<!-- #region Default heading and sort_by, suppressed id: -->
+<fieldset class="notice rounded">
+  <legend>
+    Default values for all parameters, except <code>id</code> is suppressed
+  </legend>
+  {% all_collections id="" %}
+</fieldset>
+<!-- endregion -->
+
+
+<!-- #region Default sort_by and id: -->
+<fieldset class="notice rounded">
+  <legend>
+    Default values for all parameters, except the given <code>heading</code>
+  </legend>
+  {% all_collections heading="No ID, Sorted by Date, Descending (Default)" %}
+</fieldset>
+<!-- endregion -->
+
+
+<!-- #region Default sort_by and id: -->
+<fieldset class="notice rounded">
+  <legend>
+    Default values for all parameters, exception the given <code>id</code> and <code>heading</code>
+  </legend>
+  {% all_collections
+    id="i_am_the_id"
+    heading="With ID, Sorted by Date, Descending (Default)"
+  %}
+</fieldset>
+<!-- endregion -->
+
+
+<!-- #region Default sort_by and id: -->
+<fieldset class="notice rounded">
+  <legend>
+    Default values for all parameters, except the given <code>heading</code> and <code>sort_by</code> date (descending)
+  </legend>
+  {% all_collections heading="Sorted by Date, Descending (Explicit)" sort_by="-date" %}
+</fieldset>
+<!-- endregion -->
+
+
+<!-- #region Default sort_by and id: -->
+<fieldset class="notice rounded">
+  <legend>
+    Default values for all parameters, except the given <code>heading</code> and <code>sort_by</code> date (ascending)
+  </legend>
+{% all_collections heading="Sorted by Date, Ascending (Explicit)" sort_by="date" %}
+<!-- endregion -->
+
+
+<!-- #region Default sort_by and id: -->
+<fieldset class="notice rounded">
+  <legend>
+    Default values for all parameters, except the given <code>heading</code>, <code>sort_by</code> and <code>last_modified</code> (descending)
+  </legend>
+{% all_collections
+  date_column="last_modified"
+  heading="Sorted by Last Modified Date, Descending (Explicit)"
+  sort_by="-last_modified"
+%}
+<!-- endregion -->
+
+
+<!-- #region Default sort_by and id: -->
+<fieldset class="notice rounded">
+  <legend>
+    Default values for all parameters, except the given <code>heading</code>, <code>sort_by</code> <code>title</code> (ascending)
+  </legend>
+  {% all_collections
+    heading="Sorted by Title, Ascending (Explicit)"
+    sort_by="title"
+  %}
+<!-- endregion -->
+
+
+<!-- #region Default sort_by and id: -->
+<fieldset class="notice rounded">
+  <legend>
+    Default values for all parameters, except the given <code>heading</code>, <code>sort_by</code> <code>date</code> and <code>title</code> (ascending)
+  </legend>
+{% all_collections
+  heading="Sorted by Date, then Title (Explicit)"
+  sort_by="date, title"
+%}
+<!-- endregion -->
+
+<!-- #region Default sort_by and id: -->
+<fieldset class="notice rounded">
+  <legend>
+    Default values for all parameters, except the given <code>heading</code>, <code>sort_by</code> <code>date</code> and <code>title</code> (descending)
+  </legend>
+  {% all_collections heading="Sorted by Date, then Title, Descending (Explicit)" sort_by="date, -title" %}
+<!-- endregion -->
+
+
+{% outline_js wrap_in_script_tag %}
