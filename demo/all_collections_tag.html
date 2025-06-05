@@ -4,6 +4,14 @@ layout: default
 order: 0
 title: All Collections Tag
 ---
+<!-- #region intro -->
+<p>
+  Sort_by <code>last_modified</code> is possible while only displaying <code>date</code>,
+  and vice-versa.
+</p>
+<!-- endregion -->
+
+
 <!-- #region Exercise SortedLruFiles -->
 <fieldset class="notice rounded">
   <h2 id="SortedLruFiles">Exercise <span class="code">SortedLruFiles</span></h2>
@@ -46,6 +54,26 @@ title: All Collections Tag
 <!-- endregion -->
 
 
+<!-- #region Using date_column and sort_by -->
+<fieldset class="notice rounded">
+  <legend>
+    Using <code>date_column="date" sort_by="-date"</code>
+  </legend>
+  {% all_collections date_column="date" sort_by="-date" %}
+</fieldset>
+<!-- endregion -->
+
+
+<!-- #region Using Last Modified -->
+<fieldset class="notice rounded">
+  <legend>
+    Using Last Modified
+  </legend>
+  {% all_collections date_column="last_modified" %}
+</fieldset>
+<!-- endregion -->
+
+
 <!-- #region Suppressed id: -->
 <fieldset class="notice rounded">
   <legend>
@@ -61,7 +89,7 @@ title: All Collections Tag
   <legend>
     Given <code>heading</code>
   </legend>
-  {% all_collections heading="No ID, Sorted by Date, Descending (Default)" %}
+  {% all_collections heading="No ID, Sorted by last modified, Descending (Default)" %}
 </fieldset>
 <!-- endregion -->
 
@@ -73,7 +101,7 @@ title: All Collections Tag
   </legend>
   {% all_collections
     id="i_am_the_id"
-    heading="With ID, Sorted by Date, Descending (Default)"
+    heading="With ID, Sorted by Last Modified, Descending (Default)"
   %}
 </fieldset>
 <!-- endregion -->
@@ -82,9 +110,12 @@ title: All Collections Tag
 <!-- #region Given heading and sort_by date -->
 <fieldset class="notice rounded">
   <legend>
-    Given <code>heading</code> and <code>sort_by</code> date (descending)
+    Given <code>heading</code> and <code>sort_by="-date"</code> (descending)
   </legend>
-  {% all_collections heading="Sorted by Date, Descending (Explicit)" sort_by="-date" %}
+  {% all_collections
+    heading="Sorted by Date, Descending (Explicit)"
+    sort_by="-date"
+  %}
 </fieldset>
 <!-- endregion -->
 
@@ -92,7 +123,7 @@ title: All Collections Tag
 <!-- #region Given heading and sort_by -->
 <fieldset class="notice rounded">
   <legend>
-    Given <code>heading</code> and <code>sort_by</code> date (ascending)
+    Given <code>heading</code> and <code>sort_by="date"</code> (ascending)
   </legend>
   {% all_collections
     heading="Sorted by Date, Ascending (Explicit)"
@@ -105,12 +136,8 @@ title: All Collections Tag
 <!-- #region Given date_column, heading and sort_by -->
 <fieldset class="notice rounded">
   <legend>
-    Given <code>date_column</code>, <code>heading</code>, <code>sort_by</code> <code>last_modified</code> (descending)
+    Given <code>date_column=date</code>, <code>heading</code>, <code>sort_by=-date</code> (descending)
   </legend>
-  <p>
-    Sort_by <code>last_modified</code> is possible while only displaying <code>date</code>,
-    and vice-versa.
-  </p>
   {% all_collections
     date_column="date"
     heading="Sorted by Date, Descending (Explicit)"
@@ -120,10 +147,10 @@ title: All Collections Tag
 <!-- endregion -->
 
 
-<!-- #region Given heading and sort_by -->
+<!-- #region Given heading and sort_by title-->
 <fieldset class="notice rounded">
   <legend>
-    Given <code>heading</code>, <code>sort_by title</code> (ascending)
+    Given <code>heading</code>, <code>sort_by=title</code> (ascending)
   </legend>
   {% all_collections
     heading="Sorted by Title, Ascending (Explicit)"
@@ -136,7 +163,7 @@ title: All Collections Tag
 <!-- #region Given heading, sort_by and title -->
 <fieldset class="notice rounded">
   <legend>
-    Given <code>heading</code>, <code>sort_by date</code> and <code>title</code> (ascending)
+    Given <code>heading</code>, <code>sort_by="date, title"</code> (ascending)
   </legend>
   {% all_collections
     heading="Sorted by Date, then Title (Explicit)"
@@ -148,10 +175,10 @@ title: All Collections Tag
 <!-- #region Default sort_by and id: -->
 <fieldset class="notice rounded">
   <legend>
-    Given <code>heading</code>, <code>sort_by</code> <code>date</code> and <code>title</code> (descending)
+    Given <code>heading</code>, <code>sort_by="date, -title"</code>
   </legend>
   {% all_collections
-    heading="Sorted by Date, then Title, Descending (Explicit)"
+    heading="Sorted by Date (ascending), then Title (Descending)"
     sort_by="date, -title"
   %}
 </fieldset>

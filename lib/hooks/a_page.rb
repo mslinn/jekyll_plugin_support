@@ -108,8 +108,6 @@ module AllCollectionsHooks
     # `content`, `destination`, `ext` and `extname`, `label` from `collection.label`,
     # `path`, `relative_path`, `type`, and `url`.
     def build(obj) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-      # return unless obj.respond_to? :data # TODO: halt with error instead?
-
       @categories          ||= obj_field(obj, :categories)
       @content             ||= obj.content if obj.respond_to? :content
       @data                ||= obj.respond_to?(:data) ? obj.data : {}

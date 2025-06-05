@@ -1,4 +1,3 @@
-# require 'jekyll_draft'
 require 'securerandom'
 
 # @author Copyright 2020 Michael Slinn
@@ -14,10 +13,8 @@ module JekyllAllCollections
     # Method prescribed by JekyllTag.
     # @return [String]
     def render_impl
-      parse_arguments # Defines instance variables like @sort_by
-      # puts "@sort_by=#{@sort_by}, @sort_by_param=#{@sort_by_param}".yellow
+      parse_arguments # Defines instance variables like @sort_by and @sort_by_param
       sort_lambda = init_sort_by @sort_by, @sort_by_param
-      @heading = @helper.parameter_specified?('heading') || default_head(@sort_by)
       generate_output sort_lambda
     rescue StandardError => e
       ::JekyllSupport.error_short_trace @logger, e
@@ -112,7 +109,7 @@ module JekyllAllCollections
                end
       sorted_apages = apages.sort(&sort_lambda)
       posts = sorted_apages.map do |apage|
-        date          = date_value(apage, @date_column == 'date' ? :date : :last_modified).strftime '%Y-%m-%d'
+        date          = date_value(apage, @date_column == 'last_modified' ? :last_modified : :date).strftime '%Y-%m-%d'
         draft         = apage.draft ? DRAFT_HTML : ''
         title         = apage.title || apage.href
         href          = "<a href='#{apage.href}'>#{title}</a>"
@@ -145,15 +142,19 @@ module JekyllAllCollections
       @data_selector = @helper.parameter_specified?('data_selector') || 'all_collections'
       abort "Invalid data_selector #{@data_selector}" unless %w[all_collections all_documents everything].include? @data_selector
 
-      @date_column = @helper.parameter_specified?('date_column') || 'date'
+      @date_column = @helper.parameter_specified?('date_column') || 'last_modified'
       unless %w[date last_modified].include?(@date_column)
         raise AllCollectionsError "The date_column attribute must either have value 'date' or 'last_modified', " \
                                   "but '#{@date_column}' was specified"
       end
+      puts 'date_column == ' + @date_column
 
       @id = @helper.parameter_specified?('id') || SecureRandom.hex(10)
       @sort_by_param = @helper.parameter_specified? 'sort_by'
       @sort_by = (@sort_by_param&.delete(' ')&.split(',') if @sort_by_param != false) || ['-date']
+
+      # puts "@sort_by=#{@sort_by}, @sort_by_param=#{@sort_by_param}".yellow
+      @heading = @helper.parameter_specified?('heading') || default_head(@sort_by)
     end
 
     ::JekyllSupport::JekyllPluginHelper.register(self, PLUGIN_NAME)
