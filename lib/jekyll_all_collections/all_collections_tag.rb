@@ -78,17 +78,7 @@ module JekyllAllCollections
 
     def date_value(apage, field_name)
       if field_name == :last_modified
-        if apage.data.respond_to?(:last_modified)
-          apage.data.last_modified
-        elsif apage.data.respond_to? :last_modified_at
-          apage.data.last_modified_at
-        elsif apage.respond_to?(:last_modified)
-          apage.last_modified
-        elsif apage.respond_to? :last_modified_at
-          apage.last_modified_at
-        else
-          apage.date || Time.now
-        end
+        apage.field(:last_modified_at) || apage.field(:last_modified) || Date.today
       else
         apage.date || Time.now
       end
@@ -109,7 +99,7 @@ module JekyllAllCollections
                end
       sorted_apages = apages.sort(&sort_lambda)
       posts = sorted_apages.map do |apage|
-        date_column = @date_column == 'last_modified' ? :last_modified : :date
+        date_column = @date_column.to_s == 'last_modified' ? :last_modified : :date
         d = date_value(apage, date_column)
         if d && !d.empty?
           date = d.strftime '%Y-%m-%d'

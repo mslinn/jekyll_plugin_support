@@ -79,6 +79,21 @@ module AllCollectionsHooks
       ::JekyllSupport.error_short_trace(@logger, e)
     end
 
+    # @param name can be either a String or a Symbol
+    def field(name)
+      default_value = case name
+                      when :date, :last_modified, :last_modified_at
+                        AllCollectionsHooks::END_OF_DAYS
+                      else
+                        ''
+                      end
+      if data.key?(name.to_sym) || data.key?(name.to_s)
+        data[name.to_sym] || data[name.to_s] || default_value
+      else
+        default_value
+      end
+    end
+
     # Look within @data (if the property exists), then self for the given key as a symbol or a string
     # @param key must be a symbol
     # @return value of data[key] if key exists as a string or a symbol, else nil
@@ -120,7 +135,7 @@ module AllCollectionsHooks
       @categories          ||= obj_field(obj, :categories)
       @content             ||= obj.content if obj.respond_to? :content
       @data                ||= obj.respond_to?(:data) ? obj.data : {}
-      @date                ||= obj_field(obj, :date) || Time.now
+      @date                ||= obj_field(obj, :date) || Time.now # Jekyll doc.date property is a Time
       @description         ||= obj_field(obj, :description)
       # TODO: What _config.yml setting should be passed to destination()?
       @destination         ||= obj.destination('') if obj.respond_to? :destination
@@ -132,7 +147,7 @@ module AllCollectionsHooks
 
       @last_modified       ||= obj_field(obj, :last_modified) ||
                                obj_field(obj, :last_modified_at) ||
-                               @date
+                               Date.parse(@date.to_s) # Jekyll doc.last_modified property is a Date
 
       @last_modified_field ||= if obj_field(obj, :last_modified)
                                  :last_modified
