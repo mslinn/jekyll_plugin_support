@@ -109,7 +109,13 @@ module JekyllAllCollections
                end
       sorted_apages = apages.sort(&sort_lambda)
       posts = sorted_apages.map do |apage|
-        date          = date_value(apage, @date_column == 'last_modified' ? :last_modified : :date).strftime '%Y-%m-%d'
+        date_column = @date_column == 'last_modified' ? :last_modified : :date
+        d = date_value(apage, date_column)
+        if d && !d.empty?
+          date = d.strftime '%Y-%m-%d'
+        else
+          @logger.error { "date_value is nil; date_column=#{date_column}" }
+        end
         draft         = apage.draft ? DRAFT_HTML : ''
         title         = apage.title || apage.href
         href          = "<a href='#{apage.href}'>#{title}</a>"

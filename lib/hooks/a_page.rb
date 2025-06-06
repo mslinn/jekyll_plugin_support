@@ -12,11 +12,11 @@ module JekyllSupport
     title: nil,
     url: nil
   )
-    date = Date.parse(date) if date.instance_of?(String)
+    date = Time.parse(date) if date.instance_of?(String)
     last_modified = if last_modified.nil? || last_modified == ''
                       date
                     elsif last_modified.instance_of?(String)
-                      Date.parse(last_modified)
+                      Time.parse(last_modified)
                     end
     data = {
       collection:    { label: collection_name },
