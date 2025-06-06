@@ -13,8 +13,8 @@ module JekyllAllCollections
     # Method prescribed by JekyllTag.
     # @return [String]
     def render_impl
-      parse_arguments # Defines instance variables like @sort_by and @sort_by_param
-      sort_lambda = init_sort_by @sort_by, @sort_by_param
+      parse_arguments # Defines instance variables like @sort_by
+      sort_lambda = init_sort_by @sort_by
       generate_output sort_lambda
     rescue StandardError => e
       ::JekyllSupport.error_short_trace @logger, e
@@ -127,17 +127,17 @@ module JekyllAllCollections
     end
 
     # See https://stackoverflow.com/a/75377832/553865
-    def init_sort_by(sort_by, sort_by_param)
+    def init_sort_by(sort_by)
       sort_lambda_string = AllCollectionsTag.create_lambda_string sort_by
 
       @logger.debug do
-        "#{@page['path']} sort_by_param=#{sort_by_param}  " \
-          "sort_lambda_string = #{sort_lambda_string}\n"
+        "#{@page['path']} sort_lambda_string = #{sort_lambda_string}\n"
       end
 
       evaluate sort_lambda_string
     end
 
+    # @return String defining the parsed sort_by expression
     def parse_arguments
       @data_selector = @helper.parameter_specified?('data_selector') || 'all_collections'
       abort "Invalid data_selector #{@data_selector}" unless %w[all_collections all_documents everything].include? @data_selector
@@ -147,14 +147,14 @@ module JekyllAllCollections
         raise AllCollectionsError "The date_column attribute must either have value 'date' or 'last_modified', " \
                                   "but '#{@date_column}' was specified"
       end
-      puts 'date_column == ' + @date_column
 
       @id = @helper.parameter_specified?('id') || SecureRandom.hex(10)
-      @sort_by_param = @helper.parameter_specified? 'sort_by'
-      @sort_by = (@sort_by_param&.delete(' ')&.split(',') if @sort_by_param != false) || ['-date']
 
-      # puts "@sort_by=#{@sort_by}, @sort_by_param=#{@sort_by_param}".yellow
       @heading = @helper.parameter_specified?('heading') || default_head(@sort_by)
+
+      sort_by_param = @helper.parameter_specified? 'sort_by'
+      @sort_by = (sort_by_param&.delete(' ')&.split(',') if sort_by_param != false) || ['-date']
+      @sort_by
     end
 
     ::JekyllSupport::JekyllPluginHelper.register(self, PLUGIN_NAME)
