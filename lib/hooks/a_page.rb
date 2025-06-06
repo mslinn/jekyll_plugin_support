@@ -12,11 +12,20 @@ module JekyllSupport
     title: nil,
     url: nil
   )
+    # Jekyll documents have inconsistent date and last_modified property types.
+    unless date.instance_of? Time
+      @logger.error { "date is not an instance of Time, it is an instance of #{date.class}" }
+      exit 2
+    end
+    unless last_modified.instance_of? Date
+      @logger.error { "last_modified is not an instance of Date, it is an instance of #{last_modified.class}" }
+      exit 3
+    end
     date = Time.parse(date) if date.instance_of?(String)
     last_modified = if last_modified.nil? || last_modified == ''
-                      date
+                      Date.parse(date._to_s)
                     elsif last_modified.instance_of?(String)
-                      Time.parse(last_modified)
+                      Date.parse(last_modified)
                     end
     data = {
       collection:    { label: collection_name },
@@ -52,7 +61,7 @@ end
 module AllCollectionsHooks
   FIXNUM_MAX = (2**((0.size * 8) - 2)) - 1 unless defined? FIXNUM_MAX
   END_OF_DAYS = 1_000_000_000_000 unless defined? END_OF_DAYS # One trillion years in the future
-  # Date.new is -4712-01-01
+  # Time.new is -4712-01-01
 
   class APage
     attr_reader :categories, :content, :data, :date, :description, :destination, :draft, :excerpt, :ext, :extname, :href,
