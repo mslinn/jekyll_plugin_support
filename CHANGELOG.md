@@ -1,11 +1,15 @@
 # Change Log
 
-## 3.1.0 / 2025-05-25
+## 3.1.0 / 2025-06-09
 
 * Added attribute `order` and method `field` to support `jekyll_outline`.
 * Added another constructor for `AllCollectionsHooks::APage`, called `apage_from`.
 * Added new method `new_attribute` to module `JekyllSupport`.
+* The displayed date field (`:date` or `:last_modified`) now defaults to the primary sort field.
 * Modified specs tests.
+* Jekyll tag `AllCollectionsTag` now accepts an optional parameter called
+  `collection_name`, which filters the selected data source. A warning is logged
+  if the data source is anything but `all_collections`.
 
 
 ## 3.0.0 / 2025-02-09

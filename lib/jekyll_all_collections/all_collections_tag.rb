@@ -141,6 +141,9 @@ module JekyllAllCollections
       @collection_name = @helper.parameter_specified('collection_name')
       @data_selector = @helper.parameter_specified?('data_selector') || 'all_collections'
       abort "Invalid data_selector #{@data_selector}" unless %w[all_collections all_documents everything].include? @data_selector
+      @logger.warn {
+        "collection_name was specified as #{@collection_name}, but data_selector is #{@data_selector}, which is less effcient than specifying all_collections."
+      }
 
       sort_by_param = @helper.parameter_specified? 'sort_by' # Might specify multiple sort fields
 
