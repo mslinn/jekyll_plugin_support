@@ -138,7 +138,7 @@ module JekyllAllCollections
 
     # @return String defining the parsed sort_by expression
     def parse_arguments
-      @collection_name = @helper.parameter_specified('collection_name')
+      @collection_name = @helper.parameter_specified?('collection_name')
       @data_selector = @helper.parameter_specified?('data_selector') || 'all_collections'
       abort "Invalid data_selector #{@data_selector}" unless %w[all_collections all_documents everything].include? @data_selector
       @logger.warn {
