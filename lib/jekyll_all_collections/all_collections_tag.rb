@@ -77,8 +77,10 @@ module JekyllAllCollections
     end
 
     def date_value(apage, field_name)
-      if field_name == :last_modified
-        apage.field(:last_modified_at) || apage.field(:last_modified) || Date.today
+      if %i[last_modified last_modified_at].include? field_name
+        apage.field(:last_modified_at, use_default: false) ||
+          apage.field(:last_modified, use_default: false) ||
+          Date.today
       else
         apage.date || Time.now
       end
@@ -101,10 +103,10 @@ module JekyllAllCollections
       posts = sorted_apages.map do |apage|
         date_column = @date_column.to_s == 'last_modified' ? :last_modified : :date
         d = date_value(apage, date_column)
-        if d && !d.empty?
+        if d.instance_of?(Date) || d.instance_of?(Time)
           date = d.strftime '%Y-%m-%d'
         else
-          @logger.error { "date_value is nil; date_column=#{date_column}" }
+          @logger.error { "date_value returned a #{d.class} instead of a Date or a Time; date_column=#{date_column}" }
         end
         draft         = apage.draft ? DRAFT_HTML : ''
         title         = apage.title || apage.href
@@ -119,7 +121,7 @@ module JekyllAllCollections
         </div>
       END_TEXT
     rescue NoMethodError || ArgumentError => e
-      error_short_trace e
+      ::JekyllSupport.error_short_trace e
     end
 
     # See https://stackoverflow.com/a/75377832/553865

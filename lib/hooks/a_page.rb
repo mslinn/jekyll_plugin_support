@@ -80,18 +80,18 @@ module AllCollectionsHooks
     end
 
     # @param name can be either a String or a Symbol
-    def field(name)
+    def field(name, use_default: true)
       default_value = case name
                       when :date, :last_modified, :last_modified_at
                         AllCollectionsHooks::END_OF_DAYS
                       else
                         ''
                       end
-      if data.key?(name.to_sym) || data.key?(name.to_s)
-        data[name.to_sym] || data[name.to_s] || default_value
-      else
-        default_value
-      end
+
+      result = data[name.to_sym] || data[name.to_s] if data.key?(name.to_sym) || data.key?(name.to_s)
+      return result if result
+
+      default_value if use_default
     end
 
     # Look within @data (if the property exists), then self for the given key as a symbol or a string
