@@ -99,7 +99,7 @@ module JekyllAllCollections
                else
                  raise AllCollectionsError, "Invalid value for @data_selector (#{data_selector})"
                end
-      filtered_apages = @collection_name.nil? ? apages : apages.select { |apage| apage.collection == @collection_name }
+      filtered_apages = @collection_name.nil? ? apages : apages.select { |apage| apage.collection_name == @collection_name }
       sorted_apages = filtered_apages.sort(&sort_lambda)
       posts = sorted_apages.map do |apage|
         date_column = @date_column.to_s == 'last_modified' ? :last_modified : :date
@@ -122,7 +122,7 @@ module JekyllAllCollections
         </div>
       END_TEXT
     rescue NoMethodError || ArgumentError => e
-      ::JekyllSupport.error_short_trace e
+      ::JekyllSupport.error_short_trace @logger, e
     end
 
     # See https://stackoverflow.com/a/75377832/553865
@@ -141,9 +141,12 @@ module JekyllAllCollections
       @collection_name = @helper.parameter_specified?('collection_name')
       @data_selector = @helper.parameter_specified?('data_selector') || 'all_collections'
       abort "Invalid data_selector #{@data_selector}" unless %w[all_collections all_documents everything].include? @data_selector
-      @logger.warn {
-        "collection_name was specified as #{@collection_name}, but data_selector is #{@data_selector}, which is less effcient than specifying all_collections."
-      }
+      if (@data_selector != 'all_collections') && !@collection_name.empty?
+        @logger.warn {
+          "collection_name was specified as #{@collection_name}, but data_selector is #{@data_selector},
+          which is less effcient than specifying all_collections."
+        }
+      end
 
       sort_by_param = @helper.parameter_specified? 'sort_by' # Might specify multiple sort fields
 

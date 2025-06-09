@@ -64,9 +64,9 @@ module AllCollectionsHooks
   # Time.new is -4712-01-01
 
   class APage
-    attr_reader :categories, :content, :data, :date, :description, :destination, :draft, :excerpt, :ext, :extname, :href,
-                :label, :last_modified, :last_modified_field, :logger, :layout, :name, :origin, :path, :relative_path,
-                :tags, :title, :type, :url
+    attr_reader :categories, :collection_name, :content, :data, :date, :description, :destination, :draft,
+                :excerpt, :ext, :extname, :href, :label, :last_modified, :last_modified_field, :logger,
+                :layout, :name, :origin, :path, :relative_path, :tags, :title, :type, :url
 
     # @param obj can be a `Jekyll::Document` or a Hash with properties
     # @param origin values: 'collection', 'individual_page', and 'static_file'
@@ -133,6 +133,16 @@ module AllCollectionsHooks
     # `path`, `relative_path`, `type`, and `url`.
     def build(obj) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       @categories          ||= obj_field(obj, :categories)
+
+      collection_value     = obj_field(obj, :collection)
+      @collection_name     = if collection_value
+                               if collection_value.respond_to?(:label)
+                                 collection_value.label
+                               elsif collection_value.key? :label
+                                 collection_value[:label]
+                               end
+                             end
+
       @content             ||= obj.content if obj.respond_to? :content
       @data                ||= obj.respond_to?(:data) ? obj.data : {}
       @date                ||= obj_field(obj, :date) || Time.now # Jekyll doc.date property is a Time
