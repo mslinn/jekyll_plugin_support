@@ -99,7 +99,8 @@ module JekyllAllCollections
                else
                  raise AllCollectionsError, "Invalid value for @data_selector (#{data_selector})"
                end
-      sorted_apages = apages.sort(&sort_lambda)
+      filtered_apages = @collection_name.nil? ? apages : apages.select { |apage| apage.collection == @collection_name }
+      sorted_apages = filtered_apages.sort(&sort_lambda)
       posts = sorted_apages.map do |apage|
         date_column = @date_column.to_s == 'last_modified' ? :last_modified : :date
         d = date_value(apage, date_column)
@@ -137,20 +138,24 @@ module JekyllAllCollections
 
     # @return String defining the parsed sort_by expression
     def parse_arguments
+      @collection_name = @helper.parameter_specified('collection_name')
       @data_selector = @helper.parameter_specified?('data_selector') || 'all_collections'
       abort "Invalid data_selector #{@data_selector}" unless %w[all_collections all_documents everything].include? @data_selector
 
+      sort_by_param = @helper.parameter_specified? 'sort_by' # Might specify multiple sort fields
+
+      # Default to displaying last modified field unless a sort field is specified
       @date_column = @helper.parameter_specified?('date_column') || 'last_modified'
       unless %w[date last_modified].include?(@date_column)
         raise AllCollectionsError "The date_column attribute must either have value 'date' or 'last_modified', " \
-                                  "but '#{@date_column}' was specified"
+                                  "but '#{@date_column}' was specified instead."
       end
-
-      @id = @helper.parameter_specified?('id') || SecureRandom.hex(10)
+      @date_column ||= (sort_by_param.include?('last_modified') ? 'last_modified' : 'date') # display the sort date by default
 
       @heading = @helper.parameter_specified?('heading') || default_head(@sort_by)
 
-      sort_by_param = @helper.parameter_specified? 'sort_by'
+      @id = @helper.parameter_specified?('id') || SecureRandom.hex(10)
+
       @sort_by = (sort_by_param&.delete(' ')&.split(',') if sort_by_param != false) || ['-date']
       @sort_by
     end
