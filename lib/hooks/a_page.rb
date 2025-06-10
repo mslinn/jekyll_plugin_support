@@ -65,8 +65,8 @@ module AllCollectionsHooks
 
   class APage
     attr_reader :categories, :collection_name, :content, :data, :date, :description, :destination, :draft,
-                :excerpt, :ext, :extname, :href, :label, :last_modified, :last_modified_field, :logger,
-                :layout, :name, :origin, :path, :relative_path, :tags, :title, :type, :url
+                :excerpt, :ext, :extname, :href, :label, :last_modified, :last_modified_field,
+                :layout, :logger, :name, :origin, :path, :relative_path, :tags, :title, :type, :url
 
     # @param obj can be a `Jekyll::Document` or a Hash with properties
     # @param origin values: 'collection', 'individual_page', and 'static_file'

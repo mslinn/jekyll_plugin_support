@@ -104,10 +104,12 @@ module JekyllAllCollections
       posts = sorted_apages.map do |apage|
         date_column = @date_column.to_s == 'last_modified' ? :last_modified : :date
         d = date_value(apage, date_column)
-        if d.instance_of?(Date) || d.instance_of?(Time)
+        if d.respond_to?(:strftime)
           date = d.strftime '%Y-%m-%d'
         else
-          @logger.error { "date_value returned a #{d.class} instead of a Date or a Time; date_column=#{date_column}" }
+          @logger.error do
+            "date_value returned a #{d.class} instead of a class with a strftime method like Date and Time; date_column=#{date_column}"
+          end
         end
         draft         = apage.draft ? DRAFT_HTML : ''
         title         = apage.title || apage.href
