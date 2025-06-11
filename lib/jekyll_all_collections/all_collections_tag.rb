@@ -143,11 +143,11 @@ module JekyllAllCollections
       @collection_name = @helper.parameter_specified?('collection_name')
       @data_selector = @helper.parameter_specified?('data_selector') || 'all_collections'
       abort "Invalid data_selector #{@data_selector}" unless %w[all_collections all_documents everything].include? @data_selector
-      if (@data_selector != 'all_collections') && !@collection_name.empty?
-        @logger.warn {
-          "collection_name was specified as #{@collection_name}, but data_selector is #{@data_selector},
+      if (@data_selector != 'all_collections') && @collection_name
+        @logger.warn do
+          "collection_name was specified as '#{@collection_name}', but data_selector is #{@data_selector},
           which is less effcient than specifying all_collections."
-        }
+        end
       end
 
       sort_by_param = @helper.parameter_specified? 'sort_by' # Might specify multiple sort fields
@@ -160,11 +160,12 @@ module JekyllAllCollections
       end
       @date_column ||= (sort_by_param.include?('last_modified') ? 'last_modified' : 'date') # display the sort date by default
 
-      @heading = @helper.parameter_specified?('heading') || default_head(@sort_by)
-
       @id = @helper.parameter_specified?('id') || SecureRandom.hex(10)
 
       @sort_by = (sort_by_param&.delete(' ')&.split(',') if sort_by_param != false) || ['-date']
+
+      @heading = @helper.parameter_specified?('heading') || default_head(@sort_by)
+
       @sort_by
     end
 

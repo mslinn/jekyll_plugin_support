@@ -51,6 +51,23 @@ module JekyllSupport
     puts e.full_message
   end
 
+  # Create Array of JekyllSupport::APage from objects
+  # @param objects [Array] An array of Jekyll::Document, Jekyll::Page or file names
+  # @param origin [String] Indicates type of objects being passed
+  def self.apages_from_objects(objects, origin)
+    pages = []
+    objects.each do |object|
+      unless object.respond_to?(:logger)
+        JekyllSupport.new_attribute(object,
+                                    :logger,
+                                    PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config))
+      end
+      page = APage.new(object, origin)
+      pages << page unless page.data['exclude_from_all'] || page.path == 'redirect.html'
+    end
+    pages
+  end
+
   # Defines a new attribute called `prop_name` in object `obj` and sets it to `prop_value`
   def self.new_attribute(obj, prop_name, prop_value)
     obj.class.module_eval { attr_accessor prop_name }

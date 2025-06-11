@@ -10,24 +10,6 @@ module AllCollectionsHooks
     "site.all_collections #{site.class.method_defined?(:all_collections) ? 'IS' : 'IS NOT'} defined"
   end
 
-  # TODO move to module JekyllSupport
-  # Create Array of JekyllSupport::APage from objects
-  # @param objects [Array] An array of Jekyll::Document, Jekyll::Page or file names
-  # @param origin [String] Indicates type of objects being passed
-  def self.apages_from_objects(objects, origin)
-    pages = []
-    objects.each do |object|
-      unless object.respond_to?(:logger)
-        JekyllSupport.new_attribute(object,
-                                    :logger,
-                                    PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config))
-      end
-      page = APage.new(object, origin)
-      pages << page unless page.data['exclude_from_all'] || page.path == 'redirect.html'
-    end
-    pages
-  end
-
   # Called by early, high-priority hook.
   # Computes site.all_collections, site.all_documents, site.everything, and site.sorted_lru_files
   def self.compute(site)
