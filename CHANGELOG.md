@@ -10,6 +10,7 @@
 * Jekyll tag `AllCollectionsTag` now accepts an optional parameter called
   `collection_name`, which filters the selected data source. A warning is logged
   if the data source is anything but `all_collections`.
+* Moved `APage` and its constructors to the `JekyllCollections` module.
 
 
 ## 3.0.0 / 2025-02-09
