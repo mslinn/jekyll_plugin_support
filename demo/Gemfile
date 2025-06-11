@@ -2,17 +2,22 @@ source 'https://rubygems.org'
 
 gem 'jekyll', '~> 4.4.1'
 
+# jekyll_flexible_include = ENV.fetch('jekyll_flexible_include', nil)
+# jekyll_img              = ENV.fetch('jekyll_img', nil)
+jekyll_href             = ENV.fetch('jekyll_href', nil)
+jekyll_outline          = ENV.fetch('jekyll_outline', nil)
+
 group :jekyll_plugins do
   gem 'jekyll-assets', git: 'https://github.com/envygeeks/jekyll-assets'
   gem 'jekyll_badge', '>= 0.1.2'
   gem 'jekyll_draft', '>= 3.0.0'
   gem 'jekyll_emoji_tag'
   gem 'jekyll-environment-variables'
-  gem 'jekyll_flexible_include'
+  gem 'jekyll_flexible_include' # , path: jekyll_flexible_include
   gem 'jekyll_google_translate'
-  gem 'jekyll_href', '>= 3.0.0'
-  gem 'jekyll_img'
-  gem 'jekyll_outline'
+  gem 'jekyll_href', '>= 3.0.0', path: jekyll_href
+  gem 'jekyll_img' # , path: jekyll_img
+  gem 'jekyll_outline', '>=1.3.0', path: jekyll_outline
   gem 'jekyll_plugin_support', path: '../'
   gem 'jekyll_pre', '>= 3.0.0'
   # gem 'jekyll_qr_generator'
