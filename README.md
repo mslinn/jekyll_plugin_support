@@ -64,6 +64,10 @@ Jekyll plugin tags created from `jekyll_plugin_support` framework automatically 
 
     d. `sorted_lru_files` is used by a new binary search lookup for matching page suffixes.
       The `jekyll_href` and `jekyll_draft` plugins use this feature.
+17. A new Ruby class, `APage`, which abstracts all URL-addressable entities in a Jekyll website.
+    An `APage` can be constructed from a Jekyll `Document` or `Page`, a static file, and a Ruby hash.
+
+    `APage` instances can help immensely when automating content generation and reporting tasks.
 
 ## Installation
 
@@ -76,7 +80,7 @@ add the following line to your Jekyll plugin’s `Gemfile`.
 ```ruby
 group :jekyll_plugins do
   # ...
-  gem 'jekyll_plugin_support', '>= 1.1.0'
+  gem 'jekyll_plugin_support', '>= 3.1.0'
   # ...
 end
 ```
@@ -95,7 +99,7 @@ If your custom plugin will be packaged into a gem, add the following to your plu
 ```ruby
 Gem::Specification.new do |spec|
   # ...
-  spec.add_dependency 'jekyll_plugin_support', '>= 1.1.0'
+  spec.add_dependency 'jekyll_plugin_support', '>= 3.1.0'
   # ...
 end
 ```
@@ -235,12 +239,27 @@ The general form of the Jekyll tag, including all options, is:
 
 ```html
 {% all_collections
+  collection_name='posts'
+  data_selector='all_collections'
   date_column='date|last_modified'
   heading='All Posts'
-  id='asdf'
+  id='post_outline'
   sort_by='SORT_KEYS'
 %}
 ```
+
+Each of these attributes are explained below.
+
+
+#### `collection_name` Attribute
+
+Name of the collection that this `APage` belongs to, or `nil`.
+
+
+##### `data_selector` Attribute
+
+Name of the data collection to work from, defaults to `all_collections`.
+Other allowable values are `all_documents` and `everything`.
 
 
 ##### `date_column` Attribute
@@ -1005,17 +1024,35 @@ The `site.all_collections`, `site.all_documents` and `site.everything` attribute
 consist of arrays of [`APage`](lib/hooks/a_page.rb) instances.
 
 The `APage` class has the following attributes:
-`content` (HTML or Markdown), `data` (array), `date` (Ruby Date), `description`, `destination`,
-`draft` (Boolean), `ext`, `href`, `label`, `last_modified` or `last_modified_at` (Ruby Date),
-`layout`, `origin`, `path`, `relative_path`, `tags`, `title`, `type`, and `url`.
 
+* `content` (HTML or Markdown)
+* `collection_name`
+* `content` (HTML or Markdown)
+* `data` (array)
+* `date` (Ruby Date)
+* `description`
+* `destination`,
+* `draft` (Boolean)
+* `ext` / `extname`
 * `href` always starts with a slash.
-  This value is consistent with `a href` values in website HTML.
+  This value is consistent with a `href` values in website HTML.
   Paths ending with a slash (`/`) have `index.html` appended so the path specifies an actual file.
-
+* `label`
+* `last_modified` (Ruby Date)
+* `last_modified_field` indicates the name of the field that originally contained the value for
+  `last_modified` (`last_modified` or `last_modified_at`)
+* `layout`
+* `logger` helpful for error handling
+* `name`
 * `origin` indicates the original source of the item.
   Possible values are `collection`, `individual_page` and `static_file`.
   Knowing the origin of each item allows code to process each type of item appropriately.
+* `path`
+* `relative_path`
+* `tags`
+* `title`
+* `type`
+* `url`
 
 
 ## `all_collections` Block Tag
@@ -1024,6 +1061,11 @@ The `all_collections` block tag creates a formatted listing of Jekyll files.
 The ordering is configurable; by default, the listing is sorted by `date`, newest to oldest.
 The `all_collections` tag has a `data_source` parameter that specifies which new property to report on
 (`all_collections`, `all_documents`, or `everything`).
+
+For an example of how to use this Jekyll tag in conjunction with the
+[jekyll_outline](http://localhost:4001/jekyll_plugins/jekyll_outline.html) tag,
+see the [outline_tabs](http://localhost:4001/jekyll_plugins/jekyll_outline.html#outline_tabs)
+section of the jekyll_outline documentation.
 
 
 ## Requirements
