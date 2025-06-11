@@ -23,6 +23,7 @@ module JekyllSupport
     end
 
     last_modified = Date.parse(last_modified) if last_modified.instance_of?(String)
+    last_modified = Date.parse(date.strftime('%Y-%m-%d')) if last_modified.nil?
     unless last_modified.instance_of? Date
       logger.error { "last_modified is not an instance of Date, it is an instance of #{last_modified.class}" }
       exit 3
