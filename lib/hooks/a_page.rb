@@ -1,4 +1,6 @@
+require 'date'
 require 'jekyll_draft'
+require 'time'
 
 module JekyllSupport
   # Contructor for testing and jekyll_outline
@@ -8,25 +10,24 @@ module JekyllSupport
     description: nil,
     draft: false,
     last_modified: nil,
+    logger: nil,
     order: nil,
     title: nil,
     url: nil
   )
     # Jekyll documents have inconsistent date and last_modified property types.
+    date = Time.parse(date) if date.instance_of?(String)
     unless date.instance_of? Time
-      @logger.error { "date is not an instance of Time, it is an instance of #{date.class}" }
+      logger.error { "date is not an instance of Time, it is an instance of #{date.class}" }
       exit 2
     end
+
+    last_modified = Date.parse(last_modified) if last_modified.instance_of?(String)
     unless last_modified.instance_of? Date
-      @logger.error { "last_modified is not an instance of Date, it is an instance of #{last_modified.class}" }
+      logger.error { "last_modified is not an instance of Date, it is an instance of #{last_modified.class}" }
       exit 3
     end
-    date = Time.parse(date) if date.instance_of?(String)
-    last_modified = if last_modified.nil? || last_modified == ''
-                      Date.parse(date._to_s)
-                    elsif last_modified.instance_of?(String)
-                      Date.parse(last_modified)
-                    end
+    last_modified = Date.parse(date._to_s) if last_modified.nil?
     data = {
       collection:    { label: collection_name },
       draft:         draft,
@@ -45,7 +46,7 @@ module JekyllSupport
     JekyllSupport.new_attribute obj, :title, title
     JekyllSupport.new_attribute obj, :url, url
 
-    AllCollectionsHooks::APage.new obj, nil
+    JekyllSupport::APage.new obj, nil
   rescue StandardError => e
     puts e.full_message
   end
@@ -55,10 +56,7 @@ module JekyllSupport
     obj.class.module_eval { attr_accessor prop_name }
     obj.instance_variable_set :"@#{prop_name}", prop_value
   end
-end
 
-# TODO: move APage to module JekyllSupport
-module AllCollectionsHooks
   FIXNUM_MAX = (2**((0.size * 8) - 2)) - 1 unless defined? FIXNUM_MAX
   END_OF_DAYS = 1_000_000_000_000 unless defined? END_OF_DAYS # One trillion years in the future
   # Time.new is -4712-01-01
@@ -70,7 +68,7 @@ module AllCollectionsHooks
 
     # @param obj can be a `Jekyll::Document` or a Hash with properties
     # @param origin values: 'collection', 'individual_page', and 'static_file'
-    #               (See method AllCollectionsHooks.apages_from_objects)
+    #               (See method JekyllSupport.apages_from_objects)
     def initialize(obj, origin)
       @logger = obj.logger
       @origin = origin
@@ -83,7 +81,7 @@ module AllCollectionsHooks
     def field(name, use_default: true)
       default_value = case name
                       when :date, :last_modified, :last_modified_at
-                        AllCollectionsHooks::END_OF_DAYS
+                        END_OF_DAYS
                       else
                         ''
                       end

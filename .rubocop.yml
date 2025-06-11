@@ -71,6 +71,9 @@ Naming/FileName:
 RSpec/ExampleLength:
   Max: 30
 
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
 RSpec/SpecFilePathFormat:
   Enabled: false
   IgnoreMethods: true

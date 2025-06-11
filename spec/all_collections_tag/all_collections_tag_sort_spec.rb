@@ -21,48 +21,69 @@ def show_dates(label, array)
   puts "  #{label} actual: #{array.map(&:title).join(', ')}  <==>  expected: #{expected.map(&:title).join(', ')}"
 end
 
-def show(lambda_string, actual, expected)
-  puts "For lambda_string: #{lambda_string}"
+def show(label, lambda_string, actual, expected)
+  puts "#{label} - For lambda_string: #{lambda_string}"
   puts "  actual: #{actual.map(&:title).join(', ')}"
   puts "expected: #{expected.map(&:title).join(', ')}"
-  actual_array   = actual.map   { |x| [(x.date.strftime '%Y-%m-%d'), (x.last_modified.strftime '%Y-%m-%d')].join('/') }
-  expected_array = expected.map { |x| [(x.date.strftime '%Y-%m-%d'), (x.last_modified.strftime '%Y-%m-%d')].join('/') }
+  actual_array = actual.map do |x|
+    [
+      (x.date.strftime '%Y-%m-%d' + '/' + x.title), (x.last_modified.strftime '%Y-%m-%d' + '/' + x.title)
+    ].join('/')
+  end
+  expected_array = expected.map do |x|
+    [
+      (x.date.strftime '%Y-%m-%d' + '/' + x.title), (x.last_modified.strftime '%Y-%m-%d' + '/' + x.title)
+    ].join('/')
+  end
   puts '  actual date/last_modified: ' + actual_array.join(', ')
   puts 'expected date/last_modified: ' + expected_array.join(', ')
 end
 
+logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
+
 # See https://stackoverflow.com/a/75388137/553865
 RSpec.describe(JekyllSupport) do
+  _x = described_class.apage_from(
+    collection_name: '_posts',
+    date:            '2021-01-21',
+    last_modified:   '2022-01-22',
+    logger:          logger,
+    title:           'b_C (o3)'
+  )
   let(:o1) do
     described_class.apage_from(
       collection_name: '_posts',
-      date:            '2020-01-01',
-      last_modified:   '2020-01-01',
+      date:            '2020-01-20',
+      last_modified:   '2020-01-20',
+      logger:          logger,
       title:           'a_A (o1)'
     )
   end
   let(:o2) do
     described_class.apage_from(
       collection_name: '_posts',
-      date:            '2021-01-01',
-      last_modified:   '2021-01-01',
+      date:            '2021-01-21',
+      last_modified:   '2021-01-21',
+      logger:          logger,
       title:           'b_B (o2)'
     )
   end
   let(:o3) do
     described_class.apage_from(
       collection_name: '_posts',
-      date:            '2021-01-01',
-      last_modified:   '2022-01-01',
+      date:            '2021-01-21',
+      last_modified:   '2022-01-22',
+      logger:          logger,
       title:           'b_C (o3)'
     )
   end
   let(:o4) do
     described_class.apage_from(
       collection_name: '_posts',
-      date:            '2022-01-01',
-      last_modified:   '2023-01-01',
-      title:           'c_D (o4)'
+      date:            '2022-01-22',
+      last_modified:   '2022-01-22',
+      logger:          logger,
+      title:           'c_C (o4)'
     )
   end
   let(:objs) { [o1, o2, o3, o4] }
@@ -71,7 +92,7 @@ RSpec.describe(JekyllSupport) do
     sort_lambda = ->(a, b) { [a.last_modified] <=> [b.last_modified] }
     actual = objs.sort(&sort_lambda)
     expected = [o1, o2, o3, o4]
-    show('[a.last_modified] <=> [b.last_modified]', actual, expected)
+    show('(1)', '[a.last_modified] <=> [b.last_modified]', actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -80,7 +101,7 @@ RSpec.describe(JekyllSupport) do
     sort_lambda = eval sort_lambda_string, NullBinding.new.min_binding, __FILE__, __LINE__ - 1
     actual = objs.sort(&sort_lambda)
     expected = [o1, o2, o3, o4]
-    show(sort_lambda_string, actual, expected)
+    show('(2)', sort_lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -89,16 +110,16 @@ RSpec.describe(JekyllSupport) do
     sort_lambda = eval sort_lambda_string, NullBinding.new.min_binding, __FILE__, __LINE__ - 1
     actual = objs.sort(&sort_lambda)
     expected = [o1, o2, o3, o4]
-    show(sort_lambda_string, actual, expected)
+    show('(3)', sort_lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 
-  it '(4) makes sort_by lambda with last_modified (ascending) from stringified array' do
+  it '(4) makes sort_by lambda with last_modified (descending) from stringified array' do
     sort_lambda_string = '->(a, b) { [b.last_modified] <=> [a.last_modified] }'
     sort_lambda = eval sort_lambda_string, NullBinding.new.min_binding, __FILE__, __LINE__ - 1
     actual = objs.sort(&sort_lambda)
     expected = [o4, o3, o2, o1]
-    show(sort_lambda_string, actual, expected)
+    show('(4)', sort_lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -108,7 +129,7 @@ RSpec.describe(JekyllSupport) do
     sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o4, o3, o2, o1]
-    show(lambda_string, actual, expected)
+    show('(5)', lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -118,7 +139,7 @@ RSpec.describe(JekyllSupport) do
     sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o1, o2, o3, o4]
-    show(lambda_string, actual, expected)
+    show('(1)', lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -128,7 +149,7 @@ RSpec.describe(JekyllSupport) do
     sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o1, o2, o3, o4]
-    show(lambda_string, actual, expected)
+    show('(7)', lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -138,7 +159,7 @@ RSpec.describe(JekyllSupport) do
     sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o4, o3, o2, o1]
-    show(lambda_string, actual, expected)
+    show('(8)', lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -148,7 +169,7 @@ RSpec.describe(JekyllSupport) do
     sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o4, o2, o3, o1]
-    show(lambda_string, actual, expected)
+    show('(9)', lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 
@@ -158,7 +179,7 @@ RSpec.describe(JekyllSupport) do
     sort_lambda = self.eval lambda_string, binding
     actual = objs.sort(&sort_lambda)
     expected = [o1, o3, o2, o4]
-    show(lambda_string, actual, expected)
+    show('(10)', lambda_string, actual, expected)
     expect(actual).to eq(expected)
   end
 end

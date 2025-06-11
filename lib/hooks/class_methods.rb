@@ -10,7 +10,8 @@ module AllCollectionsHooks
     "site.all_collections #{site.class.method_defined?(:all_collections) ? 'IS' : 'IS NOT'} defined"
   end
 
-  # Create Array of AllCollectionsHooks::APage from objects
+  # TODO move to module JekyllSupport
+  # Create Array of JekyllSupport::APage from objects
   # @param objects [Array] An array of Jekyll::Document, Jekyll::Page or file names
   # @param origin [String] Indicates type of objects being passed
   def self.apages_from_objects(objects, origin)
@@ -37,11 +38,11 @@ module AllCollectionsHooks
                     .map { |x| x.class.method_defined?(:docs) ? x.docs : x }
                     .flatten
                     .compact
-    @all_collections = AllCollectionsHooks.apages_from_objects(documents, 'collection')
+    @all_collections = JekyllSupport.apages_from_objects(documents, 'collection')
     @all_documents   = @all_collections +
-                       AllCollectionsHooks.apages_from_objects(site.pages, 'individual_page')
+                       JekyllSupport.apages_from_objects(site.pages, 'individual_page')
     @everything      = @all_documents +
-                       AllCollectionsHooks.apages_from_objects(site.static_files, 'static_file')
+                       JekyllSupport.apages_from_objects(site.static_files, 'static_file')
     @sorted_lru_files = SortedLruFiles.new.add_pages @everything
 
     site.all_collections  = @all_collections
