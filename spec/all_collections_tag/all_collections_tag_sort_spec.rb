@@ -43,13 +43,6 @@ logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.co
 
 # See https://stackoverflow.com/a/75388137/553865
 RSpec.describe(JekyllSupport) do
-  _x = described_class.apage_from(
-    collection_name: '_posts',
-    date:            '2021-01-21',
-    last_modified:   '2022-01-22',
-    logger:          logger,
-    title:           'b_C (o3)'
-  )
   let(:o1) do
     described_class.apage_from(
       collection_name: '_posts',
@@ -120,7 +113,10 @@ RSpec.describe(JekyllSupport) do
     actual = objs.sort(&sort_lambda)
     expected = [o4, o3, o2, o1]
     show('(4)', sort_lambda_string, actual, expected)
-    expect(actual).to eq(expected)
+    expect([o3, o4]).to include(actual[0]) # The sort might yield o3 or o4 in this position
+    expect([o3, o4]).to include(actual[1]) # The sort might yield o3 or o4 in this position
+    expect(o2).to eq(actual[2])
+    expect(o1).to eq(actual[3])
   end
 
   it '(5) create_lambda with date (descending)' do
@@ -130,7 +126,10 @@ RSpec.describe(JekyllSupport) do
     actual = objs.sort(&sort_lambda)
     expected = [o4, o3, o2, o1]
     show('(5)', lambda_string, actual, expected)
-    expect(actual).to eq(expected)
+    expect([o3, o4]).to include(actual[0]) # The sort might yield o3 or o4 in this position
+    expect([o3, o4]).to include(actual[1]) # The sort might yield o3 or o4 in this position
+    expect(o2).to eq(actual[2])
+    expect(o1).to eq(actual[3])
   end
 
   it '(6) create_lambda with date (ascending)' do
