@@ -5,10 +5,10 @@ require 'yaml'
 module JekyllSupport
   # Class methods for JekyllPluginHelper
   class JekyllPluginHelper
-    # Expand an environment variable reference
+    # Expand an environment variable reference; first expand bash environment variables, then expand windows environment vars
     def self.expand_env(str, logger = nil, die_if_undefined: false)
-      str&.gsub(/\$([a-zA-Z_][a-zA-Z0-9_]*)|\${\g<1>}/) do
-        envar = Regexp.last_match(1)
+      x = str&.gsub(/\$([a-zA-Z_][a-zA-Z0-9_]*)|\${\g<1>}/) do
+        envar = Regexp.last_match 1
         unless ENV.key? envar
           msg = "jekyll_plugin_support error: environment variable #{envar} is undefined"
           raise JekyllPluginSupportError, msg.red, [] if die_if_undefined
@@ -20,6 +20,26 @@ module JekyllSupport
           end
         end
         ENV.fetch(envar, nil)
+      end
+      # Only expand %VAR% if x is not nil and contains a %
+      if x&.include?('%')
+        x.gsub(/%([a-zA-Z_][a-zA-Z0-9_]*)%|{\g<1>}/) do
+          envar = Regexp.last_match 1
+          value = `wslvar #{envar}`.chomp
+          unless value
+            msg = "jekyll_plugin_support error: Windows environment variable %#{envar}% is undefined"
+            raise JekyllPluginSupportError, msg.red, [] if die_if_undefined
+
+            if logger
+              logger.warn msg
+            else
+              puts msg.red
+            end
+          end
+          value
+        end
+      else
+        x
       end
     end
 

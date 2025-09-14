@@ -58,18 +58,20 @@
       "program": "ruby bin/release_kraken"
     },
     {
-      "type": "rdbg",
+      "cwd": "${workspaceRoot}",
       "name": "Debug custom_error_take_2.rb",
       "request": "launch",
       "script": "experiments/custom_error_take_2.rb",
+      "type": "rdbg",
       "useBundler": true,
     },
     {
+      "cwd": "${workspaceRoot}",
       "debugPort": "0",
       "name": "Debug CallChain",
-      "type": "rdbg",
       "request": "launch",
       "script": "${workspaceRoot}/lib/call_chain.rb",
+      "type": "rdbg",
       "useBundler": true,
     },
     {

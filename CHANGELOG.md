@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.1.1 / 2025-09-13
+
+* Now looks up Windows environment variables (surrounded by `%` characters).
+  An error is generated for undefined variables.
+
+
 ## 3.1.0 / 2025-06-10
 
 * Added attribute `order` and method `field` to support `jekyll_outline`.
