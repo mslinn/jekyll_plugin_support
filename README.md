@@ -71,6 +71,24 @@ Jekyll plugin tags created from `jekyll_plugin_support` framework automatically 
 
 ## Installation
 
+### If You Need Windows Environment Variable Expansion
+
+This only works if Jekyll is running on a Windows / WSL machine.
+If you have a Mac, ignore the rest of this section, however be sure
+not to try to include a file whose name contains two percent characters.
+
+If a %WindowsStyleEnvironmentVariable% is detected in the `url` parameter,
+`wslvar` is called.
+If your WSL installation is old it might not have the `wslvar` command
+
+The wslvar utility is part of the wslu package, a collection of useful utilities that come with WSL.
+The most straightforward fix is to reinstall it.
+
+```shell
+$ sudo apt update
+$ sudo apt install wslu
+```
+
 ### For A Jekyll Website
 
 `Jekyll_plugin_support` is packaged as a Ruby gem.
