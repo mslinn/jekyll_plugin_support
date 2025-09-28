@@ -5,11 +5,14 @@ require 'yaml'
 module JekyllSupport
   # Class methods for JekyllPluginHelper
   class JekyllPluginHelper
-    # Case-insensitive search for an environment variable name
+    # Case-insensitive search for a Bash environment variable name
     # # @param name [String] name of environment variable to search for
-    # @return array of all matching variable names
+    # @return matching variable value, or nil if not found
     def env_var_case_insensitive(name)
-      candidates = ENV.select do |key, _value|
+      candidate = ENV.fetch(name, nil) # exact match first
+      return candidate if candidate
+
+      candidates = ENV.select do |key, _value| # case-insensitive search
         key.casecmp?(name)
       end.keys
       case candidates.size
@@ -24,7 +27,7 @@ module JekyllSupport
       when 1
         candidates.first
       else
-        msg = "jMultiple case-insensitive matches found for environment variable #{name}: #{candidates.join(', ')}"
+        msg = "Multiple case-insensitive matches found for environment variable #{name}: #{candidates.join(', ')}"
         raise JekyllPluginSupportError, msg.red, []
       end
     end
