@@ -1,6 +1,9 @@
 require 'spec_helper'
 require_relative '../lib/jekyll_plugin_support'
 
+ENV['SystemDrive'] = 'C:'
+ENV['os'] = 'Windows_NT'
+
 RSpec.describe('Bash and Windows environment variables') do # rubocop:disable RSpec/DescribeClass
   it 'Expands bash environment variables' do
     actual = JekyllSupport::JekyllPluginHelper.expand_env '$HOME'
@@ -33,6 +36,23 @@ RSpec.describe('Bash and Windows environment variables') do # rubocop:disable RS
     expect(actual).to eq('abc/C:/def')
 
     actual = JekyllSupport::JekyllPluginHelper.expand_env 'abc/%SystemDrive%/def/%os%'
+    expect(actual).to eq('abc/C:/def/Windows_NT')
+  end
+
+  it 'Expands Linux environment variables instead of Windows environment variables' do
+    actual = JekyllSupport::JekyllPluginHelper.expand_env '%SystemDrive%', use_wslvar: false
+    expect(actual).to eq('C:')
+
+    actual = JekyllSupport::JekyllPluginHelper.expand_env '%SystemDrive%/abc', use_wslvar: false
+    expect(actual).to eq('C:/abc')
+
+    actual = JekyllSupport::JekyllPluginHelper.expand_env 'abc/%SystemDrive%/def', use_wslvar: false
+    expect(actual).to eq('abc/C:/def')
+
+    actual = JekyllSupport::JekyllPluginHelper.expand_env 'abc/%SystemDrive%/def', use_wslvar: false
+    expect(actual).to eq('abc/C:/def')
+
+    actual = JekyllSupport::JekyllPluginHelper.expand_env 'abc/%SystemDrive%/def/%os%', use_wslvar: false
     expect(actual).to eq('abc/C:/def/Windows_NT')
   end
 end

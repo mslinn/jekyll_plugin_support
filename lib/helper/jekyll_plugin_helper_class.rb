@@ -8,7 +8,7 @@ module JekyllSupport
     # Case-insensitive search for a Bash environment variable name
     # # @param name [String] name of environment variable to search for
     # @return matching variable value, or nil if not found
-    def env_var_case_insensitive(name)
+    def self.env_var_case_insensitive(name)
       candidate = ENV.fetch(name, nil) # exact match first
       return candidate if candidate
 
@@ -18,8 +18,8 @@ module JekyllSupport
       case candidates.size
       when 0
         msg = "Environment variable #{name} is undefined, even with a case-insensitive search."
-        if logger
-          logger.warn msg
+        if Jekyll.logger
+          Jekyll.logger.warn msg
         else
           puts "jekyll_plugin_support warning: #{msg}".red
         end
@@ -74,8 +74,7 @@ module JekyllSupport
 
         return `wslvar #{envar} &2> /dev/null`.chomp
       end
-      bash_envar = env_var_case_insensitive(envar)
-      ENV.fetch(bash_envar, nil)
+      env_var_case_insensitive(envar)
     end
 
     def self.env_var_expand_windows(str, logger = nil, die_if_undefined: false, use_wslvar: true)
