@@ -5,9 +5,46 @@ require 'yaml'
 module JekyllSupport
   # Class methods for JekyllPluginHelper
   class JekyllPluginHelper
-    # Expand an environment variable reference; first expand bash environment variables, then expand windows environment vars
-    def self.expand_env(str, logger = nil, die_if_undefined: false)
-      x = str&.gsub(/\$([a-zA-Z_][a-zA-Z0-9_]*)|\${\g<1>}/) do
+    # Case-insensitive search for an environment variable name
+    # # @param name [String] name of environment variable to search for
+    # @return array of all matching variable names
+    def env_var_case_insensitive(name)
+      candidates = ENV.select do |key, _value|
+        key.casecmp?(name)
+      end.keys
+      case candidates.size
+      when 0
+        msg = "Environment variable #{name} is undefined, even with a case-insensitive search."
+        if logger
+          logger.warn msg
+        else
+          puts "jekyll_plugin_support warning: #{msg}".red
+        end
+        nil
+      when 1
+        candidates.first
+      else
+        msg = "jMultiple case-insensitive matches found for environment variable #{name}: #{candidates.join(', ')}"
+        raise JekyllPluginSupportError, msg.red, []
+      end
+    end
+
+    # Expand an environment variable reference;
+    #  - first expand bash environment variables,
+    #  - then expand windows environment vars
+    def self.expand_env(str, logger = nil, die_if_undefined: false, use_wslvar: true)
+      x = JekyllPluginHelper.env_var_expand_bash(str, logger, die_if_undefined: die_if_undefined)
+      JekyllPluginHelper.env_var_expand_windows(x, logger, die_if_undefined: die_if_undefined, use_wslvar: use_wslvar)
+    end
+
+    # If a Windows-style env var is evaluated on a non-Windows machine,
+    # then a Bash environment variable of the same name is searched for and used, if found.
+    # - If an exact case-sensitive match is found, it is used.
+    #   A debug-level log message is emitted stating what happened.
+    # - If a case-insensitive match is found, it is used, and a warning is issued.
+    # - If more than one case-insensitive match is found, Jekyll is shut down.
+    def self.env_var_expand_bash(str, logger = nil, die_if_undefined: false)
+      str&.gsub(/\$([a-zA-Z_][a-zA-Z0-9_]*)|\${\g<1>}/) do
         envar = Regexp.last_match 1
         unless ENV.key? envar
           msg = "jekyll_plugin_support error: environment variable #{envar} is undefined"
@@ -21,11 +58,29 @@ module JekyllSupport
         end
         ENV.fetch(envar, nil)
       end
-      # Only expand %VAR% if x is not nil and contains a %
-      if x&.include?('%')
-        x.gsub(/%([a-zA-Z_][a-zA-Z0-9_]*)%|{\g<1>}/) do
+    end
+
+    # Called for Linux, MacOS, and Windows (with WSL)
+    #
+    def self.find_windows_envar(envar, use_wslvar: true)
+      if use_wslvar
+        wslvar_path = `which wslvar 2> /dev/null`.chomp
+        if wslvar_path.empty?
+          warn "jekyll_plugin_support warning: wslvar not found in PATH; will attempt to find $#{envar} in the bash environment variables."
+        end
+
+        return `wslvar #{envar} &2> /dev/null`.chomp
+      end
+      bash_envar = env_var_case_insensitive(envar)
+      ENV.fetch(bash_envar, nil)
+    end
+
+    def self.env_var_expand_windows(str, logger = nil, die_if_undefined: false, use_wslvar: true)
+      # Only expand %VAR% if str is not nil and contains a %
+      if str&.include?('%')
+        str.gsub(/%([a-zA-Z_][a-zA-Z0-9_]*)%|{\g<1>}/) do
           envar = Regexp.last_match 1
-          value = `wslvar #{envar} &2> /dev/null`.chomp
+          value = find_windows_envar(envar, use_wslvar: use_wslvar)
           unless value
             msg = "jekyll_plugin_support error: Windows environment variable %#{envar}% is undefined"
             raise JekyllPluginSupportError, msg.red, [] if die_if_undefined
@@ -39,7 +94,7 @@ module JekyllSupport
           value
         end
       else
-        x
+        str
       end
     end
 

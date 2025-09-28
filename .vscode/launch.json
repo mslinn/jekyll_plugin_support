@@ -75,6 +75,14 @@
       "useBundler": true,
     },
     {
+      "askParameters": false,
+      "debugPort": "0",
+      "name": "Debug current file",
+      "request": "launch",
+      "script": "${file}",
+      "type": "rdbg",
+    },
+    {
       "debugPort": "45373",
       "name": "Attach with rdbg to 45373",
       "request": "attach",

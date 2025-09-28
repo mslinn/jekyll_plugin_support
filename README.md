@@ -81,13 +81,22 @@ If a %WindowsStyleEnvironmentVariable% is detected in the `url` parameter,
 `wslvar` is called.
 If your WSL installation is old it might not have the `wslvar` command
 
-The wslvar utility is part of the wslu package, a collection of useful utilities that come with WSL.
+The wslvar utility is part of the `wslu` package, a collection of useful utilities that come with WSL.
 The most straightforward fix is to reinstall it.
 
 ```shell
 $ sudo apt update
 $ sudo apt install wslu
 ```
+
+If a Windows-style env var is evaluated on a non-Windows machine,
+then a Bash environment variable of the same name is searched for and used, if found.
+
+- If an exact case-sensitive match is found, it is used.
+  A debug-level log message is emitted stating what happened.
+- If a case-insensitive match is found, it is used, and a warning is issued.
+- If more than one case-insensitive match is found, Jekyll is shut down.
+
 
 ### For A Jekyll Website
 
