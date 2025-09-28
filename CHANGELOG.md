@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.1.2 / 2025-09-28
+
+* Now looks for Windows environment variables (surrounded by `%` characters)
+  using a case-insensitive search, which also works when running on Linux and macOS.
+
+
 ## 3.1.1 / 2025-09-13
 
 * Now looks up Windows environment variables (surrounded by `%` characters).

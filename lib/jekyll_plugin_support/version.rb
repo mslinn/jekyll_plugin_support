@@ -1,3 +1,3 @@
 module JekyllPluginSupportVersion
-  VERSION = '3.1.1'.freeze unless defined?(VERSION)
+  VERSION = '3.1.2'.freeze unless defined?(VERSION)
 end
