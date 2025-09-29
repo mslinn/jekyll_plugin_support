@@ -9,16 +9,12 @@ module JekyllSupport
                 :keys_values, :jpsh_subclass_caller, :logger, :markup, :no_arg_parsing, :params, :params_original,
                 :tag_name
 
-    # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
     # @param tag_name [String] the name of the tag, which we already know.
-    # @param argument_string [String] the arguments from the tag, as a single string.
-    # @param parse_context [Liquid::ParseContext] hash that stores Liquid options.
-    #        By default it has two keys: :locale and :line_numbers, the first is a Liquid::I18n object, and the second,
-    #        a boolean parameter that determines if error messages should display the line number the error occurred.
-    #        This argument is used mostly to display localized error messages on Liquid built-in Tags and Filters.
-    #        See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
+    # @param markup [String] the arguments from the tag, as a single string.
+    # @param logger [Jekyll::Logger] logger instance to use for logging messages.
+    # @param no_arg_parsing [Boolean] if true, argument parsing is suppressed.
     # @return [void]
-    def initialize(tag_name, markup, logger, no_arg_parsing)
+    def initialize(tag_name, markup, logger, no_arg_parsing: false)
       @tag_name = tag_name
       @logger = logger
       @markup = markup

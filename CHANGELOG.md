@@ -4,6 +4,7 @@
 
 * Now looks for Windows environment variables (surrounded by `%` characters)
   using a case-insensitive search, which also works when running on Linux and macOS.
+* Changed `JekyllPluginHelper.initialize` to make `no_arg_parsing` a keyword argument.
 
 
 ## 3.1.1 / 2025-09-13
