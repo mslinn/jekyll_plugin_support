@@ -94,7 +94,6 @@
         "-I", "${workspaceRoot}/spec",
         "-P", "${workspaceRoot}/spec/**/*_spec.rb"
       ],
-      "cwd": "${workspaceRoot}/demo",
       "debugPort": "0",
       "name": "RSpec - all",
       "request": "launch",
@@ -108,7 +107,6 @@
         "-I", "${workspaceRoot}/spec",
         "${file}"
       ],
-      "cwd": "${workspaceRoot}/demo",
       "debugPort": "0",
       "name": "RSpec - active spec only",
       "request": "launch",
