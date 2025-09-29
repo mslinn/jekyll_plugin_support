@@ -1,7 +1,4 @@
-require 'jekyll'
-require 'jekyll_plugin_logger'
 require 'spec_helper'
-# require 'rspec/match_ignoring_whitespace'
 require_relative '../lib/jekyll_plugin_support'
 require_relative '../lib/jekyll_plugin_support/jekyll_plugin_support_spec_support'
 
@@ -10,7 +7,7 @@ class JekyllPluginHelperOptionsTest
     logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
 
     it 'parses quoted string options' do
-      helper = described_class.new('my_tag', "colors='blue or green' blah ick", logger, false)
+      helper = described_class.new('my_tag', "colors='blue or green' blah ick", logger, no_arg_parsing: false)
       helper.reinitialize helper.markup
       expect(helper.keys_values.keys).to eq(%w[colors blah ick])
 
@@ -21,7 +18,7 @@ class JekyllPluginHelperOptionsTest
     end
 
     it 'parses unquoted string options' do
-      helper = described_class.new('my_tag', 'color=blue blah ick', logger, false)
+      helper = described_class.new('my_tag', 'color=blue blah ick', logger, no_arg_parsing: false)
       helper.reinitialize helper.markup
       expect(helper.keys_values.keys).to eq(%w[color blah ick])
 
@@ -32,7 +29,7 @@ class JekyllPluginHelperOptionsTest
     end
 
     it 'parses quoted booleans' do
-      helper = described_class.new('my_tag', "bool1='true' bool2='false' blah ick", logger, false)
+      helper = described_class.new('my_tag', "bool1='true' bool2='false' blah ick", logger, no_arg_parsing: false)
       helper.reinitialize helper.markup
       expect(helper.keys_values.keys).to eq(%w[bool1 bool2 blah ick])
 
@@ -48,7 +45,7 @@ class JekyllPluginHelperOptionsTest
     end
 
     it 'parses unquoted booleans' do
-      helper = described_class.new('my_tag', 'bool1=true bool2=false blah ick', logger, false)
+      helper = described_class.new('my_tag', 'bool1=true bool2=false blah ick', logger, no_arg_parsing: false)
       helper.reinitialize helper.markup
       expect(helper.keys_values.keys).to eq(%w[bool1 bool2 blah ick])
 
