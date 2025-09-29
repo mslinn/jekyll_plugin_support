@@ -30,7 +30,7 @@ module JekyllSupport
 
       @logger = PluginMetaLogger.instance.new_logger(self, PluginMetaLogger.instance.config)
       @logger.debug { "#{self.class}: respond_to?(:no_arg_parsing) #{respond_to?(:no_arg_parsing) ? 'yes' : 'no'}." }
-      @helper = JekyllPluginHelper.new(tag_name, @argument_string, @logger, respond_to?(:no_arg_parsing))
+      @helper = JekyllPluginHelper.new(tag_name, @argument_string, @logger, no_arg_parsing: respond_to?(:no_arg_parsing))
 
       @error_name = "#{tag_name.camelcase(:upper)}Error"
       ::JekyllSupport::CustomError.factory @error_name
