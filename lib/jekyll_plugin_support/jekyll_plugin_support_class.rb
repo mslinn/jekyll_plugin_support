@@ -127,6 +127,10 @@ module JekyllSupport
 
   # Process assigned, captured and injected variables
   def self.process_liquid_variables(logger, scope, markup)
+    unless markup.instance_of(String)
+      logger.warn { "markup is a #{markup.class}, not a String" }
+      return markup
+    end
     scope&.each do |name, value|
       next if name.nil?
 
