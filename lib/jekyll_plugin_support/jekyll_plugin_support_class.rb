@@ -101,15 +101,16 @@ module JekyllSupport
 
   def self.process_included_variables(logger, scope, markup)
     scope['include']&.each do |name, value|
-      if value.nil?
-        value = ''
-        logger.warn { "include.#{name} is undefined." }
-      end
-      markup.gsub!("{{include.#{name}}}", value)
+      raise JekyllPluginSupportError, "include.#{name} is undefined." if name.nil?
+      raise JekyllPluginSupportError, "include.#{name} is a #{name.class}, not a String." unless name.instance_of?(String)
+      raise JekyllPluginSupportError, "include.#{name} has an undefined value." if value.nil?
+
+      markup.gsub!("{{include.#{name}}}", value.to_s)
     end
     markup
   rescue StandardError => e
     logger.error { e.full_message }
+    exit! 1
   end
 
   def self.process_layout_variables(logger, layout, markup)

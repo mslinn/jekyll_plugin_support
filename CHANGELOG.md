@@ -7,6 +7,7 @@
 * Changed `JekyllPluginHelper.initialize` to make `no_arg_parsing` a keyword argument.
 * Now requires `jekyll_draft` using `Gemfile` instead of the gemspec, to avoid a warning
   when running `bundle install`.
+* Handles `include` variables with types other than `String`.
 
 
 ## 3.1.1 / 2025-09-13
