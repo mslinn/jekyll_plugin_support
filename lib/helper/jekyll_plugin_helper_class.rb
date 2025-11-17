@@ -33,11 +33,12 @@ module JekyllSupport
     end
 
     # Expand an environment variable reference;
-    #  - first expand bash environment variables,
-    #  - then expand windows environment vars
-    def self.expand_env(str, logger = nil, die_if_undefined: false, use_wslvar: true)
-      x = JekyllPluginHelper.env_var_expand_bash(str, logger, die_if_undefined: die_if_undefined)
-      JekyllPluginHelper.env_var_expand_windows(x, logger, die_if_undefined: die_if_undefined, use_wslvar: use_wslvar)
+    #  - expand bash environment variables ($VAR or ${VAR})
+    # Note: Windows environment variables (%VAR%) are NOT expanded here
+    # because text content often contains percent pairs that aren't environment variables.
+    # Use env_var_expand_windows() directly if Windows environment variable expansion is needed.
+    def self.expand_env(str, logger = nil, die_if_undefined: false)
+      JekyllPluginHelper.env_var_expand_bash(str, logger, die_if_undefined: die_if_undefined)
     end
 
     # If a Windows-style env var is evaluated on a non-Windows machine,
@@ -70,9 +71,16 @@ module JekyllSupport
         wslvar_path = `which wslvar 2> /dev/null`.chomp
         if wslvar_path.empty?
           warn "jekyll_plugin_support warning: wslvar not found in PATH; will attempt to find $#{envar} in the bash environment variables."
+          return env_var_case_insensitive(envar)
         end
 
-        return `wslvar #{envar} &2> /dev/null`.chomp
+        result = `wslvar #{envar} &2> /dev/null`.chomp
+        if result.empty?
+          warn "jekyll_plugin_support warning: wslvar did not find $#{envar}; will attempt to find it in the bash environment variables."
+          return env_var_case_insensitive(envar)
+        end
+
+        return result
       end
       env_var_case_insensitive(envar)
     end

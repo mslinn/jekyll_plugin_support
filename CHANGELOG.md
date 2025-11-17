@@ -1,5 +1,21 @@
 # Change Log
 
+## 3.1.3 / 2025-01-02
+
+* **BREAKING CHANGE**: Modified `JekyllPluginHelper.expand_env` to only expand Bash environment
+  variables (`$VAR` or `${VAR}`), not Windows environment variables (`%VAR%`). This prevents false
+  expansions in web content where text strings contain pairs of percent signs that are not
+  environment variables.
+* Removed the `use_wslvar` parameter from `JekyllPluginHelper.expand_env` method signature.
+* `JekyllPluginHelper.env_var_expand_windows` is still available for plugins that specifically
+  need Windows environment variable expansion.
+* `jekyll_flexible_include_plugin` now explicitly calls both `env_var_expand_bash` and
+  `env_var_expand_windows` for file paths to maintain its ability to handle both Bash and
+  Windows environment variables.
+* Updated `JekyllPluginHelper.find_windows_envar` to properly fall back to environment variable
+  search when `wslvar` is not available or doesn't find the variable.
+
+
 ## 3.1.2 / 2025-11-17
 
 * Support for [Claude CLI](https://www.mslinn.com/llm/7900-claude.html) is

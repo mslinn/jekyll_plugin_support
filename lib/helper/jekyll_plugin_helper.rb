@@ -95,7 +95,7 @@ module JekyllSupport
                               .parse(@argv_original)
       @params_original = @keys_values_original unless respond_to?(:no_arg_parsing) && no_arg_parsing
 
-      @argv = Shellwords.split(self.class.expand_env(markup, logger, use_wslvar: JekyllPluginHelper.use_wslvar?))
+      @argv = Shellwords.split(self.class.expand_env(markup, logger))
       @keys_values = KeyValueParser
                      .new({}, { array_values: false, normalize_keys: false, separator: /=/ })
                      .parse(@argv)
