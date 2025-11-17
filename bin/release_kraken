@@ -59,7 +59,7 @@ def check_gem_versions(gemspecs)
     # puts "Processing #{gemspec_file}".yellow
     spec = load_gemspec gemspec_file
     # puts "spec=#{spec}".yellow
-    this_version = spec&.version.to_s || '0'
+    this_version = spec&.version.to_s | '0'
     dir = File.dirname gemspec_file
     gem_name = File.basename gemspec_file, '.*'
     Dir.chdir(dir) do
@@ -101,11 +101,11 @@ def execute(command)
   exit 1
 end
 
-def execute_in_each_project(gemspecs, &block)
+def execute_in_each_project(gemspecs, &)
   gemspecs.each do |gemspec|
     dir = File.dirname gemspec
     # puts "Entering #{dir}".green
-    Dir.chdir dir, &block
+    Dir.chdir(dir, &)
   end
 end
 

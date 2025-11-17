@@ -3,23 +3,29 @@
 Jekyll is a Ruby gem that creates static websites.
 
 This project (`jekyll_plugin_support`) is a framework for writing and testing
-[Jekyll](https://jekyllrb.com/) plugins in the Ruby language.
-These plugins share common coding standards and debugging techniques.
+[Jekyll](https://jekyllrb.com/) plugins in the Ruby language. These plugins
+share common coding standards and debugging techniques. We shall refer to
+`jekyll_plugin_support` as `JPS` for convenience, and plugins created from the
+JPS framework as `JPS plugins`.
 
 ## General
 
 - Write using Ruby 3.4.7 features and recommended syntax.
-- Preserve existing comments and formatting.
+- Follow the existing coding style.
 - Use multiline strings whenever possible using squiggly heredocs (`<<~IDENTIFIER`).
+- Before making any changes, tell the user a high-level explanation
+  - If requested, show detailed changes.
+  - Proceed after the user approves the changes.
+
+
+## Comments
+
+- Preserve existing comments and formatting.
+- Only write new comments when they are non-obvious.
 - Assume the reader knows the Ruby language, so do not explain common Ruby
   coding techniques.
 - Assume the reader is new to writing Jekyll plugins and is unfamiliar with
   `jekyll_plugin_support`.
-- Only write new comments when they are non-obvious.
-- Follow the existing coding style.
-- Before making any changes, tell the user a high-level explanation
-  - If requested, show detailed changes.
-  - Proceed after the user approves the changes.
 
 
 ## Unit Tests
@@ -42,6 +48,10 @@ subdirectory and running the demo.
 
 - Configuration for the `demo` Jekyll website is provided in `_config.yml` in
   that subdirectory.
+
+- The `demo` project in the `jekyll_plugin_support` project contains examples of
+  how important JPS plugins are used.
+
 
 ### Demo Project Configuration
 

@@ -77,6 +77,9 @@ module JekyllSupport
       env_var_case_insensitive(envar)
     end
 
+    # Detect if Jekyll is running under WSL
+    def self.wsl_detected? = File.read('/proc/version').include?('-WSL')
+
     def self.env_var_expand_windows(str, logger = nil, die_if_undefined: false, use_wslvar: true)
       # Only expand %VAR% if str is not nil and contains a %
       if str&.include?('%')
