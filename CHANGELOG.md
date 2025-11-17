@@ -5,7 +5,7 @@
 * Support for [Claude CLI](https://www.mslinn.com/llm/7900-claude.html) is
   provided in the `.claude` directory. This was implemented so it would work
   with other LLMs, for example [Cursor](https://mslinn.com/llm/7980_cursor.html) and
-  [MiniMax Mini-Agent](https://www.mslinn.com/llm/7997-mini-agent.html)
+  [MiniMax Mini-Agent](https://www.mslinn.com/llm/7997-mini-agent.html).
 * `JekyllPluginHelper.env_var_expand_windows` expands Windows environment
   variables (surrounded by `%` characters) using a case-insensitive search,
   which also works when running on Linux and macOS. This is used by

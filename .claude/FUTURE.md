@@ -20,19 +20,23 @@ example "blah%some_text%more text").
 
 To correct the problem, `expand_env` should never call `env_var_expand_windows`,
 and should instead merely return the result of calling `env_var_expand_bash`.
-This means that the `use_wslvar` method is not required by this method and the
-method signature should be simplified. The
+This means that the `use_wslvar` parameter is not required by this method or the
+methods that it calls, and the method signatures should be simplified.
 
 `JekyllPluginHelper.env_var_expand_windows` will be called by JPS plugins when
-required, so it must remain as is, without any changes.
+required, so that method it must remain intact.
 
 Currently the only Jekyll plugin that needs to call
 `JekyllPluginHelper.env_var_expand_windows` is `jekyll_flexible_include_plugin`.
-We only need to call this method to expand the `file` parameter, exactly as shown in `$jekyll_flexible_include_plugin/demo/index.html`.
+That plugin only needs to call `JekyllPluginHelper.env_var_expand_windows` to
+expand the `file` parameter, exactly as shown in
+`$jekyll_flexible_include_plugin/demo/index.html`.
 
 Modify `$jekyll_flexible_include_plugin/lib/flexible_include_private_methods.rb`
 so the `@filename` parameter is expanded using both
 `JekyllPluginHelper.env_var_expand_bash` and
 `JekyllPluginHelper.env_var_expand_windows`.
+
+I already updated `CHANGELOG.md` so you do not have to.
 
 Describe your plan and obtain approval before starting.

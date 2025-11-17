@@ -16,7 +16,7 @@
 
 - If you need to write documentation, place the file in the `docs/` directory.
 
-- Before every git command, if `.git/index.lock` exists, delete it using `sudo`.
+- Before running every git command, check if `.git/index.lock` exists, and delete it using `sudo` if so.
 
 - Git projects have environment variables that point to their directories. Some examples:
 
@@ -42,11 +42,12 @@ The following must be completed before your work can be considered to be done.
 - Linters for all languages (bash, Ruby, Markdown, etc) must succeed.
 - Unit tests must pass.
 - Update `README.md` for user-visible changes only.
-- Update `CHANGES.md` for user-visible changes, describe at a high level.
+- Update `CHANGES.md` for programmer-visible changes, described at a high level.
 - Update `.claude/PROGRESS.md`.
 - Only then `git push` with a message and commit.
 
 
 ## DO THIS NOW
 
-Read and execute `FUTURE.md`.
+Read `FUTURE.md` and execute instructions in the following section:
+  Rework Windows Environment Variable Expansion
