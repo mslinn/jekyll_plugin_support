@@ -41,7 +41,7 @@ Many features cannot be easily tested using RSpec. However, all features should
 be testable by making Jekyll web pages in the Jekyll website in the `demo`
 subdirectory and running the demo.
 
-- Use the scripts in the `bin` directory to test functionality in a live setup.
+- Use the scripts in the `bin/` directory to test functionality in a live setup.
 
 - All Jekyll plugins based on `jekyll_plugin_support` should include a `demo`
   subdirectory.
@@ -55,7 +55,7 @@ subdirectory and running the demo.
 
 ### Demo Project Configuration
 
-- The `Gemfile` in the `demo` subdirectory can be used for debugging plugins
+- The `Gemfile` in the `demo/` subdirectory can be used for debugging plugins
   based on `jekyll_plugin_support`.
 
 - Each of the `gem` lines can include an optional `path` argument, like

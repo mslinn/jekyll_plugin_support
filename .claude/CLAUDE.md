@@ -2,7 +2,7 @@
 
 ## General Instructions
 
-- Read `RUBY_STANDARDS.md` in this directory so you can learn about Ruby coding
+- Read `.claude/RUBY_STANDARDS.md` in this directory so you can learn about Ruby coding
   instructions.
 
 - Do not use emojis in user dialog or documentation.
@@ -52,5 +52,5 @@ The following must be completed before your work can be considered to be done.
 
 ## DO THIS NOW
 
-Read `FUTURE.md` and execute instructions in the following section:
+Read `.claude/FUTURE.md` and execute instructions in the following section:
   Rework Windows Environment Variable Expansion
