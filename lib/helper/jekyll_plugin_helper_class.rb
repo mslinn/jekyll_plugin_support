@@ -83,7 +83,7 @@ module JekyllSupport
         str.gsub(/%([a-zA-Z_][a-zA-Z0-9_]*)%|{\g<1>}/) do
           envar = Regexp.last_match 1
           value = find_windows_envar(envar, use_wslvar: use_wslvar)
-          unless value
+          if value.to_s.empty?
             msg = "jekyll_plugin_support error: Windows environment variable %#{envar}% is undefined"
             raise JekyllPluginSupportError, msg.red, [] if die_if_undefined
 

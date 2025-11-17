@@ -20,6 +20,7 @@
       "cwd": "${workspaceRoot}/demo",
       "debugPort": "45373",
       "env": {
+        "AppData": "/home/mslinn/.config",
         "JEKYLL_ENV": "development"
       },
       "name": "Debug Demo development",
@@ -42,6 +43,7 @@
       "cwd": "${workspaceRoot}/demo",
       "debugPort": "45373",
       "env": {
+        "AppData": "/home/mslinn/.config",
         "JEKYLL_ENV": "production"
       },
       "name": "Debug Demo production",

@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'jekyll', '~> 4.4.1'
 
-# jekyll_flexible_include = ENV.fetch('jekyll_flexible_include', nil)
+jekyll_flexible_include = ENV.fetch('jekyll_flexible_include', nil)
 # jekyll_img              = ENV.fetch('jekyll_img', nil)
 jekyll_href             = ENV.fetch('jekyll_href', nil)
 jekyll_outline          = ENV.fetch('jekyll_outline', nil)
@@ -13,7 +13,7 @@ group :jekyll_plugins do
   gem 'jekyll_draft', '>= 3.0.0'
   gem 'jekyll_emoji_tag'
   gem 'jekyll-environment-variables'
-  gem 'jekyll_flexible_include' # , path: jekyll_flexible_include
+  gem 'jekyll_flexible_include', path: jekyll_flexible_include
   gem 'jekyll_google_translate'
   gem 'jekyll_href', '>= 3.0.0', path: jekyll_href
   gem 'jekyll_img' # , path: jekyll_img

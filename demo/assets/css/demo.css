@@ -19,11 +19,6 @@
   color: white;
 }
 
-.flexible_error {
-  background-color: pink;
-}
-
-
 .demo_block_error code,
 .demo_tag_error code,
 .flexible_error code {

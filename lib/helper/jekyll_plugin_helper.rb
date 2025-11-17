@@ -95,7 +95,8 @@ module JekyllSupport
                               .parse(@argv_original)
       @params_original = @keys_values_original unless respond_to?(:no_arg_parsing) && no_arg_parsing
 
-      @argv = Shellwords.split(self.class.expand_env(markup, logger))
+      use_wslvar = File.read('/proc/version').include?('-WSL')
+      @argv = Shellwords.split(self.class.expand_env(markup, logger, use_wslvar: use_wslvar))
       @keys_values = KeyValueParser
                      .new({}, { array_values: false, normalize_keys: false, separator: /=/ })
                      .parse(@argv)
