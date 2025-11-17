@@ -14,16 +14,36 @@ At present, only Jekyll tags and blocks are supported.
 Public plugins that use `jekyll_plugin_support` include:
 
 <ul style="columns: 2">
-  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_badge'><code>jekyll_badge</code></a></li>
-  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_draft'><code>jekyll_draft</code></a></li>
-  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_emoji'><code>jekyll_emoji</code></a></li>
-  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_flexible_include.html'><code>jekyll_flexible_include</code></a></li>
-  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_google_translate'><code>jekyll_google_translate</code></a></li>
-  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_href.html'><code>jekyll_href</code></a></li>
-  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_img.html'><code>jekyll_img</code></a></li>
-  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_outline.html'><code>jekyll_outline</code></a></li>
-  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_pre.html'><code>jekyll_pre</code></a></li>
-  <li><a href='https://www.mslinn.com/jekyll_plugins/jekyll_quote.html'><code>jekyll_quote</code></a></li>
+  <li>
+    <a href='https://www.mslinn.com/jekyll_plugins/jekyll_badge'><code>jekyll_badge</code></a>
+  </li>
+  <li>
+    <a href='https://www.mslinn.com/jekyll_plugins/jekyll_draft'><code>jekyll_draft</code></a>
+  </li>
+  <li>
+    <a href='https://www.mslinn.com/jekyll_plugins/jekyll_emoji'><code>jekyll_emoji</code></a>
+  </li>
+  <li>
+    <a href='https://www.mslinn.com/jekyll_plugins/jekyll_flexible_include.html'><code>jekyll_flexible_include</code></a>
+  </li>
+  <li>
+    <a href='https://www.mslinn.com/jekyll_plugins/jekyll_google_translate'><code>jekyll_google_translate</code></a>
+  </li>
+  <li>
+    <a href='https://www.mslinn.com/jekyll_plugins/jekyll_href.html'><code>jekyll_href</code></a>
+  </li>
+  <li>
+    <a href='https://www.mslinn.com/jekyll_plugins/jekyll_img.html'><code>jekyll_img</code></a>
+  </li>
+  <li>
+    <a href='https://www.mslinn.com/jekyll_plugins/jekyll_outline.html'><code>jekyll_outline</code></a>
+  </li>
+  <li>
+    <a href='https://www.mslinn.com/jekyll_plugins/jekyll_pre.html'><code>jekyll_pre</code></a>
+  </li>
+  <li>
+    <a href='https://www.mslinn.com/jekyll_plugins/jekyll_quote.html'><code>jekyll_quote</code></a>
+  </li>
 </ul>
 
 ... and also the demonstration plugins in
@@ -73,10 +93,9 @@ Jekyll plugin tags created from `jekyll_plugin_support` framework automatically 
 
 ### If You Need Windows Environment Variable Expansion
 
-This only works if Jekyll is running on a Windows / WSL machine.
-If you have a Mac, ignore the rest of this section, however be sure
-not to try to include a file whose name contains two percent characters.
+This works for Jekyll running on any OS.
 
+A Jekyll Support plugin can selectively expand Windows-style environment variables
 If a %WindowsStyleEnvironmentVariable% is detected in the `url` parameter,
 `wslvar` is called.
 If your WSL installation is old it might not have the `wslvar` command
