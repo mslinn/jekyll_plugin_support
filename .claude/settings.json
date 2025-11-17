@@ -37,6 +37,6 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "/work/mslinn_bin/misc/claude_statusline"
+    "command": "claude_statusline"
   }
 }
