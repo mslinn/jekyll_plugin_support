@@ -1,9 +1,14 @@
 # Change Log
 
-## 3.1.2 / 2025-09-28
+## 3.1.2 / 2025-11-17
 
-* Now looks for Windows environment variables (surrounded by `%` characters)
-  using a case-insensitive search, which also works when running on Linux and macOS.
+* Support for [Claude CLI](https://www.mslinn.com/llm/7900-claude.html) is
+  provided in the `.claude` directory.
+* `JekyllPluginHelper.env_var_expand_windows` expands Windows environment
+  variables (surrounded by `%` characters) using a case-insensitive search,
+  which also works when running on Linux and macOS. This is used by
+  [`jekyll_flexible_include_plugin`](https://www.mslinn.com/jekyll_plugins/jekyll_flexible_include.html).
+* `JekyllPluginHelper.wsl_detected?` detects if Jekyll is running under WSL
 * Changed `JekyllPluginHelper.initialize` to make `no_arg_parsing` a keyword argument.
 * Now requires `jekyll_draft` using `Gemfile` instead of the gemspec, to avoid a warning
   when running `bundle install`.

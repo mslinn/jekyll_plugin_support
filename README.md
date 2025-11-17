@@ -54,6 +54,7 @@ Public plugins that use `jekyll_plugin_support` include:
 
 Jekyll plugin tags created from `jekyll_plugin_support` framework automatically have the following features:
 
+0. Claude LLM support is provided
 1. Boilerplate is removed, so you can focus on the required logic and output.
 2. Arguments are parsed for keywords and name/value parameters.
 3. Single or double quotes can be used for arguments and parameters.
