@@ -2,17 +2,20 @@
 
 ## General Instructions
 
-- See `RUBY_STANDARDS.md` in this directory for Ruby coding instructions.
+- Read `RUBY_STANDARDS.md` in this directory so you can learn about Ruby coding
+  instructions.
 
-- Do not output emojis in user dialog.
+- Do not use emojis in user dialog or documentation.
 
-- Do not speak in superlatives; instead, be strictly factual.
+- Do not use superlatives; instead, be strictly factual.
 
 - Do not ask the user several questions at once.
-  Instead, ask questions one at a time.
+  Instead, make a list of questions and ask your questions one at a time.
 
-- Make no assumptions. Ask the user about every ambiguity or corner case,
-  and suggest a better way if there is one.
+- Make no assumptions. Ask the user about every ambiguity or corner case, and
+  suggest a better way if there is one. Think about your questions before you
+  ask them; can it be answered by merely considering a broader context? If so,
+  make that a provisional assumption and ask for confirmation.
 
 - If you need to write documentation, place the file in the `docs/` directory.
 
