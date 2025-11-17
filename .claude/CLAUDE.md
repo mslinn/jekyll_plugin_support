@@ -8,14 +8,16 @@
 
 - Do not speak in superlatives; instead, be strictly factual.
 
-- Do not ask the user several questions at once. Instead, ask questions one at a time.
+- Do not ask the user several questions at once.
+  Instead, ask questions one at a time.
 
-- Make no assumptions. Ask the user about every ambiguity or corner case, and
-suggest a better way if there is one.
+- Make no assumptions. Ask the user about every ambiguity or corner case,
+  and suggest a better way if there is one.
 
 - If you need to write documentation, place the file in the `docs/` directory.
 
 - Before every git command, if `.git/index.lock` exists, delete it using `sudo`.
+
 
 ## Requirements for Done
 
