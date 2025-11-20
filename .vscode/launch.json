@@ -25,14 +25,46 @@
       "env": {
         "AppData": "/home/mslinn/.config"
       },
-      "name": "Start Jekyll Server",
+      "name": "Start Jekyll Server (No Debug)",
+      "panel": "shared",
       "presentation": {
         "echo": true,
-        "reveal": "always",
         "focus": false,
-        "panel": "shared"
+        "reveal": "always"
       },
       "type": "shell"
+    },
+    {
+      "args": [
+        "serve",
+        "--livereload_port",
+        "25729",
+        "--force_polling",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "4444",
+        "--future",
+        "--incremental",
+        "--livereload",
+        "--drafts",
+        "--unpublished"
+      ],
+      "cwd": "${workspaceRoot}/demo",
+      "env": {
+        "AppData": "/home/mslinn/.config",
+        "JEKYLL_ENV": "development"
+      },
+      "log": "*",
+      "name": "Debug Jekyll Server (With Breakpoints)",
+      "navigateStack": true,
+      "program": "${workspaceRoot}/binstub/jekyll",
+      "request": "launch",
+      "showInstructionBreakpoints": false,
+      "showReturnValue": true,
+      "start": true,
+      "stopOnEntry": false,
+      "type": "ruby"
     }
   ]
 }
