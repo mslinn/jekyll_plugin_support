@@ -2,7 +2,7 @@
 
 ## General Instructions
 
-- Read `.claude/RUBY_STANDARDS.md` in this directory so you can learn about Ruby coding
+- Read `.chat/RUBY_STANDARDS.md` so you can learn about Ruby coding
   instructions.
 
 - Do not use emojis in user dialog or documentation.
@@ -46,5 +46,5 @@ The following must be completed before your work can be considered to be done.
 - Unit tests must pass.
 - Update `README.md` for user-visible changes only.
 - Update `CHANGES.md` for programmer-visible changes, described at a high level.
-- Update `.claude/PROGRESS.md`.
+- Update `.chat/PROGRESS.md`.
 - Only then `git push` with a message and commit.
