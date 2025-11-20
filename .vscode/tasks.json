@@ -2,9 +2,56 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "cleanDemo",
+      "label": "Start Jekyll Demo Server",
       "type": "shell",
-      "command": "rm -rf demo/_sites/",
+      "command": "JEKYLL_ENV=development bundle exec jekyll serve --host 0.0.0.0 --port 4444 --livereload_port 25729 --force_polling --future --incremental --livereload --drafts --unpublished",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceRoot}/demo"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build Jekyll Demo Site",
+      "type": "shell",
+      "command": "JEKYLL_ENV=development bundle exec jekyll build --future",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceRoot}/demo"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Clean Demo Site",
+      "type": "shell",
+      "command": "rm -rf demo/_site && bundle exec jekyll clean",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceRoot}"
+      },
       "problemMatcher": []
     }
   ]

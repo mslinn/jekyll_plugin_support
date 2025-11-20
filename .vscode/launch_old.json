@@ -3,28 +3,32 @@
   "configurations": [
     {
       "args": [
-        "exec",
-        "jekyll", 
         "serve",
         "--livereload_port", "25729",
         "--force_polling",
         "--host", "0.0.0.0",
-        "--port", "4444", 
+        "--port", "4444",
         "--future",
-        "--incremental",
+        "--incremental", 
         "--livereload",
         "--drafts",
         "--unpublished"
       ],
       "cwd": "${workspaceRoot}/demo",
+      "debugPort": "45373",
       "env": {
         "AppData": "/home/mslinn/.config",
         "JEKYLL_ENV": "development"
       },
-      "name": "Debug Jekyll Demo (Ruby LSP compatible)",
+      "name": "Debug Demo development",
+      // "preLaunchTask": "cleanDemo",
       "request": "launch",
-      "program": "${workspaceRoot}/demo",
-      "type": "ruby"
+      "runtimeArgs": ["-r", "rdbg", "-O"], 
+      "script": "bundle",
+      "type": "rdbg",
+      "useBundler": true,
+      // Add timeout to prevent premature termination
+      "timeout": 30000
     }
   ]
 }
