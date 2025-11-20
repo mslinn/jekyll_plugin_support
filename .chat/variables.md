@@ -350,3 +350,224 @@ These variables are created and maintained by Jekyll's core rendering system but
 
 The framework focuses on the most commonly needed variables: page, site, layout, include, and liquid scopes for maximum plugin compatibility and ease of use.
 
+---
+
+# Analysis: How jekyll_plugin_support Obtains Variable Names and Values
+
+## Overview
+
+This section analyzes how `jekyll_plugin_support` obtains Jekyll variable names and values, checks the accuracy of the README documentation, and identifies problems in the implementation.
+
+## How Variables Are Obtained
+
+### 1. Entry Point: Liquid Context Access
+
+**Primary Access Methods:**
+- `liquid_context.registers[:page]` - Direct page object access
+- `liquid_context.registers[:site]` - Direct site object access  
+- `liquid_context.environments.first[:layout]` - Layout variables via UnifiedPayloadDrop
+- `liquid_context.environments.first[:paginator]` - Pagination data
+- `liquid_context.environments.first[:theme]` - Theme data
+- `liquid_context.scopes` - Liquid scopes (include, assign, capture variables)
+
+**Locations in Code:**
+- `lib/jekyll_plugin_support/jekyll_plugin_support_class.rb:85-100` - `lookup_liquid_variables` method
+- `lib/jekyll_plugin_support/jekyll_plugin_support_class.rb:47-68` - `inject_config_vars` method
+- `lib/tag/jekyll_plugin_support_tag.rb:45-60` - Tag render method
+- `lib/block/jekyll_plugin_support_block.rb:52-67` - Block render method
+
+### 2. Variable Processing Flow
+
+**Step 1: Configuration Injection**
+```ruby
+# lib/jekyll_plugin_support/jekyll_plugin_support_class.rb:47-68
+def self.inject_config_vars(liquid_context)
+  site = liquid_context.registers[:site]
+  plugin_variables = site.config['liquid_vars']
+  scope = liquid_context.scopes.last
+  # Environment-specific variable handling
+end
+```
+
+**Step 2: Variable Lookup and Substitution**
+```ruby
+# lib/jekyll_plugin_support/jekyll_plugin_support_class.rb:85-100
+def self.lookup_liquid_variables(logger, liquid_context, markup_original)
+  markup = markup_original.clone
+  page   = liquid_context.registers[:page]
+  envs   = liquid_context.environments.first
+  layout = envs[:layout]
+  
+  # Process variables in specific order
+  markup = process_layout_variables logger, layout, markup
+  markup = process_page_variables logger, page, markup
+  liquid_context.scopes&.each do |scope|
+    markup = process_included_variables logger, scope, markup
+    markup = process_liquid_variables logger, scope, markup
+  end
+  markup
+end
+```
+
+**Step 3: Individual Variable Processing**
+- **Layout Variables**: `process_layout_variables` - processes `{{layout.var}}` patterns
+- **Page Variables**: `process_page_variables` - processes `{{page.var}}` patterns
+- **Include Variables**: `process_included_variables` - processes `{{include.var}}` patterns
+- **Liquid Variables**: `process_liquid_variables` - processes `{{var}}` patterns
+
+### 3. Implementation Details
+
+**String Replacement Strategy:**
+Each processing method uses `String#gsub!` to replace variable references with their values:
+- Pattern: `"{{scope.#{name}}}"` → `value.to_s`
+- Example: `"{{page.title}}"` → `"My Page Title"`
+
+**Error Handling:**
+- Each method has comprehensive error handling with `rescue StandardError`
+- Different error behaviors: some log and continue, others `exit! 1`
+- Detailed error messages with context information
+
+## Problems Identified
+
+### 1. Documentation Accuracy Issues in README.md
+
+**Found In Variable Expansion Section (lines 640-680):**
+
+**Critical Grammatical Error:**
+- **Line 646**: "Jekyll does not expand Liquid variable references passes as parameters" 
+- **Problem**: "passes" should be "passed"
+- **Fix**: "Jekyll does not expand Liquid variable references passed as parameters"
+
+**Case Consistency Issues:**
+- **Line 650**: "Jekyll_plugin_support" should be "jekyll_plugin_support"
+- **Line 652**: "Jekyll_plugin_support configuration variables" should be "jekyll_plugin_support configuration variables"
+- **Line 678**: "Jekyll_plugin_support expands most" should be "jekyll_plugin_support expands most"
+
+**Incomplete Variable List:**
+The README states that these variables are expanded:
+- Jekyll_plugin_support configuration variables
+- Jekyll page and layout variables  
+- Inline Liquid variables (assign and capture)
+
+**Missing from Documentation:**
+- **Include variables** - These are documented elsewhere but not in the Variable Expansion section
+- **Theme variables** - Available but not mentioned
+- **Paginator variables** - Available but not mentioned
+- **Environment variables** (content, highlighter_prefix, highlighter_suffix, jekyll) - Available but not mentioned
+
+### 2. Implementation Issues
+
+**A. Variable Processing Order Problems**
+
+**Current Order:**
+1. Layout variables
+2. Page variables
+3. Include variables
+4. Liquid variables
+
+**Potential Issue**: This order doesn't follow Jekyll's actual resolution priority, which is:
+1. registers[:page]
+2. registers[:site]
+3. environments (layout, paginator, theme, etc.)
+4. scopes (include, assign, capture)
+
+**Impact**: Variables might not resolve in the expected priority order, leading to unexpected substitutions.
+
+**B. Error Handling Inconsistencies**
+
+**Different Behaviors Across Methods:**
+- `process_layout_variables`: Logs errors but continues processing
+- `process_page_variables`: Logs errors but continues processing
+- `process_included_variables`: Logs errors and calls `exit! 1` (terminates Jekyll)
+- `process_liquid_variables`: Logs errors but continues processing
+
+**Problem**: This inconsistency can lead to confusing behavior where some variable lookup failures terminate the entire Jekyll build while others don't.
+
+**C. Missing Environment Variables Access**
+
+**Available but Unaccessed:**
+- `:content` - Could be useful for plugins that need access to rendered page content
+- `:highlighter_prefix` and `:highlighter_suffix` - Could be useful for code-related plugins
+- `:jekyll` - Global Jekyll information (version, environment)
+
+**Current State**: These variables are extracted from `liquid_context.environments.first` in the tag/block classes but never used in variable expansion.
+
+**D. Performance Concerns**
+
+**Multiple String Replacements:**
+Each variable processing method does a complete string scan:
+```ruby
+markup.gsub!("{{layout.#{name}}}", value.to_s)  # Scans entire string
+markup.gsub!("{{page.#{name}}}", value.to_s)    # Scans entire string again
+markup.gsub!("{{include.#{name}}}", value.to_s) # Scans entire string again
+markup.gsub!("{{#{name}}}", value.to_s)         # Scans entire string again
+```
+
+**Potential Issue**: For markup with many variables, this could be inefficient.
+
+**E. Missing Input Validation**
+
+**No Validation on Variable Values:**
+- No checking for malicious input in variable values
+- No validation that variable values are safe to substitute
+- No protection against injection attacks
+
+### 3. Configuration Injection Issues
+
+**A. Hard-Coded Environment Variable**
+```ruby
+@mode = env&.key?('JEKYLL_ENV') ? env['JEKYLL_ENV'] : 'development'
+```
+**Issue**: Uses 'JEKYLL_ENV' as the only environment variable key, but Jekyll also supports `JEKYLL_ENVIRONMENT` and defaults to `development` without checking actual Jekyll environment.
+
+**B. Type Restriction Issue**
+```ruby
+plugin_variables&.each do |name, value|
+  scope[name] = value if value.instance_of? String
+end
+```
+**Issue**: Only injects String values, but Jekyll config can contain Hashes, Arrays, and other data types that plugins might need.
+
+### 4. Security Considerations
+
+**A. No HTML Escaping**
+Variable values are inserted directly without escaping:
+```ruby
+markup.gsub!("{{layout.#{name}}}", value.to_s)
+```
+
+**Potential Issue**: If variable values contain HTML or JavaScript, this could lead to XSS vulnerabilities in generated content.
+
+**B. Variable Name Sanitization**
+No validation that variable names don't contain special characters that could cause unexpected behavior:
+```ruby
+scope['include']&.each do |name, value|
+  markup.gsub!("{{include.#{name}}}", value.to_s)
+end
+```
+
+**Potential Issue**: Variable names with special regex characters could cause `gsub` to fail or behave unexpectedly.
+
+## Recommendations
+
+### 1. Documentation Fixes
+- Fix grammatical error on line 646: "passes" → "passed"
+- Standardize case: "jekyll_plugin_support" throughout
+- Add missing variable types to Variable Expansion section
+- Include include, theme, and paginator variables in documentation
+
+### 2. Implementation Improvements
+- Standardize error handling behavior across all processing methods
+- Review and potentially reorder variable processing to match Jekyll's priority
+- Consider adding access to additional environment variables
+- Add input validation and sanitization
+- Consider HTML escaping for variable values
+- Optimize string replacement performance
+
+### 3. Configuration Enhancement
+- Support multiple environment variable keys
+- Allow non-String value types in configuration injection
+- Add validation for configuration data
+
+These issues, while not critical, represent opportunities for improvement in consistency, performance, security, and documentation accuracy.
+
