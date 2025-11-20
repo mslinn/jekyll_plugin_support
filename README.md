@@ -463,6 +463,10 @@ Included spaces are ignored:
 * [`@helper`](https://github.com/mslinn/jekyll_plugin_support/blob/master/lib/jekyll_plugin_helper.rb)
   `JekyllPluginHelper` instance for your plugin.
 
+* `@highlighter_prefix` Syntax highlighter prefix
+
+* `@highlighter_suffix` Syntax highlighter suffix
+
 * [`@layout`](https://jekyllrb.com/docs/variables/#global-variables) Layout information
 
 * `@logger` [`jekyll_plugin_logger`](https://github.com/mslinn/jekyll_plugin_logger) instance for your Jekyll plugin.
@@ -473,6 +477,8 @@ Included spaces are ignored:
 * [`@page`](https://jekyllrb.com/docs/variables/#page-variables) `Jekyll::Page` variables
 
 * [`@paginator`](https://jekyllrb.com/docs/variables/#page-variables) Pagination variables
+
+- `@raw_content` The raw HTML/Markdown content of the current page
 
 * [`@scopes`](https://jekyllrb.com/docs/variables/)
   See the [`jekyll_plugin_support` demo project](demo/variables.html)
