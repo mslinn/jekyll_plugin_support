@@ -4,6 +4,38 @@
 
 This document summarizes how `jekyll_plugin_support` accesses different types of Jekyll variables. The analysis covers all locations where variables are obtained from Jekyll for use in plugins.
 
+## Recent Fixes and Improvements
+
+### Problems Fixed in Current Session
+
+**Documentation Issues Resolved:**
+- ✅ Fixed grammatical error on line 646: "passes" → "passed"
+- ✅ Standardized case to "jekyll_plugin_support" throughout documentation
+- ✅ Added missing variable types to Variable Expansion section:
+  - Include variables 
+  - Theme variables
+  - Paginator variables
+  - Jekyll global variables
+- ✅ Added note about variable resolution order
+
+**Implementation Issues Resolved:**
+- ✅ **Error Handling Consistency**: Removed `exit! 1` from `process_included_variables` to match other methods
+- ✅ **Variable Processing Order**: Reordered to match Jekyll's actual priority:
+  1. Page variables
+  2. Layout variables  
+  3. Jekyll global variables (newly added)
+  4. Include variables
+  5. Liquid variables
+- ✅ **Environment Variable Detection**: Now supports multiple keys:
+  - `JEKYLL_ENV`
+  - `JEKYLL_ENVIRONMENT` 
+  - Site config values
+- ✅ **Configuration Injection**: Removed String-only restriction, now supports all data types
+- ✅ **New Variable Support**: Added access to Jekyll global variables (`{{jekyll.version}}`, `{{jekyll.environment}}`)
+- ✅ **Security Improvements**: Added `sanitize_variable_name` method to prevent regex injection attacks
+
+**Backward Compatibility**: All changes maintain backward compatibility while improving functionality, security, and consistency.
+
 ## Variable Types and Access Patterns
 
 ### 1. Page Variables

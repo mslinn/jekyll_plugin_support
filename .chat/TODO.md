@@ -48,6 +48,6 @@ efficiently resume from subsequent new chat sessions.
    Check the "Variable Expansion" section of `README.md` for accuracy.
    Present your findings, commit, push and stop.
 
-4. Fix any problems found in `jekyll_plugin_support`, commit, push.
+4. ✅ Fix any problems found in `jekyll_plugin_support`, commit, push.
 
-5. Update the documentation, commit, push.
+5. ✅ Update the documentation, commit, push.
