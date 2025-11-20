@@ -1,5 +1,19 @@
 # Change Log
 
+## Unreleased
+
+* **FIXED**: Resolved JekyllDrop iteration error that occurred when plugins tried to iterate over JekyllDrop objects
+  using `.each`. JekyllDrop provides specific attributes (`jekyll.version`, `jekyll.environment`) via method calls,
+  not iteration. Fixed by implementing direct attribute access using `respond_to?` checks.
+* **FIXED**: Multiple Jekyll build errors related to missing dependencies and plugin loading:
+  - Installed missing gems: `jekyll_href` (3.0.2), `jekyll_outline` (1.3.1), `jekyll_flexible_include` (2.0.28)
+  - Resolved version compatibility issues by updating `jekyll_flexible_include`
+  - Fixed plugin loading by moving plugin files from `demo/_plugins/` to root `_plugins/` directory
+  - Created missing include files and directories required by plugins
+* **IMPROVED**: Code style and linting compliance - removed trailing whitespace, fixed modifier if usage, string literals
+* **IMPROVED**: Demo website now builds successfully in ~4 seconds without fatal errors
+* **IMPROVED**: Documentation updated to reflect variable expansion behavior and error handling improvements
+
 ## 3.1.3 / 2025-01-02
 
 * **BREAKING CHANGE**: Modified `JekyllPluginHelper.expand_env` to only expand Bash environment

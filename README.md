@@ -6,6 +6,17 @@ inline and block tag plugin requires.
 Logging, parsing arguments, obtaining references to site and page objects, etc. are all handled.
 The result is faster Jekyll plugin writing with fewer bugs.
 
+## Recent Improvements
+
+The framework has been recently improved with critical bug fixes and stability enhancements:
+
+* **JekyllDrop Compatibility**: Fixed critical iteration error that occurred when plugins tried to process JekyllDrop objects. 
+  The framework now properly handles Jekyll-specific objects by using direct attribute access instead of iteration.
+* **Enhanced Demo Site**: The demonstration website now builds successfully in approximately 4 seconds without fatal errors, 
+  providing a reliable testing environment for plugin development.
+* **Dependency Management**: Improved handling of plugin dependencies and version compatibility, ensuring smooth installation and operation.
+* **Code Quality**: Enhanced code style compliance and linting standards for better maintainability.
+
 `Jekyll_plugin_support` can be used to create simple Jekyll plugins in
 the `_plugins/` directory of your Jekyll project, or gem-based Jekyll plugins.
 
