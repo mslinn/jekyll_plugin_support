@@ -48,9 +48,3 @@ The following must be completed before your work can be considered to be done.
 - Update `CHANGES.md` for programmer-visible changes, described at a high level.
 - Update `.chat/PROGRESS.md`.
 - Only then `git push` with a message and commit.
-
-
-## Do This Now
-
-At present, only Jekyll tags and blocks are supported.
- consider how the rest can be supported.

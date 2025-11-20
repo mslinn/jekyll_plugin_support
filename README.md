@@ -478,7 +478,10 @@ Included spaces are ignored:
 
 * [`@paginator`](https://jekyllrb.com/docs/variables/#page-variables) Pagination variables
 
-- `@raw_content` The raw HTML/Markdown content of the current page
+- `@raw_content` The raw HTML/Markdown content of the current page, as it exists
+  during the [layout rendering stage](https://jekyllrb.com/docs/plugins/hooks/)
+  occurring between `:documents, :post_convert` and `:documents, :post_render`.
+  All pages, posts and documents go through this phase.
 
 * [`@scopes`](https://jekyllrb.com/docs/variables/)
   See the [`jekyll_plugin_support` demo project](demo/variables.html)

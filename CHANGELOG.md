@@ -1,26 +1,15 @@
 # Change Log
 
-## Unreleased
+## 3.1.4
 
-* **ADDED**: `@raw_content` instance variable exposing raw HTML content of the page being processed
-* **FIXED**: JekyllDrop iteration error using direct attribute access with `respond_to?` checks
-* **FIXED**: Missing dependencies (`jekyll_href`, `jekyll_outline`, `jekyll_flexible_include`) and plugin loading issues
-* **IMPROVED**: Code style compliance, demo website build stability (~4 seconds), and documentation
+* ADDED `@raw_content` instance variable exposing raw HTML content of the page being processed
+
 
 ## 3.1.3 / 2025-01-02
 
-* **BREAKING CHANGE**: Modified `JekyllPluginHelper.expand_env` to only expand Bash environment
-  variables (`$VAR` or `${VAR}`), not Windows environment variables (`%VAR%`). This prevents false
-  expansions in web content where text strings contain pairs of percent signs that are not
-  environment variables.
-* Removed the `use_wslvar` parameter from `JekyllPluginHelper.expand_env` method signature.
-* `JekyllPluginHelper.env_var_expand_windows` is still available for plugins that specifically
-  need Windows environment variable expansion.
-* `jekyll_flexible_include_plugin` now explicitly calls both `env_var_expand_bash` and
-  `env_var_expand_windows` for file paths to maintain its ability to handle both Bash and
-  Windows environment variables.
-* Updated `JekyllPluginHelper.find_windows_envar` to properly fall back to environment variable
-  search when `wslvar` is not available or doesn't find the variable.
+* Modified `JekyllPluginHelper.expand_env` to only expand Bash environment variables (`$VAR` or `${VAR}`), not Windows environment variables (`%VAR%`)
+* Removed the `use_wslvar` parameter from `JekyllPluginHelper.expand_env` method signature
+* `env_var_expand_windows` remains available for plugins that specifically need Windows environment variable expansion
 
 
 ## 3.1.2 / 2025-11-17
@@ -76,12 +65,7 @@
 * Added the `bin/release_port` script that kills hung processes being debugged
 * Added the `cleanDemo` task for the **Debug Demo production** and **Debug Demo development** tasks
 * Many minor improvements to the demo.
-* `JekyllSupport::JekyllPluginHelper::register` now accepts a `quiet` option, to suppress the signon message.
-  Use it like this:
-
-  ```ruby
-  JekyllPluginHelper.register(self, 'tag_name', quiet: true)
-  ```
+* `JekyllPluginHelper.register` now accepts a `quiet` option to suppress the signon message
 
 
 ## 1.0.3 / 2024-08-19
@@ -93,19 +77,7 @@
 
 * Computes line_number and path properly
 * Refactored demo CSS
-* Improved custom plugin error handling and sample code.
-  The following seems to be optimal for custom plugins; it suppresses the ridiculously long stack trace that used to be generated:
-
-   ```ruby
-   begin
-     # ...
-   rescue DemoInlineTagError => e # jekyll_plugin_support handles StandardError
-     @logger.error { e.logger_message }
-     exit! 1 if @die_on_demo_tag_error
-
-     e.html_message
-   end
-   ```
+* Improved custom plugin error handling and sample code
 
 
 ## 1.0.1 / 2024-07-27
@@ -168,10 +140,8 @@
 * Demo site now shows how to define and handle custom errors.
 * Added `@tag_config` variable, which can be inspected to determine whether to die on various types of exceptions.
 * Added `format_error_message`, `maybe_reraise_error`, and `raise_error` to `JekyllBlock` and `JekyllTag`
-* Adds a method called `shorten_backtrace` to `StandardError` and all custom error
-  classes defined by `JekyllSupport.define_error`.
-  See the `demo/` directory for examples of how to use this optional feature.
-* The `plugin-vars` section in `_config.yml` was renamed to `liquid_vars`.
+* Added `shorten_backtrace` to StandardError and all custom error classes defined by `JekyllSupport.define_error`
+* The `plugin-vars` section in `_config.yml` was renamed to `liquid_vars`
 
 
 ## 0.7.2 / 2023-08-14
@@ -183,10 +153,8 @@
 
 * Suppressed stack trace from issue [#4](../../issues/4).
 * Now using Shopify `ruby-lsp` instead of `rebornix.Ruby` by Peng Lv
-* Debug configurations changed to `rdbg` instead of `ruby`, so the `debase` development dependency was changed to
-  [`debug`](https://marketplace.visualstudio.com/items?itemName=KoichiSasada.vscode-rdbg),
-  which provides the `rdgb` command.
-  The `ruby-debug-ide` development dependency is also no longer required.
+* Debug configurations changed to `rdbg` instead of `ruby`, so the `debase` development dependency was changed to [`debug`](https://marketplace.visualstudio.com/items?itemName=KoichiSasada.vscode-rdbg)
+* The `ruby-debug-ide` development dependency is no longer required
 
 
 ## 0.7.0 / 2023-05-22
