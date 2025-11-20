@@ -48,3 +48,8 @@ The following must be completed before your work can be considered to be done.
 - Update `CHANGES.md` for programmer-visible changes, described at a high level.
 - Update `.chat/PROGRESS.md`.
 - Only then `git push` with a message and commit.
+
+
+## Do This Now
+
+Execute `.chat/TODO.md`.
