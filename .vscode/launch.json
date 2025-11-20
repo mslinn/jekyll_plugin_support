@@ -4,16 +4,19 @@
     {
       "args": [
         "exec",
-        "jekyll", 
+        "jekyll",
         "serve",
-        "--livereload_port", "25729",
-        "--force_polling",
-        "--host", "0.0.0.0",
-        "--port", "4444", 
+        "--drafts",
         "--future",
+        "--force_polling",
+        "--host",
+        "0.0.0.0",
         "--incremental",
         "--livereload",
-        "--drafts",
+        "--livereload_port",
+        "25729",
+        "--port",
+        "4444",
         "--unpublished"
       ],
       "cwd": "${workspaceRoot}/demo",
@@ -22,8 +25,25 @@
         "JEKYLL_ENV": "development"
       },
       "name": "Debug Jekyll Demo (Ruby LSP compatible)",
-      "request": "launch",
       "program": "${workspaceRoot}/demo",
+      "request": "launch",
+      "type": "ruby"
+    },
+    {
+      "args": [
+        "exec",
+        "jekyll",
+        "build",
+        "--future"
+      ],
+      "cwd": "${workspaceRoot}/demo",
+      "env": {
+        "AppData": "/home/mslinn/.config",
+        "JEKYLL_ENV": "development"
+      },
+      "name": "Test Jekyll Build",
+      "program": "${workspaceRoot}/demo",
+      "request": "launch",
       "type": "ruby"
     }
   ]
