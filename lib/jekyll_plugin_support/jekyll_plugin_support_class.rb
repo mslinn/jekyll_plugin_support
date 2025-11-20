@@ -53,10 +53,10 @@ module JekyllSupport
 
     # Support multiple environment variable keys and fall back to Jekyll's environment
     env = site.config['env']
-    @mode = env&.[]('JEKYLL_ENV') || 
-            env&.[]('JEKYLL_ENVIRONMENT') || 
-            site.config['JEKYLL_ENV'] || 
-            site.config['JEKYLL_ENVIRONMENT'] || 
+    @mode = env&.[]('JEKYLL_ENV') ||
+            env&.[]('JEKYLL_ENVIRONMENT') ||
+            site.config['JEKYLL_ENV'] ||
+            site.config['JEKYLL_ENVIRONMENT'] ||
             'development'
 
     # Set default values (support multiple data types)
@@ -170,17 +170,13 @@ module JekyllSupport
 
   def self.process_jekyll_variables(logger, jekyll, markup)
     return markup unless jekyll
-    
+
     # JekyllDrop provides access to version and environment
     # Handle known JekyllDrop attributes
-    if jekyll.respond_to?(:version)
-      markup.gsub!("{{jekyll.version}}", jekyll.version.to_s)
-    end
-    
-    if jekyll.respond_to?(:environment)
-      markup.gsub!("{{jekyll.environment}}", jekyll.environment.to_s)
-    end
-    
+    markup.gsub!('{{jekyll.version}}', jekyll.version.to_s) if jekyll.respond_to?(:version)
+
+    markup.gsub!('{{jekyll.environment}}', jekyll.environment.to_s) if jekyll.respond_to?(:environment)
+
     markup
   rescue StandardError => e
     logger.error { e.full_message }
