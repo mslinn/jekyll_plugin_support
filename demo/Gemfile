@@ -10,7 +10,7 @@ jekyll_outline          = ENV.fetch('jekyll_outline', nil)
 group :jekyll_plugins do
   gem 'jekyll-assets', git: 'https://github.com/envygeeks/jekyll-assets'
   gem 'jekyll_badge', '>= 0.1.2'
-  gem 'jekyll_draft', '>= 3.0.0'
+  # gem 'jekyll_draft', '>= 3.0.0'  # Temporarily disabled - causing Draft errors
   gem 'jekyll_emoji_tag'
   gem 'jekyll-environment-variables'
   gem 'jekyll_flexible_include', path: jekyll_flexible_include

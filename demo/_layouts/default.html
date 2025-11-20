@@ -2,7 +2,7 @@
 layout: compress
 default_layout_var: set_in_default_layout_front_matter
 ---
-{% assign isDraft = page | is_draft %}
+{% comment %}{% assign isDraft = page | is_draft %}{% endcomment %}
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
 <head>
@@ -43,9 +43,9 @@ default_layout_var: set_in_default_layout_front_matter
       title="Share this page by using this QR code"
     > -->
     <div class="inner">
-      {% if isDraft %}
+      {% comment %}{% if isDraft %}
         <div class="bg_yellow draftPost">&mdash; Draft &mdash;</div>
-      {% endif %}
+      {% endif %}{% endcomment %}
       <a href="/index.html">
         <div class="h1">{{ site.title }}</div>
       </a>
@@ -79,13 +79,14 @@ default_layout_var: set_in_default_layout_front_matter
         </ul>
       </nav>
       <section id="main-content">
-        {% if isDraft %}
+        {% comment %}{% if isDraft %}
           <div class="watermarked">
             {{ content }}
           </div>
         {% else %}
           {{ content }}
-        {% endif %}
+        {% endif %}{% endcomment %}
+        {{ content }}
 
         <p class="copyright" id="copyright" xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
           <a rel="license" style="float: left; margin-right: 1em; padding-top: 9px; padding-bottom: 2em;"

@@ -15,3 +15,9 @@ group :test, :development do
   gem 'rubocop-rake', require: false
   gem 'rubocop-rspec', require: false
 end
+
+gem "jekyll_href", "~> 3.0"
+
+gem "jekyll_outline", "~> 1.3"
+
+gem "jekyll_flexible_include", "~> 2.0"
