@@ -138,3 +138,215 @@ The `jekyll_plugin_support` framework performs variable expansion through severa
 6. Liquid variables (assigned/captured)
 
 This order ensures that variables are resolved correctly and that more specific scopes override more general ones appropriately.
+
+# Where Jekyll Creates Variables
+
+## Overview
+
+Based on analysis of the Jekyll source code (https://github.com/jekyll/jekyll), variables are created and exposed to plugins through a structured system of Liquid drops and rendering pipelines.
+
+## Jekyll Variable Creation Sources
+
+### 1. UnifiedPayloadDrop (Primary Source)
+**File**: `lib/jekyll/drops/unified_payload_drop.rb`
+
+**Variables Created**:
+- `content` - Page content being processed
+- `page` - Current page data via PageDrop
+- `layout` - Layout variables 
+- `paginator` - Pagination data
+- `highlighter_prefix` - Syntax highlighter prefix
+- `highlighter_suffix` - Syntax highlighter suffix
+- `jekyll` - Global Jekyll variables via JekyllDrop
+- `site` - Site data via SiteDrop  
+- `theme` - Theme data via ThemeDrop (if theme is active)
+
+### 2. JekyllDrop (Jekyll Global Variables)
+**File**: `lib/jekyll/drops/jekyll_drop.rb`
+
+**Variables Created**:
+- `version` - Jekyll version number
+- `environment` - Current Jekyll environment (development/production)
+
+**Usage**: Available as `{{ jekyll.version }}` and `{{ jekyll.environment }}`
+
+### 3. SiteDrop (Site Variables)
+**File**: `lib/jekyll/drops/site_drop.rb`
+
+**Variables Created**:
+- `time` - Site generation time
+- `pages` - All site pages
+- `static_files` - Static files
+- `tags` - All tags used in posts
+- `categories` - All categories
+- `posts` - All posts (sorted newest to oldest)
+- `html_pages` - HTML pages
+- `collections` - All collections
+- `documents` - All documents
+- `related_posts` - Related posts for current document
+
+**Collection Access**: Collections are accessible as `site.collection_name` where collection_name is the name of each collection.
+
+### 4. ThemeDrop (Theme Variables)
+**File**: `lib/jekyll/drops/theme_drop.rb`
+
+**Variables Created**:
+- `root` - Theme root directory (empty in production)
+- `authors` - Theme authors
+- `version` - Theme version
+- `description` - Theme description
+- `metadata` - Theme metadata
+- `runtime_dependencies` - Theme dependencies
+
+### 5. Document/Page Drops (Document Variables)
+**Files**: 
+- `lib/jekyll/page.rb` - Page attributes
+- `lib/jekyll/document.rb` - Document attributes
+
+**Page Variables** (via `page.to_liquid`):
+- `content` - Page content
+- `dir` - Page directory
+- `excerpt` - Page excerpt
+- `name` - Page filename
+- `path` - Page path
+- `url` - Page URL
+
+**Document Variables** (similar to pages but for posts/documents):
+- All page variables plus document-specific attributes
+- Front matter variables are also accessible
+
+## How Variables Are Set in the Rendering Pipeline
+
+### Renderer Class (lib/jekyll/renderer.rb)
+
+The Jekyll renderer sets up variables in the Liquid context through several methods:
+
+1. **assign_pages!()** 
+   - Sets `payload["page"] = document.to_liquid`
+   - Sets `payload["paginator"]` if document has pagination
+
+2. **assign_current_document!()**
+   - Sets `payload["site"].current_document = document`
+
+3. **assign_highlighter_options!()**
+   - Sets `payload["highlighter_prefix"]` from converter
+   - Sets `payload["highlighter_suffix"]` from converter
+
+4. **assign_layout_data!()**
+   - Sets `payload["layout"]` by merging layout data with existing layout variables
+
+### Layout Rendering Process
+
+During layout rendering (`render_layout` method):
+- Content is assigned to `payload["content"]`
+- Layout data is merged into `payload["layout"]`
+- Layout variables become available in Liquid templates
+
+### Include Processing
+
+Includes process variables through:
+- **File**: `lib/jekyll/inclusion.rb`
+- Variables passed to includes are made available in the `include` scope
+- Access via `liquid_context.scopes.first['include']['variable_name']`
+
+## Liquid Context Structure
+
+The Liquid context (`liquid_context`) provided to plugins contains:
+
+1. **registers** Hash:
+   - `:site` - Site object
+   - `:page` - Current page object
+
+2. **environments** Array (first element):
+   - Contains the UnifiedPayloadDrop with all primary variables
+   - Keys include: `:content`, `:layout`, `:page`, `:paginator`, `:highlighter_prefix`, `:highlighter_suffix`, `:jekyll`, `:site`, `:theme`
+
+3. **scopes** Array:
+   - Contains variable scopes for includes, assigned variables, captured variables
+   - First scope typically contains include variables under `'include'` key
+
+## Variable Resolution Order
+
+Jekyll resolves variables in this priority order:
+
+1. **registers[:page]** - Direct page object access
+2. **registers[:site]** - Direct site object access  
+3. **environments.first** - UnifiedPayloadDrop variables
+4. **scopes** - Liquid scopes (include, assign, capture variables)
+
+## The Four Previously Flagged Variables Explained
+
+In the previous step, these 4 environment variables were identified as available but unused by `jekyll_plugin_support`. Here's what each one is for:
+
+### `:content` - Page Content
+**Purpose**: Contains the HTML/markdown content of the current page being processed.
+
+**Created In**: 
+- `lib/jekyll/renderer.rb` - `assign_layout_data!()` method
+- Set during layout rendering process
+
+**Usage**: Primarily used for layout rendering to embed page content within layout templates. Example:
+```liquid
+<html>
+  <body>
+    {{ content }}
+  </body>
+</html>
+```
+
+**Note**: `jekyll_plugin_support` does not currently access this variable, but it's available in `liquid_context.environments.first[:content]`
+
+### `:highlighter_prefix` - Syntax Highlighter Prefix
+**Purpose**: Contains the opening HTML tags for syntax highlighting (typically from Rouge, Pygments, or other syntax highlighters).
+
+**Created In**: 
+- `lib/jekyll/renderer.rb` - `assign_highlighter_options!()` method
+- Derived from the site's configured syntax highlighter
+
+**Example Value**: Something like `<pre><code class="language-ruby">`
+
+**Usage**: Used by Jekyll's built-in syntax highlighting system to wrap code blocks. Plugins could use this for custom code rendering.
+
+**Note**: Available in `liquid_context.environments.first[:highlighter_prefix]` but not currently used by `jekyll_plugin_support`
+
+### `:highlighter_suffix` - Syntax Highlighter Suffix  
+**Purpose**: Contains the closing HTML tags for syntax highlighting to match the prefix.
+
+**Created In**:
+- `lib/jekyll/renderer.rb` - `assign_highlighter_options!()` method  
+- Derived from the site's configured syntax highlighter
+
+**Example Value**: `</code></pre>`
+
+**Usage**: Used by Jekyll's built-in syntax highlighting system to close code block tags. Should be used together with `highlighter_prefix`.
+
+**Note**: Available in `liquid_context.environments.first[:highlighter_suffix]` but not currently used by `jekyll_plugin_support`
+
+### `:jekyll` - Jekyll Global Variables
+**Purpose**: Provides access to global Jekyll information such as version and environment.
+
+**Created In**:
+- `lib/jekyll/drops/unified_payload_drop.rb` - via `jekyll` method
+- `lib/jekyll/drops/jekyll_drop.rb` - JekyllDrop.global
+
+**Variables Available**:
+- `jekyll.version` - Current Jekyll version (e.g., "4.3.2")
+- `jekyll.environment` - Current environment ("development", "production", "test")
+
+**Usage**: 
+```liquid
+Built with Jekyll {{ jekyll.version }} in {{ jekyll.environment }} mode.
+```
+
+**Note**: Available in `liquid_context.environments.first[:jekyll]` but not currently exposed to plugins by `jekyll_plugin_support`
+
+## Why These Variables Are Unused
+
+These variables are created and maintained by Jekyll's core rendering system but `jekyll_plugin_support` doesn't currently utilize them because:
+
+1. **Content**: Usually not needed in plugins since page content is already available through other means
+2. **Highlighter variables**: These are specialized for code highlighting and most plugins don't need them
+3. **Jekyll global**: Can be accessed through other means (e.g., Jekyll::VERSION constant) and plugins typically don't need to know Jekyll's internal version
+
+The framework focuses on the most commonly needed variables: page, site, layout, include, and liquid scopes for maximum plugin compatibility and ease of use.
+
