@@ -1,0 +1,49 @@
+---
+title: Raw Content Variable Demo
+layout: default
+description: "Demonstration of the @raw_content variable available in Jekyll plugins"
+---
+
+# Raw Content Variable Demo
+
+The `@raw_content` variable is now available in plugins built with `jekyll_plugin_support`. 
+It provides access to the raw HTML content of the page being processed.
+
+## How to Access @raw_content
+
+In your plugin's `render_impl` method, you can now access `@raw_content`:
+
+```ruby
+def render_impl
+  if @raw_content
+    @logger.debug { "Content length: #{@raw_content.length}" }
+    @logger.debug { "Content type: #{@raw_content.class}" }
+    # Process the content...
+  end
+end
+```
+
+## Live Demo
+
+The `@raw_content` variable is demonstrated in the `demo_block_tag` plugin below.
+The plugin shows information about the content that has been rendered so far:
+
+{% demo_block_tag %}
+This is the content within the demo_block_tag block. You can see that the @raw_content variable shows what content has been processed up to this point.
+{% enddemo_block_tag %}
+
+## Key Features
+
+- **Access to rendered HTML**: See what content has been generated up to this point
+- **Content analysis**: Analyze page structure, length, or specific elements
+- **Content modification**: Process or enhance existing content
+- **Available in both tags and blocks**: Works in both `JekyllTag` and `JekyllBlock` subclasses
+
+## Use Cases
+
+- **Content validation**: Check if pages meet certain criteria
+- **Performance monitoring**: Track content complexity and size
+- **Content enhancement**: Add processing based on existing content
+- **Content extraction**: Extract specific parts for further processing
+
+This feature enhances plugin capabilities by providing direct access to the content rendering pipeline.

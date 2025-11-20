@@ -60,6 +60,9 @@ module JekyllSupport
 
         @envs=#{@envs.keys.sort.join(', ')}
 
+        @raw_content=
+          #{@raw_content ? "Length: #{@raw_content.length}, Type: #{@raw_content.class}, Preview: #{@raw_content[0..100].inspect}" : "Not available"}
+
         @config['url']='#{@config['url']}'
 
         @site.collection_names=#{@site.collection_names&.sort&.join(', ')}

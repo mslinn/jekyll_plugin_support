@@ -1,7 +1,7 @@
 module JekyllSupport
   # Base class for Jekyll block tags
   class JekyllBlock < Liquid::Block
-    attr_reader :argument_string, :helper, :line_number, :logger, :page, :site, :text
+    attr_reader :argument_string, :helper, :line_number, :logger, :page, :raw_content, :site, :text
 
     # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
     # @param tag_name [String] the name of the tag, which we usually know.
@@ -62,9 +62,10 @@ module JekyllSupport
       set_error_context
 
       # @envs.keys are :content, :highlighter_prefix, :highlighter_suffix, :jekyll, :layout, :page, :paginator, :site, :theme
-      @layout    = @envs[:layout]
-      @paginator = @envs[:paginator]
-      @theme     = @envs[:theme]
+      @layout      = @envs[:layout]
+      @paginator   = @envs[:paginator]
+      @raw_content = @envs[:content]
+      @theme       = @envs[:theme]
 
       env = @config['env']
       @mode = env&.key?('JEKYLL_ENV') ? env['JEKYLL_ENV'] : 'development'
