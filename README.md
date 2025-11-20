@@ -656,9 +656,7 @@ expand all types of variable references passed as parameters and in block tag bo
 * jekyll_plugin_support configuration variables, discussed above.
 * Jekyll [page](https://jekyllrb.com/docs/variables/#page-variables) and
   [layout](https://jekyllrb.com/docs/layouts/#variables) variables.
-* JekyllDrop variables: `{{jekyll.version}}` and `{{jekyll.environment}}`
-  (Jekyll global variables that provide access to the Jekyll version and environment).
-  These were recently fixed to work properly with JekyllDrop objects.
+* Jekyll global variables such as `jekyll.version` and `jekyll.environment`.
 * Inline Liquid variables (defined in [assign](https://shopify.dev/docs/api/liquid/tags/assign) and [capture](https://shopify.dev/docs/api/liquid/tags/capture) statements).
 * Include variables (when plugins are invoked from within Jekyll include files with parameters).
 * Theme variables (provided by the active theme).
@@ -687,7 +685,7 @@ Thus, the above is interpreted as follows when `my_plugin` is evaluated during t
 **Note on Variable Resolution Order**: Variables are processed in Jekyll's actual priority order to ensure expected behavior:
 1. Page variables (e.g., `{{page.title}}`)
 2. Layout variables (e.g., `{{layout.name}}`)
-3. JekyllDrop variables (`{{jekyll.version}}`, `{{jekyll.environment}}`)
+3. Jekyll global variables (e.g., `{{jekyll.version}}`)
 4. Include variables (e.g., `{{include.my_var}}`)
 5. Liquid variables (e.g., `{{my_var}}` from `assign`/`capture`)
 
