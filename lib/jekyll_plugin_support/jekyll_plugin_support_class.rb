@@ -169,10 +169,18 @@ module JekyllSupport
   end
 
   def self.process_jekyll_variables(logger, jekyll, markup)
-    jekyll&.each do |name, value|
-      value = '' if value.nil?
-      markup.gsub!("{{jekyll.#{name}}}", value.to_s)
+    return markup unless jekyll
+    
+    # JekyllDrop provides access to version and environment
+    # Handle known JekyllDrop attributes
+    if jekyll.respond_to?(:version)
+      markup.gsub!("{{jekyll.version}}", jekyll.version.to_s)
     end
+    
+    if jekyll.respond_to?(:environment)
+      markup.gsub!("{{jekyll.environment}}", jekyll.environment.to_s)
+    end
+    
     markup
   rescue StandardError => e
     logger.error { e.full_message }
