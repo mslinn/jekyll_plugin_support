@@ -63,6 +63,10 @@ module JekyllSupport
         @raw_content=
           #{@raw_content ? "Length: #{@raw_content.length}, Type: #{@raw_content.class}, Preview: #{CGI.escapeHTML(@raw_content[0..100])}" : "Not available"}
 
+        @highlighter_prefix='#{@highlighter_prefix}'
+
+        @highlighter_suffix='#{@highlighter_suffix}'
+
         @config['url']='#{@config['url']}'
 
         @site.collection_names=#{@site.collection_names&.sort&.join(', ')}

@@ -53,6 +53,13 @@ module JekyllSupport
         @helper.keys_values=
           #{(@helper.keys_values&.map { |k, v| "#{k}=#{v}" })&.join("\n  ")}
 
+        @raw_content=
+          #{@raw_content ? "Length: #{@raw_content.length}, Type: #{@raw_content.class}, Preview: #{@raw_content[0..100].to_s.gsub("\n", '\n')}" : "Not available"}
+
+        @highlighter_prefix='#{@highlighter_prefix}'
+
+        @highlighter_suffix='#{@highlighter_suffix}'
+
         @layout='#{@layout}'
         @page.keys='#{@page.keys}'
 

@@ -463,9 +463,15 @@ Included spaces are ignored:
 * [`@helper`](https://github.com/mslinn/jekyll_plugin_support/blob/master/lib/jekyll_plugin_helper.rb)
   `JekyllPluginHelper` instance for your plugin.
 
-* `@highlighter_prefix` Syntax highlighter prefix
+- `@highlighter_prefix` Syntax highlighter prefix, as it exists
+  during the [layout rendering stage](https://jekyllrb.com/docs/plugins/hooks/)
+  occurring between `:documents, :post_convert` and `:documents, :post_render`.
+  All pages, posts and documents go through this phase.
 
-* `@highlighter_suffix` Syntax highlighter suffix
+- `@highlighter_suffix` Syntax highlighter suffix, as it exists
+  during the [layout rendering stage](https://jekyllrb.com/docs/plugins/hooks/)
+  occurring between `:documents, :post_convert` and `:documents, :post_render`.
+  All pages, posts and documents go through this phase.
 
 * [`@layout`](https://jekyllrb.com/docs/variables/#global-variables) Layout information
 

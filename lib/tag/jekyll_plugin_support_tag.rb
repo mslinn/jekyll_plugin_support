@@ -1,7 +1,7 @@
 module JekyllSupport
   # Base class for Jekyll tags
   class JekyllTag < Liquid::Tag
-    attr_reader :argument_string, :helper, :line_number, :logger, :page, :raw_content, :site
+    attr_reader :argument_string, :helper, :highlighter_prefix, :highlighter_suffix, :line_number, :logger, :page, :raw_content, :site
 
     # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
     # @param tag_name [String] the name of the tag, which we usually know.
@@ -55,6 +55,8 @@ module JekyllSupport
       set_error_context
 
       # @envs.keys are :content, :highlighter_prefix, :highlighter_suffix, :jekyll, :layout, :page, :paginator, :site, :theme
+      @highlighter_prefix = @envs[:highlighter_prefix]
+      @highlighter_suffix = @envs[:highlighter_suffix]
       @layout      = @envs[:layout]
       @paginator   = @envs[:paginator]
       @raw_content = @envs[:content]
@@ -89,7 +91,7 @@ module JekyllSupport
 
     # Jekyll plugins must override this method, not render, so their plugin can be tested more easily
     # The following variables are predefined:
-    #   @argument_string, @config, @envs, @helper, @layout, @logger, @mode, @page, @paginator, @site, @tag_name and @theme
+    #   @argument_string, @config, @envs, @helper, @highlighter_prefix, @highlighter_suffix, @layout, @logger, @mode, @page, @paginator, @raw_content, @site, @tag_name and @theme
     def render_impl
       abort "#{self.class}.render_impl for tag #{@tag_name} must be overridden, but it was not."
     end
