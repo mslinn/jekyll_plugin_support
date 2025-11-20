@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+* **ADDED**: New `@raw_content` instance variable for JekyllTag and JekyllBlock subclasses
+  - Provides access to raw HTML content of the page being processed
+  - Available as `@raw_content` in plugin `render_impl` methods
+  - Contains the rendered HTML up to the point where the plugin is invoked
+  - Useful for content analysis, validation, and modification
 * **FIXED**: Resolved JekyllDrop iteration error that occurred when plugins tried to iterate over JekyllDrop objects
   using `.each`. JekyllDrop provides specific attributes (`jekyll.version`, `jekyll.environment`) via method calls,
   not iteration. Fixed by implementing direct attribute access using `respond_to?` checks.
