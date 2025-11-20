@@ -1,20 +1,16 @@
 {
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
       "args": [
-        "JEKYLL_ENV=development",
-        "bundle",
-        "exec",
-        "jekyll",
         "serve",
-        "--livereload_port",
-        "25729",
+        "--livereload_port", "25729",
         "--force_polling",
-        "--host",
-        "0.0.0.0",
-        "--port",
-        "4444",
+        "--host", "0.0.0.0",
+        "--port", "4444",
         "--future",
         "--incremental",
         "--livereload",
@@ -22,49 +18,103 @@
         "--unpublished"
       ],
       "cwd": "${workspaceRoot}/demo",
-      "env": {
-        "AppData": "/home/mslinn/.config"
-      },
-      "name": "Start Jekyll Server (No Debug)",
-      "panel": "shared",
-      "presentation": {
-        "echo": true,
-        "focus": false,
-        "reveal": "always"
-      },
-      "type": "shell"
-    },
-    {
-      "args": [
-        "serve",
-        "--livereload_port",
-        "25729",
-        "--force_polling",
-        "--host",
-        "0.0.0.0",
-        "--port",
-        "4444",
-        "--future",
-        "--incremental",
-        "--livereload",
-        "--drafts",
-        "--unpublished"
-      ],
-      "cwd": "${workspaceRoot}/demo",
+      "debugPort": "45373",
       "env": {
         "AppData": "/home/mslinn/.config",
         "JEKYLL_ENV": "development"
       },
-      "log": "*",
-      "name": "Debug Jekyll Server (With Breakpoints)",
-      "navigateStack": true,
-      "program": "${workspaceRoot}/binstub/jekyll",
+      "name": "Debug Demo development",
+      // "preLaunchTask": "cleanDemo",
       "request": "launch",
-      "showInstructionBreakpoints": false,
-      "showReturnValue": true,
-      "start": true,
-      "stopOnEntry": false,
-      "type": "ruby"
+      "script": "${workspaceRoot}/binstub/jekyll",
+      "type": "rdbg",
+      "useBundler": true,
+    },
+    {
+      "args": [
+        "serve",
+        "--livereload_port", "35732",
+        "--force_polling",
+        "--host", "0.0.0.0",
+        "--port", "4444",
+        "--incremental",
+        "--livereload"
+      ],
+      "cwd": "${workspaceRoot}/demo",
+      "debugPort": "45373",
+      "env": {
+        "AppData": "/home/mslinn/.config",
+        "JEKYLL_ENV": "production"
+      },
+      "name": "Debug Demo production",
+      // "preLaunchTask": "cleanDemo",
+      "request": "launch",
+      "script": "${workspaceRoot}/binstub/jekyll",
+      "type": "rdbg",
+      "useBundler": true,
+    },
+    {
+      "type": "ruby_lsp",
+      "request": "launch",
+      "name": "Debug release_kraken",
+      "program": "ruby bin/release_kraken"
+    },
+    {
+      "cwd": "${workspaceRoot}",
+      "name": "Debug custom_error_take_2.rb",
+      "request": "launch",
+      "script": "experiments/custom_error_take_2.rb",
+      "type": "rdbg",
+      "useBundler": true,
+    },
+    {
+      "cwd": "${workspaceRoot}",
+      "debugPort": "0",
+      "name": "Debug CallChain",
+      "request": "launch",
+      "script": "${workspaceRoot}/lib/call_chain.rb",
+      "type": "rdbg",
+      "useBundler": true,
+    },
+    {
+      "askParameters": false,
+      "debugPort": "0",
+      "name": "Debug current file",
+      "request": "launch",
+      "script": "${file}",
+      "type": "rdbg",
+    },
+    {
+      "debugPort": "45373",
+      "name": "Attach with rdbg to 45373",
+      "request": "attach",
+      "type": "rdbg",
+    },
+    {
+      "args": [
+        "-I", "${workspaceRoot}/lib",
+        "-I", "${workspaceRoot}/spec",
+        "-P", "${workspaceRoot}/spec/**/*_spec.rb"
+      ],
+      "debugPort": "0",
+      "name": "RSpec - all",
+      "request": "launch",
+      "script": "${workspaceRoot}/binstub/rspec",
+      "type": "rdbg",
+      "useBundler": true,
+    },
+    {
+      "args": [
+        "-I", "${workspaceRoot}/lib",
+        "-I", "${workspaceRoot}/spec",
+        "${file}"
+      ],
+      "debugPort": "0",
+      "name": "RSpec - active spec only",
+      "request": "launch",
+      "script": "${workspaceRoot}/binstub/rspec",
+      "type": "rdbg",
+      "useBundler": true,
     }
   ]
 }
