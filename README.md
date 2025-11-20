@@ -6,17 +6,6 @@ inline and block tag plugin requires.
 Logging, parsing arguments, obtaining references to site and page objects, etc. are all handled.
 The result is faster Jekyll plugin writing with fewer bugs.
 
-## Recent Improvements
-
-The framework has been recently improved with critical bug fixes and stability enhancements:
-
-* **JekyllDrop Compatibility**: Fixed critical iteration error that occurred when plugins tried to process JekyllDrop objects. 
-  The framework now properly handles Jekyll-specific objects by using direct attribute access instead of iteration.
-* **Enhanced Demo Site**: The demonstration website now builds successfully in approximately 4 seconds without fatal errors, 
-  providing a reliable testing environment for plugin development.
-* **Dependency Management**: Improved handling of plugin dependencies and version compatibility, ensuring smooth installation and operation.
-* **Code Quality**: Enhanced code style compliance and linting standards for better maintainability.
-
 `Jekyll_plugin_support` can be used to create simple Jekyll plugins in
 the `_plugins/` directory of your Jekyll project, or gem-based Jekyll plugins.
 
@@ -47,6 +36,9 @@ Public plugins that use `jekyll_plugin_support` include:
     <a href='https://www.mslinn.com/jekyll_plugins/jekyll_img.html'><code>jekyll_img</code></a>
   </li>
   <li>
+    <a href='https://www.mslinn.com/jekyll_plugins/jekyll_kramdown.html'><code>jekyll_kramdown</code></a>
+  </li>
+  <li>
     <a href='https://www.mslinn.com/jekyll_plugins/jekyll_outline.html'><code>jekyll_outline</code></a>
   </li>
   <li>
@@ -65,7 +57,8 @@ Public plugins that use `jekyll_plugin_support` include:
 
 Jekyll plugin tags created from `jekyll_plugin_support` framework automatically have the following features:
 
-0. Claude LLM support is provided
+0. Generic LLM support is provided; tested and works with Claude and mini-agent from MiniMax.
+   Gemini is not recommended since it can only handle one project at a time, and this component is a project.
 1. Boilerplate is removed, so you can focus on the required logic and output.
 2. Arguments are parsed for keywords and name/value parameters.
 3. Single or double quotes can be used for arguments and parameters.
@@ -691,7 +684,7 @@ Thus, the above is interpreted as follows when `my_plugin` is evaluated during t
 
 **Note on Variable Resolution Order**: Variables are processed in Jekyll's actual priority order to ensure expected behavior:
 1. Page variables (e.g., `{{page.title}}`)
-2. Layout variables (e.g., `{{layout.name}}`)  
+2. Layout variables (e.g., `{{layout.name}}`)
 3. Jekyll global variables (e.g., `{{jekyll.version}}`)
 4. Include variables (e.g., `{{include.my_var}}`)
 5. Liquid variables (e.g., `{{my_var}}` from `assign`/`capture`)
