@@ -643,16 +643,20 @@ They are can be used like any other Liquid variable.
 ## Variable Expansion
 
 Jekyll expands Liquid variable references during the page rendering process.
-Jekyll does not expand Liquid variable references passes as parameters to tag and block plugins, however.
+Jekyll does not expand Liquid variable references passed as parameters to tag and block plugins, however.
 However, plugins made from `jekyll_plugin_support` automatically
 expand all types of variable references passed as parameters and in block tag bodies.
 
-`Jekyll_plugin_support` tag and block plugins expand the following types of variables:
+`jekyll_plugin_support` tag and block plugins expand the following types of variables:
 
-* Jekyll_plugin_support configuration variables, discussed above.
+* jekyll_plugin_support configuration variables, discussed above.
 * Jekyll [page](https://jekyllrb.com/docs/variables/#page-variables) and
   [layout](https://jekyllrb.com/docs/layouts/#variables) variables.
+* Jekyll [global variables](https://jekyllrb.com/docs/variables/#global-variables) such as version and environment.
 * Inline Liquid variables (defined in [assign](https://shopify.dev/docs/api/liquid/tags/assign) and [capture](https://shopify.dev/docs/api/liquid/tags/capture) statements).
+* Include variables (when plugins are invoked from within Jekyll include files with parameters).
+* Theme variables (provided by the active theme).
+* Paginator variables (for sites with pagination).
 
 In the following example web page, Jekyll expands the `var1` reference within the `<p></p>` tag,
 but not the `var1` or `var2` references passed to `my_plugin`.
@@ -674,8 +678,14 @@ Thus, the above is interpreted as follows when `my_plugin` is evaluated during t
 {% my_plugin param1="value1" param2="value 2" %}
 ```
 
+**Note on Variable Resolution Order**: Variables are processed in Jekyll's actual priority order to ensure expected behavior:
+1. Page variables (e.g., `{{page.title}}`)
+2. Layout variables (e.g., `{{layout.name}}`)  
+3. Jekyll global variables (e.g., `{{jekyll.version}}`)
+4. Include variables (e.g., `{{include.my_var}}`)
+5. Liquid variables (e.g., `{{my_var}}` from `assign`/`capture`)
 
-`Jekyll_plugin_support` expands most of the [plugin variables described above](#predefined-variables),
+`jekyll_plugin_support` expands most of the [plugin variables described above](#predefined-variables),
 replacing Liquid variable references with their values.
 The exception is `@argument_string`, which is not expanded.
 

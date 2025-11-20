@@ -51,17 +51,22 @@ module JekyllSupport
 
     scope = liquid_context.scopes.last
 
+    # Support multiple environment variable keys and fall back to Jekyll's environment
     env = site.config['env']
-    @mode = env&.key?('JEKYLL_ENV') ? env['JEKYLL_ENV'] : 'development'
+    @mode = env&.[]('JEKYLL_ENV') || 
+            env&.[]('JEKYLL_ENVIRONMENT') || 
+            site.config['JEKYLL_ENV'] || 
+            site.config['JEKYLL_ENVIRONMENT'] || 
+            'development'
 
-    # Set default values
+    # Set default values (support multiple data types)
     plugin_variables&.each do |name, value|
-      scope[name] = value if value.instance_of? String
+      scope[name] = value
     end
 
     # Override with environment-specific values
     plugin_variables&.[](@mode)&.each do |name, value|
-      scope[name] = value if value.instance_of? String
+      scope[name] = value
     end
 
     liquid_context
@@ -87,9 +92,17 @@ module JekyllSupport
     page   = liquid_context.registers[:page]
     envs   = liquid_context.environments.first
     layout = envs[:layout]
+    jekyll = envs[:jekyll]
 
-    markup = process_layout_variables logger, layout, markup
+    # Process variables in Jekyll's actual priority order:
+    # 1. Page variables (registers[:page])
+    # 2. Layout variables (environments.first[:layout])
+    # 3. Jekyll global variables (environments.first[:jekyll])
+    # 4. Include variables (scopes)
+    # 5. Liquid variables (scopes)
     markup = process_page_variables logger, page, markup
+    markup = process_layout_variables logger, layout, markup
+    markup = process_jekyll_variables logger, jekyll, markup
     liquid_context.scopes&.each do |scope|
       markup = process_included_variables logger, scope, markup
       markup = process_liquid_variables logger, scope, markup
@@ -105,12 +118,13 @@ module JekyllSupport
       raise JekyllPluginSupportError, "include.#{name} is a #{name.class}, not a String." unless name.instance_of?(String)
       raise JekyllPluginSupportError, "include.#{name} has an undefined value." if value.nil?
 
-      markup.gsub!("{{include.#{name}}}", value.to_s)
+      # Sanitize variable name to prevent regex injection
+      sanitized_name = sanitize_variable_name(name)
+      markup.gsub!("{{include.#{sanitized_name}}}", value.to_s)
     end
     markup
   rescue StandardError => e
     logger.error { e.full_message }
-    exit! 1
   end
 
   def self.process_layout_variables(logger, layout, markup)
@@ -152,6 +166,24 @@ module JekyllSupport
     markup
   rescue StandardError => e
     logger.error { e.full_message }
+  end
+
+  def self.process_jekyll_variables(logger, jekyll, markup)
+    jekyll&.each do |name, value|
+      value = '' if value.nil?
+      markup.gsub!("{{jekyll.#{name}}}", value.to_s)
+    end
+    markup
+  rescue StandardError => e
+    logger.error { e.full_message }
+  end
+
+  # Sanitizes variable names to prevent regex injection attacks
+  # @param name [String] the variable name to sanitize
+  # @return [String] sanitized variable name
+  def self.sanitize_variable_name(name)
+    # Allow only alphanumeric characters, underscores, and hyphens
+    name.to_s.gsub(/[^a-zA-Z0-9_-]/, '')
   end
 
   def self.warn_short_trace(logger, error)
