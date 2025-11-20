@@ -33,7 +33,15 @@ efficiently resume from subsequent new chat sessions.
 
 2. Read the Jekyll source code (https://github.com/jekyll/jekyll). Locate and
    summarize all the places that create variables which can be used by Jekyll
-   plugins. Present your findings, commit, push and stop.
+   plugins. In addition, you had flagged these in the previous step:
+
+    - `:content` - Page content
+    - `:highlighter_prefix` - Syntax highlighter prefix
+    - `:highlighter_suffix` - Syntax highlighter suffix
+    - `:jekyll` - Jekyll-specific variables
+
+   Document what these 4 sources of variables are for.
+   Present your findings, commit, push and stop.
 
 3. When the user tells you to, analyze how `jekyll_plugin_support` obtains the
    names and values of Jekyll variables and summarize any problems found.
