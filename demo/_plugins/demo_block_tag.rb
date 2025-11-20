@@ -67,6 +67,8 @@ module JekyllSupport
 
         @highlighter_suffix='#{@highlighter_suffix}'
 
+        @jekyll_version='#{@jekyll_version}'
+
         @config['url']='#{@config['url']}'
 
         @site.collection_names=#{@site.collection_names&.sort&.join(', ')}

@@ -2,14 +2,18 @@
 
 ## 3.1.4
 
-* ADDED `@raw_content` instance variable exposing raw HTML content of the page being processed
+* Added `@jekyll_version` instance variable exposing raw HTML content of the page being processed
+* Added `@raw_content` instance variable exposing raw HTML content of the page being processed
 
 
 ## 3.1.3 / 2025-01-02
 
-* Modified `JekyllPluginHelper.expand_env` to only expand Bash environment variables (`$VAR` or `${VAR}`), not Windows environment variables (`%VAR%`)
-* Removed the `use_wslvar` parameter from `JekyllPluginHelper.expand_env` method signature
-* `env_var_expand_windows` remains available for plugins that specifically need Windows environment variable expansion
+* Modified `JekyllPluginHelper.expand_env` to only expand Bash environment
+  variables (`$VAR` or `${VAR}`), not Windows environment variables (`%VAR%`)
+* Removed the `use_wslvar` parameter from `JekyllPluginHelper.expand_env` method
+  signature
+* `env_var_expand_windows` remains available for plugins that specifically need
+  Windows environment variable expansion
 
 
 ## 3.1.2 / 2025-11-17

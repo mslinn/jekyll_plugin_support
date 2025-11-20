@@ -1,7 +1,7 @@
 module JekyllSupport
   # Base class for Jekyll tags
   class JekyllTag < Liquid::Tag
-    attr_reader :argument_string, :helper, :highlighter_prefix, :highlighter_suffix, :line_number, :logger, :page, :raw_content, :site
+    attr_reader :argument_string, :helper, :highlighter_prefix, :highlighter_suffix, :jekyll_version, :line_number, :logger, :page, :raw_content, :site
 
     # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
     # @param tag_name [String] the name of the tag, which we usually know.
@@ -57,6 +57,7 @@ module JekyllSupport
       # @envs.keys are :content, :highlighter_prefix, :highlighter_suffix, :jekyll, :layout, :page, :paginator, :site, :theme
       @highlighter_prefix = @envs[:highlighter_prefix]
       @highlighter_suffix = @envs[:highlighter_suffix]
+      @jekyll_version = @envs[:jekyll]['version']
       @layout      = @envs[:layout]
       @paginator   = @envs[:paginator]
       @raw_content = @envs[:content]

@@ -19,6 +19,8 @@
 
 - If you need to write documentation, place the file in the `docs/` directory.
 
+- Make your comments in CHANGELOG.md less verbose.
+
 - Before running every git command, check if `.git/index.lock` exists, and delete it using `sudo` if so.
 
 - Git projects have environment variables that point to their directories. Some examples:

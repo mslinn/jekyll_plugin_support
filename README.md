@@ -460,15 +460,17 @@ Included spaces are ignored:
 * [`@config`](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll#configuring-jekyll-in-your-github-pages-site)
   The [YAML](https://yaml.org/) Jekyll site configuration file
 
+- `@jekyll_version` version of Jekyll, the returned string might have a value like "4.4.1".
+
 * [`@helper`](https://github.com/mslinn/jekyll_plugin_support/blob/master/lib/jekyll_plugin_helper.rb)
   `JekyllPluginHelper` instance for your plugin.
 
-- `@highlighter_prefix` Syntax highlighter prefix, as it exists
+* `@highlighter_prefix` Syntax highlighter prefix, as it exists
   during the [layout rendering stage](https://jekyllrb.com/docs/plugins/hooks/)
   occurring between `:documents, :post_convert` and `:documents, :post_render`.
   All pages, posts and documents go through this phase.
 
-- `@highlighter_suffix` Syntax highlighter suffix, as it exists
+* `@highlighter_suffix` Syntax highlighter suffix, as it exists
   during the [layout rendering stage](https://jekyllrb.com/docs/plugins/hooks/)
   occurring between `:documents, :post_convert` and `:documents, :post_render`.
   All pages, posts and documents go through this phase.
