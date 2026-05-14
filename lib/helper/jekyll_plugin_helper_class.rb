@@ -68,21 +68,19 @@ module JekyllSupport
     #
     def self.find_windows_envar(envar, use_wslvar: true)
       if use_wslvar
-        wslvar_path = `which wslvar 2> /dev/null`.chomp
-        if wslvar_path.empty?
-          warn "jekyll_plugin_support warning: wslvar not found in PATH; will attempt to find $#{envar} in the bash environment variables."
-          return env_var_case_insensitive(envar)
-        end
-
-        result = `wslvar #{envar} &2> /dev/null`.chomp
+        result = self.wslvar envar
         if result.empty?
-          warn "jekyll_plugin_support warning: wslvar did not find $#{envar}; will attempt to find it in the bash environment variables."
+          error "jekyll_plugin_support warning: wslvar did not find $#{envar}; will attempt to find it in the bash environment variables."
           return env_var_case_insensitive(envar)
         end
 
         return result
       end
       env_var_case_insensitive(envar)
+    end
+
+    def self.wslvar(envar)
+      result = `powershell.exe -NoProfile -Command "Write-Output \\$env:#{envar}" 2> /dev/null`.chomp("\r\n")
     end
 
     # Detect if Jekyll is running under WSL

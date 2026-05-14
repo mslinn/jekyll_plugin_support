@@ -158,7 +158,7 @@ end
 Install the `jekyll_plugin_support` gem into your plugin project in the usual manner:
 
 ```shell
-$ bundle
+$ bundle install
 ```
 
 Copy the CSS classes from
