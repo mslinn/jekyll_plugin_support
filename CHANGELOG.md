@@ -1,5 +1,10 @@
 # Change Log
 
+## 3.1.5
+
+* Added install subcommand to bundle invocations
+* Replaced wslvar which is no longer maintained
+
 ## 3.1.4
 
 * Added `@jekyll_version` instance variable exposing raw HTML content of the page being processed
