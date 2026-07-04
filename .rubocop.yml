@@ -107,6 +107,9 @@ Style/GlobalVars:
   Exclude:
     - spec/mslinn_binary_search_spec.rb
 
+Style/OneClassPerFile:
+  Enabled: false
+
 Style/RedundantParentheses:
   Exclude:
     - README.md

@@ -1,15 +1,3 @@
-# Monkey patch StandardError so a new method called shorten_backtrace is added.
-class StandardError
-  def shorten_backtrace(backtrace_element_count = 5)
-    set_backtrace backtrace[0..backtrace_element_count]
-    # self.backtrace = backtrace[0..backtrace_element_count].map do |x|
-    #   raise JekyllPluginSupportError, "backtrace contains a #{x.class} with value '#{x}'." unless x.instance_of? String
-
-    #   x.gsub(Dir.pwd + '/', './')
-    # end
-  end
-end
-
 module JekyllSupport
   DISPLAYED_CALLS = 8 unless defined?(DISPLAYED_CALLS)
 

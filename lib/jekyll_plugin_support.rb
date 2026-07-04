@@ -30,7 +30,7 @@ end
 
 module ToString
   def to_s
-    "#{self}.class.name"
+    self.class.name
   end
 end
 
