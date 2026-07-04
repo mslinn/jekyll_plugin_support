@@ -34,6 +34,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'jekyll', '>= 4.4.1'
   spec.add_dependency 'jekyll_plugin_logger'
   spec.add_dependency 'key-value-parser'
-  spec.add_dependency 'pry'
   spec.add_dependency 'sorted_set'
 end

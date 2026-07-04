@@ -27,7 +27,7 @@ module JekyllSupport
 
     # @return undefined if parameter was specified, removes it from the available tokens and returns value
     def parameter_specified?(name, delete_param: true)
-      return false if @keys_values.to_s.empty?
+      return false if @keys_values.empty?
 
       key = name
       key = name.to_sym if @keys_values&.first&.first.instance_of?(Symbol)

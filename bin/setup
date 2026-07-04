@@ -34,7 +34,7 @@ if [ "$1" != nodemo ]; then demo/_bin/setup; fi
 
 # See https://www.honeybadger.io/blog/rbenv-rubygems-bundler-path/
 # See https://linuxtut.com/visual-studio-code-i-get-a-syntax-error-when-debugging-when-using-rbenv-6ee58/
-for X in debug jekyll pry rake rspec-core rubocop; do
+for X in debug jekyll rake rspec-core rubocop; do
   bundle binstubs "$X" --force
 done
 

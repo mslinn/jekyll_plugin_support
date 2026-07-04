@@ -1,7 +1,5 @@
 module JekyllSupport
   class JekyllTagNoArgParsing < JekyllTag
-    attr_reader :argument_string, :helper, :line_number, :logger, :page, :site
-
     def initialize(tag_name, argument_string, parse_context)
       class << self
         include NoArgParsing

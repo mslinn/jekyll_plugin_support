@@ -1,9 +1,15 @@
 # Change Log
 
+## 3.1.6
+
+Several little fixes and tweaks.
+
+
 ## 3.1.5
 
 * Added install subcommand to bundle invocations
-* Replaced wslvar which is no longer maintained
+* Replaced `wslvar` which is no longer maintained
+
 
 ## 3.1.4
 

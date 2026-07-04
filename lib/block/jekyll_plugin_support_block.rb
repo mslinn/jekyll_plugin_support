@@ -1,7 +1,8 @@
 module JekyllSupport
   # Base class for Jekyll block tags
   class JekyllBlock < Liquid::Block
-    attr_reader :argument_string, :helper, :highlighter_prefix, :highlighter_suffix, :jekyll_version, :line_number, :logger, :page, :raw_content, :site, :text
+    attr_reader :argument_string, :helper, :highlighter_prefix, :highlighter_suffix, :jekyll_version, :line_number, :logger, :page, :raw_content,
+                :site, :text
 
     # See https://github.com/Shopify/liquid/wiki/Liquid-for-Programmers#create-your-own-tags
     # @param tag_name [String] the name of the tag, which we usually know.
@@ -79,10 +80,6 @@ module JekyllSupport
       @attribution = @helper.parameter_specified?('attribution') || false unless @no_arg_parsing
       @logger.debug { "@keys_values='#{@keys_values}'" }
 
-      # @argument_string = JekyllSupport.lookup_liquid_variables @logger, liquid_context, @argument_string # Is this redundant?
-      # @argument_string.strip! # Is this redundant?
-      # @helper.reinitialize @argument_string # Is this redundant?
-
       render_impl(text)
     rescue StandardError => e
       e.shorten_backtrace
@@ -91,7 +88,7 @@ module JekyllSupport
       in_file_name = "in '#{file_name}' " if file_name
       of_page = "of '#{@page['path']}'" if @page
       @logger.error { "While processing line #{@line_number} #{of_page} for #{tag_name} #{in_file_name}- #{e.message}" }
-      binding.pry if @pry_on_standard_error # rubocop:disable Lint/Debugger
+      binding.pry if @pry_on_standard_error && defined?(Pry) # rubocop:disable Lint/Debugger
       raise e if @die_on_standard_error
 
       <<~END_MSG

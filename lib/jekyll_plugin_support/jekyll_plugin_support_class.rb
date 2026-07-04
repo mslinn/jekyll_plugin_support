@@ -1,3 +1,10 @@
+class StandardError
+  def shorten_backtrace(backtrace_element_count = 5)
+    limit = [backtrace.size - 1, backtrace_element_count].min
+    set_backtrace(backtrace[0..limit])
+  end
+end
+
 module JekyllSupport
   DISPLAYED_CALLS = 8 unless defined?(DISPLAYED_CALLS)
 
@@ -119,7 +126,7 @@ module JekyllSupport
     layout&.each do |name, value|
       if value.nil?
         value = ''
-        logger.warn { "layout.#{value} is undefined." }
+        logger.warn { 'layout.value is undefined.' }
       end
       markup.gsub!("{{layout.#{name}}}", value.to_s)
     end

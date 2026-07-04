@@ -1,5 +1,5 @@
 def require_directory(dir)
-  Dir[File.join(dir, '*.rb')]&.sort&.each do |file|
+  Dir[File.join(dir, '*.rb')].each do |file|
     require file unless file == __FILE__
   end
 end
@@ -7,7 +7,6 @@ end
 require 'colorator'
 require 'jekyll'
 require 'jekyll_plugin_logger'
-require 'pry'
 require 'sorted_set'
 
 # require_directory __dir__
@@ -20,13 +19,6 @@ require_directory "#{__dir__}/jekyll_plugin_support"
 require_directory "#{__dir__}/tag"
 require_directory "#{__dir__}/jekyll_all_collections"
 require_directory "#{__dir__}/hooks"
-
-module JekyllSupport
-  def self.redef_without_warning(const, value)
-    send(:remove_const, const) if const_defined?(const)
-    const_set const, value
-  end
-end
 
 module ToString
   def to_s
@@ -41,6 +33,11 @@ module NoArgParsing
 end
 
 module JekyllSupport
+  def self.redef_without_warning(const, value)
+    send(:remove_const, const) if const_defined?(const)
+    const_set const, value
+  end
+
   class JekyllTag
     include JekyllSupportError
     include ToString
