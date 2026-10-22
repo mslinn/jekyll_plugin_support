@@ -1,5 +1,10 @@
 # Change Log
 
+## 3.1.7
+
+* Fixed `parameter_specified?` so it never returns "false" in generated output.
+
+
 ## 3.1.6
 
 Several little fixes and tweaks.

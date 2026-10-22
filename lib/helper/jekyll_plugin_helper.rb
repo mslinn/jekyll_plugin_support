@@ -25,9 +25,11 @@ module JekyllSupport
       @logger.error { e.message }
     end
 
-    # @return undefined if parameter was specified, removes it from the available tokens and returns value
-    def parameter_specified?(name, delete_param: true)
-      return false if @keys_values.empty?
+    # @return undefined if parameter was specified, removes it from the available tokens and returns value.
+    # NOTE: if false is returned, the generated html will become peppered with "false" and divs generated
+    # by plugins will break.
+    def parameter_specified?(name, delete_param: true) # rubocop:disable Naming/PredicateMethod
+      return nil if @keys_values.empty? # rubocop:disable Style/ReturnNilInPredicateMethodDefinition
 
       key = name
       key = name.to_sym if @keys_values&.first&.first.instance_of?(Symbol)
